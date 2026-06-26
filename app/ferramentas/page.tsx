@@ -28,6 +28,12 @@ const ferramentas = [
     tag: "Split Payment",
   },
   {
+    titulo: "Planilha de Transição 2026–2033",
+    descricao: "Calcule o impacto do Split Payment no seu caixa, ano a ano. Inputs: faturamento, regime, prazo de recebimento e margem. Output: capital de giro imobilizado + risco por fase.",
+    href: "https://planilha-transicao.vercel.app",
+    tag: "Split Payment",
+  },
+  {
     titulo: "Compêndio Tributário",
     descricao: "Guia completo dos regimes tributários brasileiros: Simples Nacional, Lucro Presumido e Lucro Real — com EC 132/2023 incorporada.",
     href: "https://triade-guia-tributario.vercel.app",
