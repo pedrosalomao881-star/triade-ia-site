@@ -88,13 +88,15 @@ export default function Footer() {
       </div>
 
       <div className="border-t border-white/[0.06] px-6 py-4">
-        <div className="max-w-6xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-2">
+        <div className="max-w-6xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-3">
           <p className="text-xs text-ice/20">
             © {new Date().getFullYear()} TRÍADE IA. Todos os direitos reservados.
           </p>
-          <p className="text-xs text-ice/20">
-            Consultoria AI-First · Itumbiara, Goiás
-          </p>
+          <div className="flex items-center gap-4">
+            <Link href="/privacidade" className="text-xs text-ice/25 hover:text-ice/50 transition-colors">Privacidade</Link>
+            <Link href="/termos" className="text-xs text-ice/25 hover:text-ice/50 transition-colors">Termos de Uso</Link>
+            <Link href="/cookies" className="text-xs text-ice/25 hover:text-ice/50 transition-colors">Cookies</Link>
+          </div>
         </div>
       </div>
     </footer>
