@@ -6,13 +6,11 @@ import {
   Stethoscope, Calculator, ShoppingCart, Building2, Truck, CheckCircle2,
 } from "lucide-react";
 import MaturityModel from "./components/MaturityModel";
-import HeroHeadline from "./components/HeroHeadline";
-import { WA_DEFAULT } from "@/lib/whatsapp";
 
 export const metadata: Metadata = {
-  title: "Consultoria AI-First — Diagnóstico, Estratégia e Implementação",
+  title: "Reforma Tributária EC 132/2023 — Ferramentas e Consultoria AI-First",
   description:
-    "Diagnóstico, estratégia e implementação de Inteligência Artificial para aumentar produtividade, reduzir custos e acelerar o crescimento do seu negócio.",
+    "Split Payment, CBS e IBS: entenda a maior reforma tributária desde 1988 e prepare sua empresa com ferramentas gratuitas e consultoria especializada da Tríade IA.",
 };
 
 const stats = [
@@ -56,37 +54,115 @@ const diferenciais = [
 export default function Home() {
   return (
     <>
-      {/* DARK: Hero */}
-      <section className="relative min-h-[92vh] flex items-center justify-center px-6 py-28 overflow-hidden bg-navy">
+      {/* DARK: Hero — EC 132/2023 */}
+      <section className="relative min-h-[92vh] flex items-center justify-center px-6 py-28 overflow-hidden bg-navy" id="hero">
         <div className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse 100% 80% at 50% -10%, rgba(46,204,113,0.08) 0%, transparent 60%)" }} />
         <div className="relative z-10 max-w-4xl mx-auto text-center">
-          <span className="animate-fade-up inline-block text-xs font-semibold text-brand border border-brand/20 rounded-full px-4 py-1.5 mb-8 uppercase tracking-widest">
-            Diagnóstico · Estratégia · Implementação
-          </span>
-          <HeroHeadline />
+          <div className="animate-fade-up flex items-center justify-center gap-3 mb-8">
+            <span className="h-px w-8 bg-brand/40 flex-shrink-0" />
+            <span className="text-xs font-mono font-semibold text-brand/70 uppercase tracking-widest">
+              REFORMA TRIBUTÁRIA · EC 132/2023 · VIGÊNCIA: JAN 2026
+            </span>
+            <span className="h-px w-8 bg-brand/40 flex-shrink-0" />
+          </div>
+          <h1 className="animate-fade-up-delay-1 font-display font-bold text-5xl md:text-6xl lg:text-7xl text-ice leading-[1.05] tracking-[-0.035em] mb-8">
+            EC 132/2023<br />
+            redesenhou o sistema<br />
+            <span className="text-brand">tributário do Brasil.</span>
+          </h1>
           <p className="animate-fade-up-delay-2 text-lg md:text-xl text-ice/50 leading-relaxed max-w-2xl mx-auto mb-10">
-            Diagnóstico, estratégia e implementação de Inteligência Artificial
-            para aumentar produtividade, reduzir custos e acelerar o crescimento do seu negócio.
+            O Split Payment vai reter o imposto antes de chegar na sua conta.
+            O CBS e IBS substituem tudo que você conhecia sobre PIS, COFINS, ICMS e ISS.
+            Quem não se preparar vai pagar mais — e não vai saber por quê.
           </p>
           <div className="animate-fade-up-delay-3 flex flex-col sm:flex-row gap-3 justify-center mb-12">
-            <Link href="/diagnostico" className="inline-flex items-center justify-center gap-2 bg-brand text-navy font-semibold text-sm px-7 py-3.5 rounded-lg hover:bg-brand-dark transition-colors">
-              Solicitar Diagnóstico AI-First <ArrowRight className="w-4 h-4" strokeWidth={2} />
+            <Link href="/ferramentas" className="inline-flex items-center justify-center gap-2 bg-brand text-navy font-semibold text-sm px-7 py-3.5 rounded-lg hover:bg-brand-dark transition-colors">
+              Calcular o impacto no meu negócio <ArrowRight className="w-4 h-4" strokeWidth={2} />
             </Link>
-            <Link href="/quiz" className="inline-flex items-center justify-center gap-2 text-ice/50 hover:text-ice text-sm transition-colors px-6 py-3.5 border border-white/[0.08] rounded-lg hover:border-white/[0.18]">
-              Avaliar Maturidade da Empresa
+            <Link href="/#reforma" className="inline-flex items-center justify-center gap-2 text-ice/50 hover:text-ice text-sm transition-colors px-6 py-3.5 border border-white/[0.08] rounded-lg hover:border-white/[0.18]">
+              Entender a reforma
             </Link>
           </div>
-          <p className="text-xs text-ice/20 tracking-wide">Itumbiara, GO · Atendimento presencial e remoto em todo o Brasil</p>
+          <p className="text-xs text-ice/20 tracking-wide">Análise gratuita · Sem cadastro obrigatório · Baseada em dados reais da sua empresa</p>
         </div>
       </section>
 
-      {/* DARK: Frase de Impacto */}
-      <section className="border-y border-white/[0.06] py-16 px-6 bg-navy-soft">
-        <div className="max-w-3xl mx-auto text-center">
-          <p className="font-display text-xl md:text-2xl text-ice/65 leading-relaxed">
-            "A IA não vai substituir sua empresa.{" "}
-            <span className="text-ice font-semibold">A empresa AI-First do seu concorrente vai.</span>"
-          </p>
+      {/* DARK: O que muda com a Reforma */}
+      <section className="py-32 px-6 bg-navy-soft" id="reforma">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-16">
+            <span className="text-xs font-mono font-semibold text-brand/70 uppercase tracking-widest">EC 132/2023</span>
+            <h2 className="font-display font-bold text-3xl md:text-4xl text-ice mt-3 mb-5 leading-tight">
+              O que muda com a Reforma Tributária
+            </h2>
+            <p className="text-ice/45 text-sm max-w-xl mx-auto leading-relaxed">
+              A maior reforma tributária desde 1988. Vigência completa a partir de 2033, mas os impactos operacionais no caixa começam agora.
+            </p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+            {[
+              {
+                label: "CBS — Contribuição sobre Bens e Serviços",
+                status: "Federal",
+                antes: "PIS + COFINS",
+                descricao: "Unifica os dois tributos federais em um único imposto não-cumulativo. Alíquota-padrão estimada em 8,8% sobre receita bruta.",
+              },
+              {
+                label: "IBS — Imposto sobre Bens e Serviços",
+                status: "Estadual e Municipal",
+                antes: "ICMS + ISS",
+                descricao: "Substitui os dois impostos subnacionais. Gestão unificada com repartição automática entre estados e municípios.",
+              },
+              {
+                label: "Split Payment",
+                status: "Em vigor Jan 2026",
+                antes: "Recolhimento pós-faturamento",
+                descricao: "O imposto é retido na própria transação financeira antes de chegar à conta do vendedor — impacto direto no fluxo de caixa.",
+              },
+            ].map((item, i) => (
+              <div key={i} className="border border-white/[0.07] rounded-2xl p-7 bg-navy flex flex-col gap-3">
+                <span className="text-xs font-mono font-semibold text-brand/60 uppercase tracking-widest border border-brand/20 px-2 py-0.5 rounded self-start">{item.status}</span>
+                <h3 className="font-display font-semibold text-ice text-base leading-snug">{item.label}</h3>
+                <p className="text-xs text-ice/30 font-mono uppercase tracking-wider">Substitui: {item.antes}</p>
+                <p className="text-ice/50 text-sm leading-relaxed">{item.descricao}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* DARK: Split Payment */}
+      <section className="py-32 px-6 bg-navy" id="split-payment">
+        <div className="max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
+            <div>
+              <span className="text-xs font-mono font-semibold text-brand/70 uppercase tracking-widest">O maior impacto no caixa</span>
+              <h2 className="font-display font-bold text-3xl md:text-4xl text-ice mt-3 mb-5 leading-tight">
+                Split Payment: imposto retido antes de chegar na sua conta
+              </h2>
+              <p className="text-ice/55 leading-relaxed mb-6">
+                No modelo atual, você fatura, recebe o valor integral e só depois recolhe os impostos. Com o Split Payment, o sistema financeiro retém automaticamente o imposto no momento do pagamento — você recebe o valor já líquido de tributos.
+              </p>
+              <p className="text-ice/40 text-sm leading-relaxed mb-10">
+                O impacto direto é na capital de giro: o dinheiro que antes ficava disponível entre o faturamento e o vencimento dos impostos deixa de existir. Para empresas que usam esse intervalo para financiar operações, a mudança exige planejamento imediato.
+              </p>
+              <Link href="/ferramentas" className="inline-flex items-center gap-2 bg-brand text-navy font-semibold text-sm px-6 py-3.5 rounded-lg hover:bg-brand-dark transition-colors">
+                Calcular o impacto no meu negócio <ArrowRight className="w-4 h-4" strokeWidth={2} />
+              </Link>
+            </div>
+            <div className="flex flex-col gap-4">
+              {[
+                { label: "Modelo atual", descricao: "Empresa fatura → recebe 100% do valor → recolhe os impostos no vencimento (30 a 90 dias depois).", cor: "border-white/[0.07]" },
+                { label: "Com Split Payment", descricao: "Empresa fatura → sistema financeiro retém o imposto → empresa recebe somente o valor líquido.", cor: "border-brand/20 bg-brand/[0.04]" },
+                { label: "O que isso significa", descricao: "Fim do float tributário. Redução de capital de giro. Gestão de fluxo de caixa exige replanejamento.", cor: "border-white/[0.07]" },
+              ].map((item, i) => (
+                <div key={i} className={`border rounded-xl p-6 ${item.cor}`}>
+                  <p className="text-xs font-mono font-semibold text-ice/40 uppercase tracking-widest mb-2">{item.label}</p>
+                  <p className="text-ice/70 text-sm leading-relaxed">{item.descricao}</p>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </section>
 
