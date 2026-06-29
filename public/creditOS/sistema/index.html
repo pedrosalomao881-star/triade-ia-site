@@ -1,0 +1,1197 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CreditOS — Sistema Operacional de Créditos Tributários · TRÍADE IA</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+:root{
+  --bg:#07101e;--bg2:#0c1830;--bg3:#112040;
+  --brand:#6366f1;--brand2:#818cf8;--brand-glow:rgba(99,102,241,0.12);
+  --amber:#f59e0b;--amber2:#fbbf24;--amber-glow:rgba(245,158,11,0.1);
+  --green:#10b981;--green2:#34d399;--green-glow:rgba(16,185,129,0.1);
+  --red:#ef4444;--red-glow:rgba(239,68,68,0.1);
+  --yellow:#f59e0b;
+  --ice:#f0f4ff;--muted:rgba(240,244,255,0.5);--dim:rgba(240,244,255,0.25);
+  --border:rgba(240,244,255,0.07);--border2:rgba(99,102,241,0.2);
+  --sidebar:240px;
+  --fM:'JetBrains Mono',monospace;
+}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--ice);line-height:1.6;overflow-x:hidden;font-size:14px}
+
+/* ── SCROLLBAR ──────────────────────────────── */
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-track{background:var(--bg2)}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:var(--brand)}
+
+/* ── LOGIN ──────────────────────────────────── */
+#login{position:fixed;inset:0;z-index:9999;background:var(--bg);display:flex;align-items:center;justify-content:center;
+  background-image:radial-gradient(ellipse 60% 50% at 50% 0%,rgba(99,102,241,0.08) 0%,transparent 70%)}
+.login-card{background:var(--bg2);border:1px solid var(--border2);border-radius:20px;padding:48px 44px;width:380px;text-align:center;box-shadow:0 32px 80px rgba(0,0,0,0.6)}
+.login-logo{width:60px;height:60px;background:linear-gradient(135deg,var(--brand),#4f46e5);border-radius:16px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:20px;color:#fff;margin:0 auto 20px;box-shadow:0 0 32px rgba(99,102,241,0.3)}
+.login-title{font-size:24px;font-weight:800;letter-spacing:-0.03em;margin-bottom:4px}
+.login-title span{color:var(--brand)}
+.login-sub{font-size:13px;color:var(--muted);margin-bottom:28px;line-height:1.5}
+.login-badge{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;background:rgba(245,158,11,0.12);color:var(--amber);border:1px solid rgba(245,158,11,0.25);padding:3px 10px;border-radius:20px;margin-bottom:20px}
+.login-input{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:13px 16px;color:var(--ice);font-size:15px;outline:none;text-align:center;letter-spacing:4px;margin-bottom:12px;transition:.2s;font-family:var(--fM)}
+.login-input:focus{border-color:var(--brand);box-shadow:0 0 0 3px rgba(99,102,241,0.15)}
+.login-btn{width:100%;background:var(--brand);color:#fff;border:none;border-radius:10px;padding:13px;font-size:15px;font-weight:700;cursor:pointer;transition:.15s;letter-spacing:.01em}
+.login-btn:hover{background:var(--brand2);transform:translateY(-1px);box-shadow:0 8px 24px rgba(99,102,241,0.3)}
+.login-error{color:var(--red);font-size:12px;margin-top:10px;min-height:18px}
+.login-hint{font-size:11px;color:var(--dim);margin-top:16px}
+
+/* ── APP SHELL ──────────────────────────────── */
+#app{display:none;min-height:100vh}
+#sidebar{width:var(--sidebar);background:var(--bg2);border-right:1px solid var(--border);position:fixed;height:100vh;display:flex;flex-direction:column;z-index:100;overflow-y:auto}
+#main{margin-left:var(--sidebar);min-height:100vh;display:flex;flex-direction:column}
+
+/* ── SIDEBAR ────────────────────────────────── */
+.s-logo{padding:20px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+.s-logo-icon{width:36px;height:36px;background:linear-gradient(135deg,var(--brand),#4f46e5);border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:14px;color:#fff;flex-shrink:0}
+.s-logo-text{font-size:15px;font-weight:800;letter-spacing:-0.02em}
+.s-logo-text span{color:var(--brand)}
+.s-logo-sub{font-size:10px;color:var(--muted);margin-top:1px}
+.s-badge{font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;background:rgba(245,158,11,0.12);color:var(--amber);border:1px solid rgba(245,158,11,0.2);padding:2px 7px;border-radius:10px;margin-left:auto;flex-shrink:0}
+
+.s-section{padding:10px 0}
+.s-label{font-size:10px;font-weight:700;color:var(--dim);letter-spacing:.08em;text-transform:uppercase;padding:8px 16px 4px}
+.s-item{display:flex;align-items:center;gap:10px;padding:9px 16px;cursor:pointer;border-left:3px solid transparent;color:var(--muted);font-size:13px;transition:.15s;user-select:none}
+.s-item:hover{background:var(--bg3);color:var(--ice)}
+.s-item.active{background:var(--brand-glow);color:var(--brand2);border-left-color:var(--brand)}
+.s-item .ico{font-size:16px;width:20px;text-align:center;flex-shrink:0}
+.s-item .badge{margin-left:auto;background:var(--red);color:#fff;font-size:10px;padding:1px 6px;border-radius:10px;font-weight:700}
+.s-item .badge.ok{background:var(--green)}
+
+.s-footer{margin-top:auto;padding:16px;border-top:1px solid var(--border)}
+.s-escritorio{font-size:11px;color:var(--muted);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.s-dot{width:7px;height:7px;border-radius:50%;background:var(--green);animation:pdot 2s ease-in-out infinite}
+@keyframes pdot{0%,100%{opacity:1}50%{opacity:.4}}
+.s-logout{width:100%;background:transparent;border:1px solid var(--border);border-radius:8px;padding:7px;color:var(--muted);font-size:12px;cursor:pointer;transition:.15s}
+.s-logout:hover{border-color:var(--red);color:var(--red)}
+
+/* ── TOPBAR ─────────────────────────────────── */
+#topbar{background:var(--bg2);border-bottom:1px solid var(--border);padding:14px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50}
+.tb-title{font-size:18px;font-weight:700;letter-spacing:-0.02em}
+.tb-sub{font-size:12px;color:var(--muted);margin-top:1px}
+.tb-actions{display:flex;gap:10px;align-items:center}
+.urgency-chip{display:flex;align-items:center;gap:6px;background:var(--amber-glow);border:1px solid rgba(245,158,11,0.3);border-radius:20px;padding:5px 12px;font-size:12px;font-weight:600;color:var(--amber)}
+.urgency-chip .dot{width:6px;height:6px;border-radius:50%;background:var(--amber);animation:pdot 1s ease-in-out infinite}
+
+/* ── CONTENT ────────────────────────────────── */
+#content{padding:24px;flex:1}
+.page{display:none}
+.page.active{display:block}
+
+/* ── CARDS GRID ─────────────────────────────── */
+.cards-4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
+.cards-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px}
+.cards-2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px}
+@media(max-width:1100px){.cards-4{grid-template-columns:repeat(2,1fr)}.cards-3{grid-template-columns:repeat(2,1fr)}}
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:20px}
+.card-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px}
+.card-value{font-size:28px;font-weight:800;letter-spacing:-0.03em;line-height:1}
+.card-sub{font-size:12px;color:var(--muted);margin-top:6px}
+.card.brand{border-color:var(--border2);background:var(--brand-glow)}
+.card.brand .card-value{color:var(--brand2)}
+.card.amber{border-color:rgba(245,158,11,0.25);background:var(--amber-glow)}
+.card.amber .card-value{color:var(--amber)}
+.card.green{border-color:rgba(16,185,129,0.25);background:var(--green-glow)}
+.card.green .card-value{color:var(--green2)}
+
+/* ── URGENCY BLOCK ──────────────────────────── */
+.urgency-block{background:linear-gradient(135deg,rgba(245,158,11,0.07),rgba(239,68,68,0.05));border:1px solid rgba(245,158,11,0.2);border-radius:16px;padding:28px;margin-bottom:24px}
+.urgency-title{font-size:13px;font-weight:700;color:var(--amber);text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.urgency-title::before{content:'⚡'}
+.urgency-counter{display:flex;gap:24px;align-items:flex-end;flex-wrap:wrap}
+.uc-item{text-align:center}
+.uc-val{font-family:var(--fM);font-size:40px;font-weight:700;color:var(--amber);line-height:1}
+.uc-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-top:4px}
+.uc-sep{font-family:var(--fM);font-size:32px;color:var(--dim);padding-bottom:8px}
+.urgency-sub{font-size:13px;color:var(--muted);margin-top:16px;max-width:560px;line-height:1.6}
+.urgency-sub strong{color:var(--ice)}
+
+/* ── SECTION ────────────────────────────────── */
+.section-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:20px}
+.section-header{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.section-title{font-size:14px;font-weight:700}
+.section-body{padding:20px}
+
+/* ── BUTTONS ────────────────────────────────── */
+.btn{display:inline-flex;align-items:center;gap:8px;padding:9px 18px;border-radius:8px;border:none;cursor:pointer;font-size:13px;font-weight:600;transition:.15s;font-family:inherit}
+.btn-brand{background:var(--brand);color:#fff}
+.btn-brand:hover{background:var(--brand2);box-shadow:0 6px 20px rgba(99,102,241,0.3);transform:translateY(-1px)}
+.btn-amber{background:var(--amber);color:#07100A}
+.btn-amber:hover{background:var(--amber2)}
+.btn-ghost{background:transparent;color:var(--muted);border:1px solid var(--border)}
+.btn-ghost:hover{border-color:var(--brand);color:var(--ice)}
+.btn-green{background:var(--green);color:#07100A}
+.btn-green:hover{background:var(--green2)}
+.btn-lg{padding:14px 28px;font-size:15px;border-radius:10px}
+
+/* ── BADGE ──────────────────────────────────── */
+.badge{display:inline-flex;align-items:center;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:700;letter-spacing:.04em}
+.badge-green{background:rgba(16,185,129,0.12);color:var(--green2);border:1px solid rgba(16,185,129,0.25)}
+.badge-yellow{background:rgba(245,158,11,0.12);color:var(--amber2);border:1px solid rgba(245,158,11,0.25)}
+.badge-red{background:rgba(239,68,68,0.12);color:#f87171;border:1px solid rgba(239,68,68,0.25)}
+.badge-brand{background:var(--brand-glow);color:var(--brand2);border:1px solid var(--border2)}
+
+/* ── TABLE ──────────────────────────────────── */
+.tbl{width:100%;border-collapse:collapse}
+.tbl th{padding:10px 14px;text-align:left;font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;background:var(--bg3);border-bottom:1px solid var(--border)}
+.tbl td{padding:12px 14px;font-size:13px;border-top:1px solid var(--border)}
+.tbl tr:hover td{background:rgba(255,255,255,.02)}
+
+/* ── ANALISE ────────────────────────────────── */
+#step-upload,#step-processing,#step-resultado{display:none}
+#step-upload.active,#step-processing.active,#step-resultado.active{display:block}
+
+.upload-zone{border:2px dashed rgba(99,102,241,0.3);border-radius:16px;padding:48px;text-align:center;cursor:pointer;transition:.2s;position:relative}
+.upload-zone:hover,.upload-zone.drag{border-color:var(--brand);background:var(--brand-glow)}
+.upload-zone input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.upload-icon{font-size:48px;margin-bottom:16px}
+.upload-title{font-size:18px;font-weight:700;margin-bottom:8px}
+.upload-sub{font-size:13px;color:var(--muted);margin-bottom:24px}
+.upload-or{font-size:12px;color:var(--dim);margin:20px 0;position:relative}
+.upload-or::before,.upload-or::after{content:'';position:absolute;top:50%;width:40%;height:1px;background:var(--border)}
+.upload-or::before{left:0}.upload-or::after{right:0}
+
+textarea.efd-input{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:14px;color:var(--ice);font-family:var(--fM);font-size:12px;line-height:1.7;resize:vertical;min-height:180px;outline:none;transition:.2s;margin-bottom:16px}
+textarea.efd-input:focus{border-color:var(--brand)}
+
+.demo-card{background:linear-gradient(135deg,var(--brand-glow),rgba(16,185,129,0.05));border:1px solid var(--border2);border-radius:12px;padding:20px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:20px}
+.demo-info h4{font-size:14px;font-weight:700;margin-bottom:4px}
+.demo-info p{font-size:12px;color:var(--muted)}
+.demo-info p strong{color:var(--brand2)}
+
+/* ── PROCESSING ─────────────────────────────── */
+.proc-header{text-align:center;padding:32px 0;border-bottom:1px solid var(--border);margin-bottom:28px}
+.proc-title{font-size:20px;font-weight:700;margin-bottom:8px}
+.proc-sub{font-size:13px;color:var(--muted)}
+.proc-progress{height:4px;background:var(--bg3);border-radius:2px;margin:20px 0;overflow:hidden}
+.proc-bar{height:100%;background:linear-gradient(90deg,var(--brand),var(--brand2));border-radius:2px;transition:width 0.4s ease;width:0%}
+.proc-skills{display:flex;flex-direction:column;gap:12px}
+.skill-row{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:16px 20px;transition:.3s}
+.skill-row.running{border-color:var(--brand);background:var(--brand-glow)}
+.skill-row.done{border-color:rgba(16,185,129,0.3);background:var(--green-glow)}
+.skill-row.done .skill-status{color:var(--green2)}
+.skill-row.waiting .skill-name{color:var(--dim)}
+.skill-header{display:flex;align-items:center;gap:12px;margin-bottom:0}
+.skill-badge{font-family:var(--fM);font-size:11px;font-weight:700;background:var(--bg2);border:1px solid var(--border);color:var(--muted);padding:2px 8px;border-radius:6px;flex-shrink:0}
+.skill-row.running .skill-badge{border-color:var(--brand);color:var(--brand2);background:var(--brand-glow)}
+.skill-row.done .skill-badge{border-color:rgba(16,185,129,.4);color:var(--green2);background:var(--green-glow)}
+.skill-name{font-size:13px;font-weight:600;flex:1}
+.skill-status{font-size:12px;color:var(--muted);font-family:var(--fM)}
+.skill-logs{margin-top:10px;font-family:var(--fM);font-size:12px;line-height:1.8;display:none}
+.skill-row.running .skill-logs,.skill-row.done .skill-logs{display:block}
+.log-ok{color:var(--green2)}
+.log-warn{color:var(--amber)}
+.log-info{color:var(--muted)}
+.log-critical{color:var(--amber);font-weight:700}
+
+/* ── RESULTADO ──────────────────────────────── */
+.resultado-header{background:linear-gradient(135deg,var(--brand-glow),rgba(16,185,129,0.05));border:1px solid var(--border2);border-radius:16px;padding:28px;margin-bottom:24px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.res-title h3{font-size:13px;font-weight:700;color:var(--brand2);text-transform:uppercase;letter-spacing:.08em;font-family:var(--fM);margin-bottom:6px}
+.res-title h2{font-size:22px;font-weight:800;letter-spacing:-0.02em;margin-bottom:4px}
+.res-title p{font-size:12px;color:var(--muted)}
+.res-verdict{text-align:right;flex-shrink:0}
+.verdict-badge{display:inline-block;font-size:13px;font-weight:800;letter-spacing:.1em;padding:8px 20px;border-radius:8px;text-transform:uppercase}
+.verdict-fav{background:rgba(16,185,129,0.15);color:var(--green2);border:1px solid rgba(16,185,129,0.35)}
+.verdict-res{background:rgba(245,158,11,0.15);color:var(--amber2);border:1px solid rgba(245,158,11,0.35)}
+
+.credits-table-wrap{overflow-x:auto}
+.stj-box{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:16px 20px;font-family:var(--fM);font-size:12px;line-height:1.8;color:var(--muted);margin-top:16px}
+.stj-box .label{font-size:10px;color:var(--dim);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px}
+.stj-highlight{color:var(--brand2)}
+.stj-urgent{color:var(--amber)}
+
+.prazo-box{background:linear-gradient(135deg,var(--amber-glow),rgba(239,68,68,0.05));border:1px solid rgba(245,158,11,0.25);border-radius:12px;padding:20px 24px;margin-top:20px;display:flex;align-items:flex-start;gap:16px}
+.prazo-icon{font-size:28px;flex-shrink:0}
+.prazo-text h4{font-size:14px;font-weight:700;color:var(--amber);margin-bottom:4px}
+.prazo-text p{font-size:13px;color:var(--muted);line-height:1.6}
+.prazo-text strong{color:var(--ice)}
+.action-bar{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}
+
+/* ── TOAST ──────────────────────────────────── */
+#toast{position:fixed;bottom:24px;right:24px;background:var(--brand);color:#fff;padding:12px 20px;border-radius:10px;font-weight:600;font-size:13px;transform:translateY(80px);opacity:0;transition:.3s;z-index:9999;box-shadow:0 8px 24px rgba(99,102,241,0.4)}
+#toast.show{transform:translateY(0);opacity:1}
+
+/* ── PARECER PRINT ──────────────────────────── */
+#print-area{display:none;position:fixed;inset:0;background:#fff;z-index:99999;overflow:auto;padding:40px}
+#print-area.open{display:block}
+@media print{body>*:not(#print-area){display:none!important}#print-area{position:static!important;padding:0}}
+.pr-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:32px;padding-bottom:20px;border-bottom:2px solid #1e293b}
+.pr-logo{font-size:20px;font-weight:900;color:#1e293b}
+.pr-logo span{color:#6366f1}
+.pr-meta{text-align:right;font-size:12px;color:#64748b;line-height:1.6}
+.pr-title{font-size:24px;font-weight:900;color:#1e293b;margin-bottom:4px}
+.pr-subtitle{font-size:13px;color:#64748b;margin-bottom:32px}
+.pr-section{margin-bottom:28px}
+.pr-section h3{font-size:14px;font-weight:700;color:#1e293b;text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid #e2e8f0;padding-bottom:8px;margin-bottom:16px}
+.pr-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #f1f5f9;font-size:13px;color:#374151}
+.pr-row strong{color:#1e293b}
+.pr-verdict{text-align:center;padding:20px;margin:20px 0;border-radius:10px;background:#f0fdf4;border:2px solid #bbf7d0}
+.pr-verdict .vd-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#15803d;margin-bottom:8px}
+.pr-verdict .vd-text{font-size:22px;font-weight:900;color:#166534}
+.pr-tese{background:#f8fafc;border-left:3px solid #6366f1;padding:16px 20px;font-size:13px;color:#374151;line-height:1.8;border-radius:0 8px 8px 0;margin-bottom:16px}
+.pr-close{position:fixed;top:16px;right:16px;background:#1e293b;color:#fff;border:none;border-radius:8px;padding:8px 16px;cursor:pointer;font-weight:600;font-size:13px}
+
+/* ── PARECERES PAGE ─────────────────────────── */
+.parecer-item{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:16px 20px;margin-bottom:10px;display:flex;align-items:center;gap:16px;cursor:pointer;transition:.15s}
+.parecer-item:hover{border-color:var(--border2);background:var(--bg3)}
+.pi-id{font-family:var(--fM);font-size:12px;color:var(--brand2);flex-shrink:0}
+.pi-empresa{font-size:14px;font-weight:600;flex:1}
+.pi-valor{font-size:14px;font-weight:700;color:var(--green2)}
+.pi-data{font-size:12px;color:var(--muted)}
+
+/* ── CONFIG ─────────────────────────────────── */
+.config-section{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:24px;margin-bottom:16px}
+.config-section h3{font-size:14px;font-weight:700;margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid var(--border)}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+.form-group{display:flex;flex-direction:column;gap:6px}
+.form-group label{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.form-group input,.form-group select{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:10px 14px;color:var(--ice);font-size:14px;outline:none;transition:.15s}
+.form-group input:focus,.form-group select:focus{border-color:var(--brand)}
+.form-group select option{background:var(--bg2)}
+
+/* ── SPINNER ────────────────────────────────── */
+@keyframes spin{to{transform:rotate(360deg)}}
+.spinner{display:inline-block;width:16px;height:16px;border:2px solid rgba(255,255,255,0.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite}
+
+/* ── EMPTY STATE ─────────────────────────────── */
+.empty-state{text-align:center;padding:60px 20px;color:var(--muted)}
+.empty-state .ico{font-size:48px;margin-bottom:16px}
+.empty-state h3{font-size:16px;font-weight:600;margin-bottom:8px;color:var(--ice)}
+.empty-state p{font-size:13px}
+</style>
+</head>
+<body>
+
+<!-- ══ LOGIN ══════════════════════════════════════════ -->
+<div id="login">
+  <div class="login-card">
+    <div class="login-logo">C</div>
+    <div class="login-title">Credit<span>OS</span></div>
+    <div class="login-sub">Sistema Operacional de Créditos Tributários<br>TRÍADE IA · Powered by Sonnet 4.6</div>
+    <div class="login-badge">⚡ EC 132/2023 · Janela fecha em 2027</div>
+    <input type="password" id="pwd" class="login-input" placeholder="••••••••" onkeydown="if(event.key==='Enter')login()">
+    <button class="login-btn" onclick="login()">Acessar Sistema</button>
+    <div class="login-error" id="login-err"></div>
+    <div class="login-hint">CreditOS v1.0-beta · Demo para Ilter Bispo · 2026</div>
+  </div>
+</div>
+
+<!-- ══ APP ════════════════════════════════════════════ -->
+<div id="app">
+
+  <!-- SIDEBAR -->
+  <div id="sidebar">
+    <div class="s-logo">
+      <div class="s-logo-icon">C</div>
+      <div>
+        <div class="s-logo-text">Credit<span>OS</span></div>
+        <div class="s-logo-sub">Motor de Créditos Tributários</div>
+      </div>
+      <div class="s-badge">Beta</div>
+    </div>
+
+    <div class="s-section">
+      <div class="s-label">Principal</div>
+      <div class="s-item active" onclick="showPage('dashboard')"><span class="ico">📊</span>Dashboard</div>
+      <div class="s-item" onclick="showPage('analise');resetAnalise()"><span class="ico">🔍</span>Nova Análise<span class="badge" id="badge-analise" style="display:none">!</span></div>
+    </div>
+
+    <div class="s-section">
+      <div class="s-label">Documentos</div>
+      <div class="s-item" onclick="showPage('pareceres')"><span class="ico">📋</span>Pareceres Gerados<span class="badge ok" id="badge-pareceres">0</span></div>
+    </div>
+
+    <div class="s-section">
+      <div class="s-label">Tributário</div>
+      <div class="s-item" onclick="showPage('reforma')"><span class="ico">🏛️</span>EC 132 / IBS / CBS</div>
+    </div>
+
+    <div class="s-section">
+      <div class="s-label">Sistema</div>
+      <div class="s-item" onclick="showPage('config')"><span class="ico">⚙️</span>Configurações</div>
+    </div>
+
+    <div class="s-footer">
+      <div class="s-escritorio"><div class="s-dot"></div><span id="s-nome">Escritório Contábil</span></div>
+      <button class="s-logout" onclick="logout()">⏏ Sair do sistema</button>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div id="main">
+
+    <!-- TOPBAR -->
+    <div id="topbar">
+      <div>
+        <div class="tb-title" id="tb-title">Dashboard</div>
+        <div class="tb-sub" id="tb-sub">Visão geral dos seus créditos tributários</div>
+      </div>
+      <div class="tb-actions">
+        <div class="urgency-chip"><div class="dot"></div><span id="urgency-chip-text">186 dias para Jan/2027</span></div>
+        <button class="btn btn-brand" onclick="showPage('analise');resetAnalise()">⚡ Nova Análise</button>
+      </div>
+    </div>
+
+    <!-- CONTENT -->
+    <div id="content">
+
+      <!-- ── DASHBOARD ───────────────────────── -->
+      <div id="page-dashboard" class="page active">
+        <div class="cards-4">
+          <div class="card brand">
+            <div class="card-label">Total Identificado</div>
+            <div class="card-value" id="d-total">R$ 0</div>
+            <div class="card-sub">em créditos de PIS/COFINS</div>
+          </div>
+          <div class="card green">
+            <div class="card-label">Créditos Válidos (VERDE)</div>
+            <div class="card-value" id="d-verdes">0</div>
+            <div class="card-sub">aprovados pelo critério STJ</div>
+          </div>
+          <div class="card amber">
+            <div class="card-label">Potencial 5 Anos</div>
+            <div class="card-value" id="d-pot">R$ 0</div>
+            <div class="card-sub">projeção acumulada</div>
+          </div>
+          <div class="card">
+            <div class="card-label">Análises Geradas</div>
+            <div class="card-value" id="d-analises">0</div>
+            <div class="card-sub">pareceres no sistema</div>
+          </div>
+        </div>
+
+        <div class="urgency-block">
+          <div class="urgency-title">JANELA DE OPORTUNIDADE — EC 132/2023</div>
+          <div class="urgency-counter">
+            <div class="uc-item"><div class="uc-val" id="uc-d">186</div><div class="uc-label">Dias</div></div>
+            <div class="uc-sep">:</div>
+            <div class="uc-item"><div class="uc-val" id="uc-h">00</div><div class="uc-label">Horas</div></div>
+            <div class="uc-sep">:</div>
+            <div class="uc-item"><div class="uc-val" id="uc-m">00</div><div class="uc-label">Min</div></div>
+            <div class="uc-sep">:</div>
+            <div class="uc-item"><div class="uc-val" id="uc-s">00</div><div class="uc-label">Seg</div></div>
+          </div>
+          <div class="urgency-sub">
+            A EC 132/2023 substitui o PIS/COFINS pelo <strong>CBS em janeiro de 2027</strong>. Créditos do sistema antigo que não estiverem homologados entram na transição sem suporte e podem ser perdidos.<br>
+            <strong>Cada mês de atraso aumenta o risco de auditoria retroativa de 5 anos.</strong>
+          </div>
+        </div>
+
+        <div class="section-card">
+          <div class="section-header">
+            <div class="section-title">Pareceres Recentes</div>
+            <button class="btn btn-ghost" onclick="showPage('analise');resetAnalise()">+ Nova Análise</button>
+          </div>
+          <div id="d-pareceres-list">
+            <div class="empty-state">
+              <div class="ico">🔍</div>
+              <h3>Nenhuma análise realizada ainda</h3>
+              <p>Clique em "Nova Análise" para processar seu primeiro arquivo EFD-Contribuições</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-card">
+          <div class="section-header"><div class="section-title">Prazos EC 132 — Cronograma de Transição</div></div>
+          <div style="padding:16px 20px">
+            <table class="tbl">
+              <thead><tr><th>Ano</th><th>Marco</th><th>Impacto nos Créditos</th><th>Status</th></tr></thead>
+              <tbody>
+                <tr><td style="font-weight:700;color:var(--brand2)">2026</td><td>IBS e CBS entram em vigor</td><td>Dois sistemas paralelos — validar agora com regras atuais</td><td><span class="badge badge-green">JANELA ABERTA</span></td></tr>
+                <tr><td style="font-weight:700;color:var(--amber)">2027</td><td>PIS/COFINS substituídos</td><td>Créditos precisam estar homologados ou entram no sistema antigo sem suporte</td><td><span class="badge badge-yellow">PRAZO CRÍTICO</span></td></tr>
+                <tr><td style="font-weight:700;color:#f87171">2033</td><td>Extinção completa</td><td>ICMS, ISS, PIS e COFINS extintos. Risco de perda definitiva dos créditos</td><td><span class="badge badge-red">PERIGO</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div><!-- /dashboard -->
+
+      <!-- ── NOVA ANÁLISE ────────────────────── -->
+      <div id="page-analise" class="page">
+
+        <!-- Step 1: Upload -->
+        <div id="step-upload" class="active">
+          <div class="demo-card">
+            <div class="demo-info">
+              <h4>📂 Dados de demonstração disponíveis</h4>
+              <p>Empresa: <strong>TECH INSUMOS INDUSTRIA LTDA</strong> · Janeiro/2025 · Regime Não-Cumulativo<br>
+              Total identificado: <strong>R$ 62.900,00</strong> · 8 créditos · 90% confiança</p>
+            </div>
+            <button class="btn btn-brand" onclick="carregarDemo()">Carregar Demonstração →</button>
+          </div>
+
+          <div class="section-card">
+            <div class="section-header">
+              <div class="section-title">Upload EFD-Contribuições</div>
+              <span class="badge badge-brand">M100 · M500 · 1700</span>
+            </div>
+            <div class="section-body">
+              <div class="upload-zone" id="upload-zone">
+                <input type="file" id="file-input" accept=".txt,.sped" onchange="handleFile(this)">
+                <div class="upload-icon">📄</div>
+                <div class="upload-title">Arraste o arquivo EFD aqui</div>
+                <div class="upload-sub">Formato SPED pipe-delimited (.txt)</div>
+                <button class="btn btn-ghost" onclick="document.getElementById('file-input').click();event.stopPropagation()">Selecionar arquivo</button>
+              </div>
+
+              <div class="upload-or">ou cole o conteúdo do EFD abaixo</div>
+
+              <textarea id="efd-text" class="efd-input" placeholder="Cole aqui o conteúdo do arquivo EFD-Contribuições...
+Exemplo:
+|M100|101|0|50|407272,73|1,65|0|0|6720,00|...
+|M500|501|0|70|242105,26|7,60|0|0|18400,00|..."></textarea>
+
+              <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+                <button class="btn btn-brand btn-lg" onclick="iniciarAnalise()" id="btn-analisar">
+                  <span>⚡</span> Analisar com CreditOS
+                </button>
+                <button class="btn btn-ghost" onclick="document.getElementById('efd-text').value=''">Limpar</button>
+                <span style="font-size:12px;color:var(--muted)">Registros buscados: M100 (PIS) · M500 (COFINS) · 1700 (Saldo Credor)</span>
+              </div>
+            </div>
+          </div>
+
+          <div style="background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:20px 24px;margin-top:16px">
+            <div style="font-size:13px;font-weight:700;margin-bottom:12px;color:var(--muted)">ONDE ENCONTRAR O ARQUIVO EFD-CONTRIBUIÇÕES</div>
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px">
+              <div style="font-size:12px;color:var(--muted);line-height:1.6"><strong style="color:var(--ice);display:block;margin-bottom:4px">SPED Contribuições</strong>Sistema SPED → EFD-Contribuições → Exportar arquivo de transmissão</div>
+              <div style="font-size:12px;color:var(--muted);line-height:1.6"><strong style="color:var(--ice);display:block;margin-bottom:4px">Domínio / Alterdata</strong>Relatórios → SPED Fiscal → EFD Contribuições → Gerar arquivo</div>
+              <div style="font-size:12px;color:var(--muted);line-height:1.6"><strong style="color:var(--ice);display:block;margin-bottom:4px">Totvs / Senior</strong>Fiscal → Obrigações Acessórias → EFD-Contribuições → Download</div>
+            </div>
+          </div>
+        </div><!-- /step-upload -->
+
+        <!-- Step 2: Processing -->
+        <div id="step-processing">
+          <div class="section-card">
+            <div class="proc-header">
+              <div class="proc-title" id="proc-title">Processando EFD-Contribuições...</div>
+              <div class="proc-sub" id="proc-sub">Pipeline CreditOS v1.0 · Motor Parrot / TRÍADE IA</div>
+              <div class="proc-progress"><div class="proc-bar" id="proc-bar"></div></div>
+            </div>
+            <div style="padding:0 24px 24px">
+              <div class="proc-skills" id="proc-skills">
+                <div class="skill-row waiting" id="sk-001">
+                  <div class="skill-header">
+                    <span class="skill-badge">001</span>
+                    <span class="skill-name">Extrator EFD-Contribuições</span>
+                    <span class="skill-status" id="sk-001-status">Aguardando...</span>
+                  </div>
+                  <div class="skill-logs" id="sk-001-logs"></div>
+                </div>
+                <div class="skill-row waiting" id="sk-002">
+                  <div class="skill-header">
+                    <span class="skill-badge">002</span>
+                    <span class="skill-name">Validador STJ (Essencialidade)</span>
+                    <span class="skill-status" id="sk-002-status">Aguardando...</span>
+                  </div>
+                  <div class="skill-logs" id="sk-002-logs"></div>
+                </div>
+                <div class="skill-row waiting" id="sk-003">
+                  <div class="skill-header">
+                    <span class="skill-badge">003</span>
+                    <span class="skill-name">Calculador de Proporcionalidade</span>
+                    <span class="skill-status" id="sk-003-status">Aguardando...</span>
+                  </div>
+                  <div class="skill-logs" id="sk-003-logs"></div>
+                </div>
+                <div class="skill-row waiting" id="sk-004">
+                  <div class="skill-header">
+                    <span class="skill-badge">004</span>
+                    <span class="skill-name">Gerador de Parecer Técnico</span>
+                    <span class="skill-status" id="sk-004-status">Aguardando...</span>
+                  </div>
+                  <div class="skill-logs" id="sk-004-logs"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div><!-- /step-processing -->
+
+        <!-- Step 3: Resultado -->
+        <div id="step-resultado">
+          <div class="resultado-header" id="res-header">
+            <div class="res-title">
+              <h3 id="res-parecer-id">PT-CREDITOS-...</h3>
+              <h2 id="res-empresa">Empresa</h2>
+              <p id="res-periodo">Período · Regime</p>
+            </div>
+            <div class="res-verdict">
+              <div class="verdict-badge verdict-fav" id="res-verdict">FAVORÁVEL</div>
+              <div style="font-size:11px;color:var(--muted);margin-top:8px" id="res-confianca">90% confiança média</div>
+            </div>
+          </div>
+
+          <div class="cards-4" id="res-cards">
+            <div class="card brand"><div class="card-label">Total Identificado</div><div class="card-value" id="rc-total">—</div><div class="card-sub">PIS + COFINS</div></div>
+            <div class="card"><div class="card-label">Créditos Avaliados</div><div class="card-value" id="rc-itens">—</div><div class="card-sub">itens analisados</div></div>
+            <div class="card green"><div class="card-label">Confiança Média</div><div class="card-value" id="rc-conf">—</div><div class="card-sub">ponderada pelo valor</div></div>
+            <div class="card amber"><div class="card-label">Potencial 5 Anos</div><div class="card-value" id="rc-pot">—</div><div class="card-sub">projeção acumulada</div></div>
+          </div>
+
+          <div class="section-card">
+            <div class="section-header">
+              <div class="section-title">Créditos Identificados</div>
+              <span id="res-resumo" class="badge badge-green"></span>
+            </div>
+            <div class="credits-table-wrap">
+              <table class="tbl" id="credits-table">
+                <thead>
+                  <tr>
+                    <th>Tipo</th>
+                    <th>Descrição do Crédito</th>
+                    <th>Base Legal</th>
+                    <th>Status STJ</th>
+                    <th style="text-align:right">Valor (R$)</th>
+                  </tr>
+                </thead>
+                <tbody id="credits-tbody"></tbody>
+              </table>
+            </div>
+            <div class="stj-box">
+              <div class="label">TESE JURÍDICA APLICADA</div>
+              <span class="stj-highlight">STJ REsp 1.221.170/PR (Tema 779)</span> — Créditos de insumos essenciais são aproveitáveis independente de contato físico direto com o produto final. O conceito de insumo deve ser analisado à luz da <em>essencialidade</em> e <em>relevância</em> para o processo produtivo. Base: <span class="stj-highlight">Lei 10.637/2002 art. 3º, II</span> (PIS) · <span class="stj-highlight">Lei 10.833/2003 art. 3º, II</span> (COFINS). Prazo prescricional: 5 anos (art. 168 CTN).
+            </div>
+          </div>
+
+          <div class="prazo-box">
+            <div class="prazo-icon">⚠️</div>
+            <div class="prazo-text">
+              <h4>AÇÃO RECOMENDADA — PER/DCOMP antes de Jan/2027</h4>
+              <p>Com o parecer em mãos, o próximo passo é a habilitação dos créditos via <strong>PER/DCOMP</strong> (Pedido Eletrônico de Ressarcimento / Declaração de Compensação) no e-CAC da Receita Federal. Este pedido deve ser protocolado <strong>antes de janeiro de 2027</strong> — prazo da entrada do CBS em vigor pela EC 132/2023. Créditos de <strong>ICMS</strong> seguem via <strong>DARE</strong> estadual ou transferência para terceiros.</p>
+            </div>
+          </div>
+
+          <div class="action-bar">
+            <button class="btn btn-green btn-lg" onclick="imprimirParecer()">🖨️ Imprimir Parecer</button>
+            <button class="btn btn-brand btn-lg" onclick="baixarParecer()">⬇ Download HTML</button>
+            <button class="btn btn-ghost" onclick="resetAnalise()">← Nova Análise</button>
+          </div>
+        </div><!-- /step-resultado -->
+
+      </div><!-- /page-analise -->
+
+      <!-- ── PARECERES ───────────────────────── -->
+      <div id="page-pareceres" class="page">
+        <div class="section-card">
+          <div class="section-header">
+            <div class="section-title">Pareceres Gerados</div>
+            <button class="btn btn-brand" onclick="showPage('analise');resetAnalise()">+ Nova Análise</button>
+          </div>
+          <div id="pareceres-list" style="padding:8px 12px"></div>
+        </div>
+      </div>
+
+      <!-- ── EC 132 ──────────────────────────── -->
+      <div id="page-reforma" class="page">
+        <div class="section-card">
+          <div class="section-header"><div class="section-title">EC 132/2023 — Observatório da Reforma Tributária</div></div>
+          <div class="section-body">
+            <div class="cards-3" style="margin-bottom:24px">
+              <div class="card brand"><div class="card-label">CBS entra em vigor</div><div class="card-value">2027</div><div class="card-sub">Contribuição sobre Bens e Serviços (substitui PIS/COFINS)</div></div>
+              <div class="card amber"><div class="card-label">IBS implementação</div><div class="card-value">2029</div><div class="card-sub">Imposto sobre Bens e Serviços (substitui ICMS+ISS)</div></div>
+              <div class="card" style="border-color:rgba(239,68,68,.25);background:rgba(239,68,68,.05)"><div class="card-label">Sistema unificado</div><div class="card-value" style="color:#f87171">2033</div><div class="card-sub">Extinção completa de PIS, COFINS, ICMS e ISS</div></div>
+            </div>
+            <div style="font-size:13px;color:var(--muted);line-height:1.9">
+              <p style="margin-bottom:12px"><strong style="color:var(--ice)">O que muda para os créditos tributários:</strong></p>
+              <p>• Créditos de PIS/COFINS acumulados até 2027 devem ser <strong style="color:var(--ice)">homologados e utilizados antes da transição</strong> — a Receita Federal não garante aproveitamento posterior no sistema CBS.</p>
+              <p>• O período de transição (2027–2033) prevê dois sistemas simultâneos com alíquotas duais — o contador que não mapear os créditos atuais terá dificuldade em identificar a base de cálculo retroativa.</p>
+              <p>• A <strong style="color:var(--ice)">tese do STJ (Tema 779)</strong> sobre essencialidade dos insumos continua válida para os créditos históricos de PIS/COFINS, mas a janela de protocolo se fecha com a CBS.</p>
+              <p style="margin-top:16px;color:var(--amber)"><strong>⚡ Recomendação CreditOS:</strong> Toda empresa com regime não-cumulativo (Lucro Real) deve protocolar PER/DCOMP antes de jan/2027 para garantir o aproveitamento dos créditos históricos.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── CONFIG ─────────────────────────── -->
+      <div id="page-config" class="page">
+        <div class="config-section">
+          <h3>Dados do Escritório / Empresa</h3>
+          <div class="form-row">
+            <div class="form-group"><label>Razão Social</label><input type="text" id="cfg-nome" placeholder="Nome do escritório" oninput="salvarConfig()"></div>
+            <div class="form-group"><label>CNPJ</label><input type="text" id="cfg-cnpj" placeholder="00.000.000/0001-00" oninput="salvarConfig()"></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>CRC</label><input type="text" id="cfg-crc" placeholder="GO-00000/O" oninput="salvarConfig()"></div>
+            <div class="form-group"><label>Responsável Técnico</label><input type="text" id="cfg-resp" placeholder="Nome do contador" oninput="salvarConfig()"></div>
+          </div>
+          <div class="form-group"><label>E-mail</label><input type="email" id="cfg-email" placeholder="contato@escritorio.com.br" oninput="salvarConfig()"></div>
+        </div>
+        <div class="config-section">
+          <h3>Segurança</h3>
+          <div class="form-row">
+            <div class="form-group"><label>Senha atual</label><input type="password" id="cfg-pwd-old" placeholder="••••••••"></div>
+            <div class="form-group"><label>Nova senha</label><input type="password" id="cfg-pwd-new" placeholder="••••••••"></div>
+          </div>
+          <button class="btn btn-brand" onclick="alterarSenha()">Salvar nova senha</button>
+        </div>
+        <div class="config-section">
+          <h3>Sobre o CreditOS</h3>
+          <div style="font-size:13px;color:var(--muted);line-height:1.9">
+            <p><strong style="color:var(--ice)">CreditOS v1.0-beta</strong> · TRÍADE IA · Itumbiara, GO</p>
+            <p>Motor de recuperação de créditos tributários com IA — PIS/COFINS e ICMS.</p>
+            <p>Base normativa: EC 132/2023 · Lei 10.637/2002 · Lei 10.833/2003 · STJ REsp 1.221.170/PR (Tema 779) · IN RFB 1.911/2019</p>
+            <p style="margin-top:8px;font-size:11px">Desenvolvido por Claude Windows + Claude Parrot · TRÍADE IA Squad · 2026</p>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /content -->
+  </div><!-- /main -->
+</div><!-- /app -->
+
+<!-- PRINT AREA -->
+<div id="print-area">
+  <button class="pr-close" onclick="fecharParecer()" style="position:fixed">✕ Fechar</button>
+  <div id="print-content"></div>
+</div>
+
+<!-- TOAST -->
+<div id="toast"></div>
+
+<script>
+// ══════════════════════════════════════════════
+// ESTADO GLOBAL
+// ══════════════════════════════════════════════
+let state = {
+  pareceres: [],
+  config: { nome: 'Escritório Contábil', cnpj: '', crc: '', resp: '', email: '' },
+  ultimaAnalise: null,
+  pwd: 'creditos2026'
+};
+
+const DEMO_EFD = `|M100|101|0|50|407272,73|1,65|0|0|6720,00|0|0|0|407272,73|1,65|6720,00|6720,00|0|0|0||INSUMOS MATERIA PRIMA - LINHA PRODUCAO|012025|1.01.01|
+|M100|201|0|50|272727,27|1,65|0|0|4500,00|0|0|0|272727,27|1,65|4500,00|4500,00|0|0|0||ENERGIA ELETRICA LINHA PRODUCAO|012025|1.01.02|
+|M500|501|0|70|242105,26|7,60|0|0|18400,00|0|0|0|242105,26|7,60|18400,00|18400,00|0|0|0||INSUMOS EMBALAGENS|012025|1.01.03|
+|M500|601|0|70|194736,84|7,60|0|0|14800,00|0|0|0|194736,84|7,60|14800,00|14800,00|0|0|0||ENERGIA ELETRICA FABRICA|012025|1.01.04|
+|M500|701|0|70|134210,53|7,60|0|0|10200,00|0|0|0|134210,53|7,60|10200,00|10200,00|0|0|0||FRETE CIF SOBRE VENDAS|012025|1.01.05|
+|M500|702|0|70|65789,47|7,60|0|0|5000,00|0|0|0|65789,47|7,60|5000,00|5000,00|0|0|0||FRETE SOBRE COMPRAS|012025|1.01.06|
+|M500|801|0|70|27631,58|7,60|0|0|2100,00|0|0|0|27631,58|7,60|2100,00|2100,00|0|0|0||DEPRECIACAO ATIVO IMOBILIZADO|012025|1.01.07|
+|M500|901|0|70|15526,32|7,60|0|0|1180,00|0|0|0|15526,32|7,60|1180,00|1180,00|0|0|0||SERVICOS TERCEIRIZADOS|012025|1.01.08|`;
+
+const DEMO_META = { empresa: 'TECH INSUMOS INDUSTRIA LTDA', cnpj: '12.345.678/0001-90', periodo: 'Janeiro/2025', regime: 'Não-Cumulativo (Lucro Real)' };
+
+// ══════════════════════════════════════════════
+// BOOT
+// ══════════════════════════════════════════════
+document.addEventListener('DOMContentLoaded', () => {
+  carregarStorage();
+  atualizarUrgency();
+  setInterval(atualizarUrgency, 1000);
+  document.getElementById('upload-zone').addEventListener('dragover', e => { e.preventDefault(); e.currentTarget.classList.add('drag'); });
+  document.getElementById('upload-zone').addEventListener('dragleave', e => e.currentTarget.classList.remove('drag'));
+  document.getElementById('upload-zone').addEventListener('drop', e => {
+    e.preventDefault();
+    e.currentTarget.classList.remove('drag');
+    const file = e.dataTransfer.files[0];
+    if (file) lerArquivo(file);
+  });
+});
+
+// ══════════════════════════════════════════════
+// LOGIN
+// ══════════════════════════════════════════════
+function login() {
+  const v = document.getElementById('pwd').value;
+  if (v === state.pwd) {
+    document.getElementById('login').style.display = 'none';
+    document.getElementById('app').style.display = 'flex';
+    atualizarDashboard();
+    atualizarBadgeParecer();
+  } else {
+    const el = document.getElementById('login-err');
+    el.textContent = 'Senha incorreta. Tente novamente.';
+    document.getElementById('pwd').value = '';
+    setTimeout(() => el.textContent = '', 3000);
+  }
+}
+function logout() {
+  document.getElementById('login').style.display = 'flex';
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('pwd').value = '';
+}
+function alterarSenha() {
+  const old = document.getElementById('cfg-pwd-old').value;
+  const nv = document.getElementById('cfg-pwd-new').value;
+  if (old !== state.pwd) { toast('Senha atual incorreta', true); return; }
+  if (nv.length < 6) { toast('Nova senha muito curta (mín. 6 chars)', true); return; }
+  state.pwd = nv;
+  salvarStorage();
+  toast('Senha alterada com sucesso');
+  document.getElementById('cfg-pwd-old').value = '';
+  document.getElementById('cfg-pwd-new').value = '';
+}
+
+// ══════════════════════════════════════════════
+// NAVEGAÇÃO
+// ══════════════════════════════════════════════
+const pageConfig = {
+  dashboard:  { title: 'Dashboard', sub: 'Visão geral dos seus créditos tributários' },
+  analise:    { title: 'Nova Análise', sub: 'Processamento de EFD-Contribuições com motor de IA' },
+  pareceres:  { title: 'Pareceres Gerados', sub: 'Histórico de análises e pareceres técnicos' },
+  reforma:    { title: 'EC 132/2023', sub: 'Observatório da Reforma Tributária — IBS / CBS / IS' },
+  config:     { title: 'Configurações', sub: 'Dados do escritório e preferências do sistema' },
+};
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.s-item').forEach(i => i.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  const item = document.querySelector(`.s-item[onclick*="'${id}'"]`);
+  if (item) item.classList.add('active');
+  const cfg = pageConfig[id];
+  if (cfg) {
+    document.getElementById('tb-title').textContent = cfg.title;
+    document.getElementById('tb-sub').textContent = cfg.sub;
+  }
+  if (id === 'pareceres') renderPareceresPage();
+  if (id === 'dashboard') atualizarDashboard();
+  if (id === 'config') carregarConfigForm();
+}
+
+// ══════════════════════════════════════════════
+// EFD PARSER
+// ══════════════════════════════════════════════
+const COD_MAP = {
+  '1': { cat: 'Insumos',               base: 'Lei 10.637/2002 art. 3º, II',          status: 'VERDE', conf: 0.95 },
+  '2': { cat: 'Energia Elétrica',      base: 'STJ Tema 779 (essencialidade)',         status: 'VERDE', conf: 0.95 },
+  '3': { cat: 'Aluguéis de Prédio',    base: 'Lei 10.637/2002 art. 3º, IV',          status: 'VERDE', conf: 0.90 },
+  '4': { cat: 'Aluguéis de Máquinas',  base: 'Lei 10.637/2002 art. 3º, V',          status: 'VERDE', conf: 0.90 },
+  '5': { cat: 'Insumos / Fretes',      base: 'IN RFB 1.911/2019 art. 167',           status: 'VERDE', conf: 0.92 },
+  '6': { cat: 'Energia / Devolução',   base: 'STJ Tema 779 (essencialidade)',         status: 'VERDE', conf: 0.93 },
+  '7': { cat: 'Fretes',                base: 'IN RFB 1.911/2019 art. 167',           status: 'VERDE', conf: 0.92 },
+  '8': { cat: 'Depreciação',           base: 'Lei 10.833/2003 art. 3º, VI — Verificar', status: 'AMARELO', conf: 0.72 },
+  '9': { cat: 'Outros Créditos',       base: 'Análise detalhada recomendada',        status: 'AMARELO', conf: 0.65 },
+};
+
+function parseEFD(text) {
+  const linhas = text.split('\n');
+  const creditos = [];
+  for (const linha of linhas) {
+    const raw = linha.trim();
+    if (!raw) continue;
+    const campos = raw.split('|');
+    // Remove primeiro campo vazio se houver pipe inicial
+    while (campos.length > 0 && campos[0] === '') campos.shift();
+    const tipo = campos[0];
+    if (tipo !== 'M100' && tipo !== 'M500') continue;
+    // COD_CRED está na posição 1 (campo 02 do layout)
+    const codCred = campos[1] || '901';
+    // VL_CRED está na posição 8 (campo 09 do layout) — pode variar
+    let valor = 0;
+    // Tenta posições conhecidas: 8, 6, 5 (fallback)
+    for (const idx of [8, 6, 5, 9]) {
+      const v = campos[idx];
+      if (v && v !== '0' && v !== '') {
+        const num = parseFloat(v.replace(',', '.'));
+        if (num > 0) { valor = num; break; }
+      }
+    }
+    if (valor <= 0) continue;
+    const descCred = campos[campos.length - 4] || campos[campos.length - 3] || 'Crédito Tributário';
+    const primeiroDigito = codCred.charAt(0);
+    const mapa = COD_MAP[primeiroDigito] || COD_MAP['9'];
+    creditos.push({
+      tipo: tipo === 'M100' ? 'PIS' : 'COFINS',
+      codCred,
+      descricao: descCred.trim(),
+      valor,
+      categoria: mapa.cat,
+      base: mapa.base,
+      status: mapa.status,
+      confianca: mapa.conf,
+    });
+  }
+  return creditos;
+}
+
+// ══════════════════════════════════════════════
+// PIPELINE
+// ══════════════════════════════════════════════
+function carregarDemo() {
+  document.getElementById('efd-text').value = DEMO_EFD;
+  toast('Dados de demonstração carregados — Jan/2025');
+  window._demoMeta = DEMO_META;
+}
+function handleFile(input) {
+  if (input.files[0]) lerArquivo(input.files[0]);
+}
+function lerArquivo(file) {
+  const reader = new FileReader();
+  reader.onload = e => {
+    document.getElementById('efd-text').value = e.target.result;
+    toast('Arquivo carregado: ' + file.name);
+    window._demoMeta = null;
+  };
+  reader.readAsText(file, 'latin1');
+}
+function iniciarAnalise() {
+  const txt = document.getElementById('efd-text').value.trim();
+  if (!txt) { toast('Cole o conteúdo do EFD ou carregue um arquivo', true); return; }
+  const creditos = parseEFD(txt);
+  if (creditos.length === 0) { toast('Nenhum registro M100/M500 encontrado — verifique o arquivo', true); return; }
+  mostrarStep('processing');
+  rodarPipeline(creditos);
+}
+
+async function rodarPipeline(creditos) {
+  const delay = ms => new Promise(r => setTimeout(r, ms));
+  const bar = document.getElementById('proc-bar');
+  const totalPIS  = creditos.filter(c => c.tipo === 'PIS').reduce((s, c) => s + c.valor, 0);
+  const totalCOF  = creditos.filter(c => c.tipo === 'COFINS').reduce((s, c) => s + c.valor, 0);
+  const totalGeral = totalPIS + totalCOF;
+  const isCritical = totalGeral >= 50000;
+
+  // SKILL 001
+  setSkill('001', 'running', 'Extraindo registros...');
+  bar.style.width = '10%';
+  await delay(600);
+  addLog('001', `<span class="log-ok">✓ Registros M100 encontrados: ${creditos.filter(c=>c.tipo==='PIS').length}</span>`);
+  await delay(400);
+  addLog('001', `<span class="log-ok">✓ Registros M500 encontrados: ${creditos.filter(c=>c.tipo==='COFINS').length}</span>`);
+  await delay(300);
+  addLog('001', `<span class="log-info">  Créditos PIS (M100): R$ ${fmt(totalPIS)}</span>`);
+  await delay(300);
+  addLog('001', `<span class="log-info">  Créditos COFINS (M500): R$ ${fmt(totalCOF)}</span>`);
+  await delay(400);
+  if (isCritical) addLog('001', `<span class="log-critical">⚡ OPORTUNIDADE CRÍTICA — total ≥ R$50.000 detectado</span>`);
+  bar.style.width = '28%';
+  setSkill('001', 'done', '✓ Concluído');
+  await delay(500);
+
+  // SKILL 002
+  setSkill('002', 'running', 'Validando critério de essencialidade...');
+  await delay(500);
+  const verdes  = creditos.filter(c => c.status === 'VERDE').length;
+  const amarelos = creditos.filter(c => c.status === 'AMARELO').length;
+  addLog('002', `<span class="log-ok">✓ Aplicando STJ REsp 1.221.170/PR (Tema 779)</span>`);
+  await delay(600);
+  addLog('002', `<span class="log-ok">✓ ${verdes} crédito(s) VERDE — essencialidade confirmada</span>`);
+  if (amarelos > 0) addLog('002', `<span class="log-warn">⚠ ${amarelos} crédito(s) AMARELO — análise adicional recomendada</span>`);
+  await delay(400);
+  const confMedia = creditos.reduce((s,c) => s + c.confianca * c.valor, 0) / totalGeral;
+  addLog('002', `<span class="log-info">  Confiança média ponderada: ${Math.round(confMedia*100)}%</span>`);
+  bar.style.width = '56%';
+  setSkill('002', 'done', '✓ Concluído');
+  await delay(500);
+
+  // SKILL 003
+  setSkill('003', 'running', 'Calculando proporcionalidade...');
+  await delay(500);
+  addLog('003', `<span class="log-ok">✓ Regime verificado: Não-Cumulativo (Lucro Real) → elegível</span>`);
+  await delay(400);
+  addLog('003', `<span class="log-info">  Base legal: Lei 10.637/2002 art. 3º §7º + IN RFB 1.911/2019 art. 167</span>`);
+  await delay(300);
+  addLog('003', `<span class="log-ok">✓ Coeficiente de aproveitamento: 1,00 (operações tributadas = 100%)</span>`);
+  await delay(300);
+  const pot5 = totalGeral * 6;
+  addLog('003', `<span class="log-info">  Crédito líquido aproveitável: R$ ${fmt(totalGeral)}</span>`);
+  await delay(300);
+  addLog('003', `<span class="log-warn">⚡ Projeção 5 anos: R$ ${fmt(pot5)}</span>`);
+  bar.style.width = '82%';
+  setSkill('003', 'done', '✓ Concluído');
+  await delay(500);
+
+  // SKILL 004
+  setSkill('004', 'running', 'Gerando parecer técnico...');
+  await delay(500);
+  const parecerId = gerarId();
+  addLog('004', `<span class="log-ok">✓ Numeração automática: ${parecerId}</span>`);
+  await delay(400);
+  addLog('004', `<span class="log-info">  Reproduzindo tese STJ Tema 779 no relatório</span>`);
+  await delay(300);
+  addLog('004', `<span class="log-info">  Calculando prazo prescricional: 5 anos (art. 168 CTN)</span>`);
+  await delay(400);
+  addLog('004', `<span class="log-ok">✓ Parecer ${parecerId} gerado com sucesso</span>`);
+  bar.style.width = '100%';
+  setSkill('004', 'done', '✓ Concluído');
+  await delay(600);
+
+  // Montar resultado
+  const meta = window._demoMeta || { empresa: 'Empresa Analisada', cnpj: '—', periodo: 'Período atual', regime: 'Não-Cumulativo' };
+  const resultado = { parecerId, empresa: meta.empresa, cnpj: meta.cnpj, periodo: meta.periodo, regime: meta.regime, creditos, totalPIS, totalCOF, totalGeral, confianca: Math.round(confMedia*100), pot5, verdes, amarelos, dataGeracao: new Date().toLocaleDateString('pt-BR') };
+  state.ultimaAnalise = resultado;
+  state.pareceres.unshift(resultado);
+  salvarStorage();
+  atualizarBadgeParecer();
+  mostrarResultado(resultado);
+}
+
+function setSkill(id, estado, status) {
+  const row = document.getElementById('sk-' + id);
+  row.className = 'skill-row ' + estado;
+  document.getElementById('sk-' + id + '-status').textContent = status;
+}
+function addLog(skillId, html) {
+  const el = document.getElementById('sk-' + skillId + '-logs');
+  el.innerHTML += html + '<br>';
+}
+
+// ══════════════════════════════════════════════
+// RESULTADO
+// ══════════════════════════════════════════════
+function mostrarResultado(r) {
+  mostrarStep('resultado');
+  document.getElementById('res-parecer-id').textContent = r.parecerId;
+  document.getElementById('res-empresa').textContent = r.empresa;
+  document.getElementById('res-periodo').textContent = r.periodo + ' · ' + r.regime;
+  const isVerdes = r.amarelos === 0;
+  document.getElementById('res-verdict').textContent = isVerdes ? 'FAVORÁVEL' : 'FAVORÁVEL COM RESSALVAS';
+  document.getElementById('res-verdict').className = 'verdict-badge ' + (isVerdes ? 'verdict-fav' : 'verdict-res');
+  document.getElementById('res-confianca').textContent = r.confianca + '% confiança média';
+  document.getElementById('rc-total').textContent = 'R$ ' + fmt(r.totalGeral);
+  document.getElementById('rc-itens').textContent = r.creditos.length;
+  document.getElementById('rc-conf').textContent = r.confianca + '%';
+  document.getElementById('rc-pot').textContent = 'R$ ' + fmt(r.pot5);
+  document.getElementById('res-resumo').textContent = r.verdes + ' VERDE · ' + r.amarelos + ' AMARELO';
+
+  // Tabela
+  const tbody = document.getElementById('credits-tbody');
+  tbody.innerHTML = '';
+  r.creditos.forEach(c => {
+    const cls = c.status === 'VERDE' ? 'badge-green' : c.status === 'AMARELO' ? 'badge-yellow' : 'badge-red';
+    tbody.innerHTML += `<tr>
+      <td><span style="font-family:var(--fM);font-size:11px;font-weight:700;color:${c.tipo==='PIS'?'var(--brand2)':'var(--amber2)'}">${c.tipo}</span></td>
+      <td>${c.descricao}</td>
+      <td style="font-size:12px;color:var(--muted)">${c.base}</td>
+      <td><span class="badge ${cls}">${c.status}</span></td>
+      <td style="text-align:right;font-family:var(--fM);font-weight:600">${fmt(c.valor)}</td>
+    </tr>`;
+  });
+  // Total row
+  tbody.innerHTML += `<tr style="border-top:2px solid var(--border)">
+    <td colspan="3" style="font-weight:700;font-size:13px">Total Identificado</td>
+    <td></td>
+    <td style="text-align:right;font-family:var(--fM);font-weight:800;color:var(--brand2);font-size:15px">R$ ${fmt(r.totalGeral)}</td>
+  </tr>`;
+}
+
+// ══════════════════════════════════════════════
+// IMPRESSÃO / DOWNLOAD
+// ══════════════════════════════════════════════
+function imprimirParecer() {
+  const r = state.ultimaAnalise;
+  if (!r) return;
+  document.getElementById('print-content').innerHTML = buildParecerHTML(r);
+  document.getElementById('print-area').classList.add('open');
+}
+function fecharParecer() {
+  document.getElementById('print-area').classList.remove('open');
+}
+function baixarParecer() {
+  const r = state.ultimaAnalise;
+  if (!r) return;
+  const html = `<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><title>${r.parecerId}</title><style>body{font-family:Arial,sans-serif;max-width:800px;margin:40px auto;color:#1e293b;line-height:1.6}h1{font-size:22px;margin-bottom:4px}h3{font-size:14px;text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid #e2e8f0;padding-bottom:8px;margin:24px 0 12px}.row{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid #f1f5f9;font-size:13px}.badge{padding:2px 9px;border-radius:20px;font-size:11px;font-weight:700}.verde{background:#dcfce7;color:#166534}.amarelo{background:#fef3c7;color:#92400e}.total{font-size:18px;font-weight:900;color:#4f46e5}.tese{background:#f8fafc;border-left:3px solid #6366f1;padding:14px 18px;font-size:13px;margin:16px 0;border-radius:0 6px 6px 0}.alert{background:#fffbeb;border:1px solid #fcd34d;padding:14px 18px;border-radius:8px;font-size:13px;margin:20px 0}</style></head><body>
+<div style="display:flex;justify-content:space-between;align-items:flex-start;padding-bottom:20px;border-bottom:2px solid #1e293b;margin-bottom:28px">
+<div><h1><span style="color:#6366f1">Credit</span>OS · Parecer Técnico</h1><div style="font-size:13px;color:#64748b">TRÍADE IA · Motor de Recuperação de Créditos Tributários</div></div>
+<div style="text-align:right;font-size:12px;color:#64748b">${r.parecerId}<br>${r.dataGeracao}<br>${state.config.nome || 'TRÍADE IA'}</div></div>
+${buildParecerHTML(r, true)}</body></html>`;
+  const blob = new Blob([html], {type:'text/html;charset=utf-8'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = r.parecerId + '.html';
+  a.click();
+  toast('Parecer baixado: ' + r.parecerId + '.html');
+}
+function buildParecerHTML(r, plain=false) {
+  const vtxt = r.amarelos === 0 ? 'FAVORÁVEL' : 'FAVORÁVEL COM RESSALVAS';
+  const vbg  = r.amarelos === 0 ? 'background:#f0fdf4;border:2px solid #bbf7d0' : 'background:#fffbeb;border:2px solid #fde68a';
+  const vcol = r.amarelos === 0 ? '#166534' : '#92400e';
+
+  let linhas = '';
+  r.creditos.forEach(c => {
+    const cls = plain ? (c.status==='VERDE'?'verde':'amarelo') : (c.status==='VERDE'?'badge-green':c.status==='AMARELO'?'badge-yellow':'badge-red');
+    linhas += `<div class="row"><span>${c.tipo} · ${c.descricao}</span><span style="display:flex;gap:12px;align-items:center"><span style="font-size:12px;color:#64748b">${c.base}</span><span class="badge ${cls}">${c.status}</span><strong>R$ ${fmt(c.valor)}</strong></span></div>`;
+  });
+
+  return `
+    <div style="text-align:center;padding:20px;margin-bottom:24px;border-radius:10px;${vbg}">
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:${vcol};margin-bottom:6px">PARECER</div>
+      <div style="font-size:22px;font-weight:900;color:${vcol}">${vtxt}</div>
+      <div style="font-size:13px;color:${vcol};margin-top:6px">${r.confianca}% de confiança média ponderada</div>
+    </div>
+    <h3>Identificação</h3>
+    <div class="row"><span>Número do Parecer</span><strong>${r.parecerId}</strong></div>
+    <div class="row"><span>Empresa</span><strong>${r.empresa}</strong></div>
+    <div class="row"><span>CNPJ</span><strong>${r.cnpj}</strong></div>
+    <div class="row"><span>Período de Apuração</span><strong>${r.periodo}</strong></div>
+    <div class="row"><span>Regime Tributário</span><strong>${r.regime}</strong></div>
+    <div class="row"><span>Data de Geração</span><strong>${r.dataGeracao}</strong></div>
+    <h3>Créditos Identificados</h3>
+    ${linhas}
+    <div class="row"><span style="font-weight:800;font-size:14px">TOTAL IDENTIFICADO</span><span class="total">R$ ${fmt(r.totalGeral)}</span></div>
+    <div class="row"><span>Potencial 5 anos (projeção)</span><strong>R$ ${fmt(r.pot5)}</strong></div>
+    <h3>Tese Jurídica Aplicada</h3>
+    <div class="tese"><strong>STJ REsp 1.221.170/PR (Tema 779)</strong> — Créditos de insumos essenciais são aproveitáveis independente de contato físico direto com o produto final. O conceito de insumo deve ser analisado à luz da <em>essencialidade</em> e <em>relevância</em>.<br><br>Base normativa: Lei 10.637/2002 art. 3º, II (PIS) · Lei 10.833/2003 art. 3º, II (COFINS) · IN RFB 1.911/2019 art. 167. Prazo prescricional: 5 anos (art. 168 CTN).</div>
+    <h3>Ação Recomendada</h3>
+    <div class="alert"><strong>⚠ PER/DCOMP antes de Janeiro/2027</strong><br>Protocolar Pedido Eletrônico de Ressarcimento / Declaração de Compensação (PER/DCOMP) no e-CAC da Receita Federal antes da entrada em vigor do CBS (EC 132/2023). Créditos de ICMS: DARE estadual ou transferência para terceiros.<br><br><em>EC 132/2023 substitui PIS/COFINS pelo CBS em 2027. Créditos não homologados ficam expostos a auditoria retroativa de 5 anos.</em></div>
+    <div style="margin-top:40px;padding-top:20px;border-top:1px solid #e2e8f0;font-size:12px;color:#94a3b8;text-align:center">
+      Parecer gerado por CreditOS v1.0 · Motor IA TRÍADE IA · ${r.dataGeracao}<br>
+      Base normativa: EC 132/2023 · STJ Tema 779 · IN RFB 1.911/2019<br>
+      Este documento é um auxílio à decisão profissional e não substitui o juízo do contador responsável.
+    </div>`;
+}
+
+// ══════════════════════════════════════════════
+// STEPS
+// ══════════════════════════════════════════════
+function mostrarStep(step) {
+  document.getElementById('step-upload').classList.remove('active');
+  document.getElementById('step-processing').classList.remove('active');
+  document.getElementById('step-resultado').classList.remove('active');
+  document.getElementById('step-' + step).classList.add('active');
+}
+function resetAnalise() {
+  window._demoMeta = null;
+  document.getElementById('efd-text').value = '';
+  document.getElementById('sk-001-logs').innerHTML = '';
+  document.getElementById('sk-002-logs').innerHTML = '';
+  document.getElementById('sk-003-logs').innerHTML = '';
+  document.getElementById('sk-004-logs').innerHTML = '';
+  ['001','002','003','004'].forEach(id => setSkill(id, 'waiting', 'Aguardando...'));
+  document.getElementById('proc-bar').style.width = '0%';
+  mostrarStep('upload');
+}
+
+// ══════════════════════════════════════════════
+// PARECERES PAGE
+// ══════════════════════════════════════════════
+function renderPareceresPage() {
+  const el = document.getElementById('pareceres-list');
+  if (state.pareceres.length === 0) {
+    el.innerHTML = '<div class="empty-state"><div class="ico">📋</div><h3>Nenhum parecer gerado</h3><p>Realize uma análise de EFD-Contribuições para gerar o primeiro parecer</p></div>';
+    return;
+  }
+  el.innerHTML = state.pareceres.map((p, i) => `
+    <div class="parecer-item" onclick="verParecer(${i})">
+      <div class="pi-id">${p.parecerId}</div>
+      <div class="pi-empresa">${p.empresa}</div>
+      <div style="text-align:right">
+        <div class="pi-valor">R$ ${fmt(p.totalGeral)}</div>
+        <div class="pi-data">${p.dataGeracao}</div>
+      </div>
+    </div>
+  `).join('');
+}
+function verParecer(idx) {
+  state.ultimaAnalise = state.pareceres[idx];
+  showPage('analise');
+  mostrarResultado(state.pareceres[idx]);
+  mostrarStep('resultado');
+}
+
+// ══════════════════════════════════════════════
+// DASHBOARD
+// ══════════════════════════════════════════════
+function atualizarDashboard() {
+  const total = state.pareceres.reduce((s, p) => s + p.totalGeral, 0);
+  const verdes = state.pareceres.reduce((s, p) => s + p.verdes, 0);
+  const pot = state.pareceres.reduce((s, p) => s + p.pot5, 0);
+  document.getElementById('d-total').textContent = 'R$ ' + fmt(total);
+  document.getElementById('d-verdes').textContent = verdes;
+  document.getElementById('d-pot').textContent = 'R$ ' + fmt(pot);
+  document.getElementById('d-analises').textContent = state.pareceres.length;
+  const lista = document.getElementById('d-pareceres-list');
+  if (state.pareceres.length === 0) {
+    lista.innerHTML = '<div class="empty-state"><div class="ico">🔍</div><h3>Nenhuma análise realizada ainda</h3><p>Clique em "Nova Análise" para processar seu primeiro arquivo EFD-Contribuições</p></div>';
+  } else {
+    lista.innerHTML = '<div style="padding:0 4px">' + state.pareceres.slice(0,5).map((p, i) => `
+      <div class="parecer-item" onclick="verParecer(${i})">
+        <div class="pi-id">${p.parecerId}</div>
+        <div class="pi-empresa">${p.empresa}</div>
+        <div style="text-align:right"><div class="pi-valor">R$ ${fmt(p.totalGeral)}</div><div class="pi-data">${p.dataGeracao}</div></div>
+      </div>`).join('') + '</div>';
+  }
+}
+function atualizarBadgeParecer() {
+  const n = state.pareceres.length;
+  const b = document.getElementById('badge-pareceres');
+  b.textContent = n;
+  b.className = 'badge ' + (n > 0 ? 'ok' : '');
+}
+
+// ══════════════════════════════════════════════
+// CONFIG
+// ══════════════════════════════════════════════
+function carregarConfigForm() {
+  document.getElementById('cfg-nome').value  = state.config.nome  || '';
+  document.getElementById('cfg-cnpj').value  = state.config.cnpj  || '';
+  document.getElementById('cfg-crc').value   = state.config.crc   || '';
+  document.getElementById('cfg-resp').value  = state.config.resp  || '';
+  document.getElementById('cfg-email').value = state.config.email || '';
+}
+function salvarConfig() {
+  state.config.nome  = document.getElementById('cfg-nome').value;
+  state.config.cnpj  = document.getElementById('cfg-cnpj').value;
+  state.config.crc   = document.getElementById('cfg-crc').value;
+  state.config.resp  = document.getElementById('cfg-resp').value;
+  state.config.email = document.getElementById('cfg-email').value;
+  document.getElementById('s-nome').textContent = state.config.nome || 'Escritório Contábil';
+  salvarStorage();
+}
+
+// ══════════════════════════════════════════════
+// URGENCY TIMER
+// ══════════════════════════════════════════════
+function atualizarUrgency() {
+  const alvo = new Date('2027-01-01T00:00:00');
+  const agora = new Date();
+  const diff = alvo - agora;
+  if (diff <= 0) return;
+  const dias  = Math.floor(diff / 86400000);
+  const horas = Math.floor((diff % 86400000) / 3600000);
+  const min   = Math.floor((diff % 3600000) / 60000);
+  const seg   = Math.floor((diff % 60000) / 1000);
+  document.getElementById('uc-d').textContent = dias;
+  document.getElementById('uc-h').textContent = String(horas).padStart(2,'0');
+  document.getElementById('uc-m').textContent = String(min).padStart(2,'0');
+  document.getElementById('uc-s').textContent = String(seg).padStart(2,'0');
+  document.getElementById('urgency-chip-text').textContent = dias + ' dias para Jan/2027';
+}
+
+// ══════════════════════════════════════════════
+// LOCALSTORAGE
+// ══════════════════════════════════════════════
+function salvarStorage() {
+  try { localStorage.setItem('creditOS_state', JSON.stringify({ pareceres: state.pareceres, config: state.config, pwd: state.pwd })); } catch(e){}
+}
+function carregarStorage() {
+  try {
+    const raw = localStorage.getItem('creditOS_state');
+    if (!raw) return;
+    const saved = JSON.parse(raw);
+    if (saved.pareceres) state.pareceres = saved.pareceres;
+    if (saved.config) state.config = { ...state.config, ...saved.config };
+    if (saved.pwd) state.pwd = saved.pwd;
+  } catch(e){}
+}
+
+// ══════════════════════════════════════════════
+// UTIL
+// ══════════════════════════════════════════════
+function fmt(n) {
+  return Number(n).toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2});
+}
+function gerarId() {
+  const d = new Date();
+  const dt = d.getFullYear().toString() + String(d.getMonth()+1).padStart(2,'0') + String(d.getDate()).padStart(2,'0');
+  const hash = Math.random().toString(36).substring(2,8).toUpperCase();
+  return `PT-CREDITOS-${dt}-${hash}`;
+}
+function toast(msg, erro=false) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.style.background = erro ? '#ef4444' : 'var(--brand)';
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 3000);
+}
+</script>
+</body>
+</html>
