@@ -1,17 +1,45 @@
 import type { Metadata } from "next";
 import { FileText, ShieldCheck, BarChart3, Cpu, Scale, Link2 } from "lucide-react";
+import Link from "next/link";
 import PilarPage from "../components/PilarPage";
 
 export const metadata: Metadata = {
-  title: "Inteligência Fiscal | TRÍADE IA",
-  description: "Auditoria fiscal com IA, cruzamento de dados tributários e inteligência fiscal para escritórios de contabilidade e gestão pública.",
+  title: "Inteligência Fiscal — SOAF | TRÍADE IA",
+  description: "SOAF v3.0 — plataforma de auditoria fiscal com IA para prefeituras. 7 agentes especializados: Terminal Fiscal, Investigador de Sonegação, Apontador de Omissão e mais. ISS, IBS, ITBI, IPTU.",
 };
 
 const iconClass = "w-5 h-5";
 
 export default function Fiscal() {
   return (
-    <PilarPage
+    <>
+      {/* Banner SOAF v3.0 */}
+      <section className="pt-28 pb-0 px-6 bg-navy">
+        <div className="max-w-4xl mx-auto">
+          <div className="border border-brand/20 bg-brand/[0.04] rounded-lg px-8 py-6 flex flex-col md:flex-row items-start md:items-center gap-6">
+            <div className="flex-1">
+              <span className="text-xs font-mono font-semibold text-brand/70 uppercase tracking-widest">Produto ativo</span>
+              <h2 className="font-display font-bold text-xl text-ice mt-1 mb-2 leading-tight">
+                SOAF v3.0 — Sistema Operacional de Auditoria Fiscal
+              </h2>
+              <p className="text-ice/50 text-sm leading-relaxed">
+                7 agentes de IA especializados em ISS, IBS, ITBI e IPTU. Terminal Fiscal, Investigador de Sonegação, Apontador de Omissão, Classificador de Conformidade e geração de autos de infração — para prefeituras e secretarias municipais.
+              </p>
+            </div>
+            <Link
+              href="https://app.triadeiaos.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="shrink-0 inline-flex items-center gap-2 bg-brand text-navy font-semibold text-sm px-6 py-3 rounded-sm hover:bg-brand/90 transition-colors whitespace-nowrap"
+              style={{ borderRadius: '1px' }}
+            >
+              Acessar SOAF
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      <PilarPage
       tag="Inteligência Fiscal"
       title="Auditoria Fiscal e Análise Tributária com Inteligência Artificial"
       description="Cruzamos dados, identificamos inconsistências e automatizamos a análise fiscal em volumes que seriam inviáveis manualmente — com precisão e velocidade que nenhuma equipe humana consegue replicar."
@@ -78,5 +106,6 @@ export default function Fiscal() {
         "Conformidade fiscal com menor esforço operacional",
       ]}
     />
+    </>
   );
 }

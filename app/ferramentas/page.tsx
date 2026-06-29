@@ -10,48 +10,60 @@ export const metadata: Metadata = {
 
 const ferramentas = [
   {
+    titulo: "Regime Certo",
+    descricao: "Diagnóstico tributário gratuito: compare Simples Nacional, Lucro Presumido e Lucro Real e descubra qual regime economiza mais para a sua empresa. Resultado em 3 minutos, sem cadastro.",
+    href: "/ferramentas/regime-certo",
+    tag: "Diagnóstico",
+  },
+  {
+    titulo: "Calculadora CBS/IBS",
+    descricao: "Calcule o impacto real dos novos tributos da Reforma Tributária sobre o seu negócio. Considera atividade, regime, faturamento e insumos creditáveis. Resultado imediato.",
+    href: "/ferramentas/cbs",
+    tag: "EC 132/2023",
+  },
+  {
     titulo: "Simulador Fator R",
     descricao: "Descubra se sua empresa tem vantagem no Simples Nacional usando o Fator R — índice de folha sobre receita que define a alíquota do ISSQN.",
-    href: "https://fator-r-triade.vercel.app",
+    href: "/ferramentas/fator-r",
     tag: "Simples Nacional",
   },
   {
     titulo: "Recalculador CBS/IBS",
     descricao: "Estime o impacto da substituição do PIS/COFINS pelo CBS e do ICMS/ISS pelo IBS no preço dos seus produtos e serviços.",
-    href: "https://recalculador-preco-triade.vercel.app",
+    href: "/ferramentas/recalculador",
     tag: "EC 132/2023",
   },
   {
     titulo: "Checklist Split Payment",
     descricao: "Checklist completo de adequação ao Split Payment. Verifique se sua empresa está preparada para a retenção automática do imposto na transação.",
-    href: "https://checklist-split-triade.vercel.app",
+    href: "/ferramentas/checklist-split",
     tag: "Split Payment",
   },
   {
     titulo: "Planilha de Transição 2026–2033",
     descricao: "Calcule o impacto do Split Payment no seu caixa, ano a ano. Inputs: faturamento, regime, prazo de recebimento e margem. Output: capital de giro imobilizado + risco por fase.",
-    href: "https://planilha-transicao.vercel.app",
+    href: "/ferramentas/planilha",
     tag: "Split Payment",
   },
   {
     titulo: "Compêndio Tributário",
     descricao: "Guia completo dos regimes tributários brasileiros: Simples Nacional, Lucro Presumido e Lucro Real — com EC 132/2023 incorporada.",
-    href: "https://triade-guia-tributario.vercel.app",
+    href: "/produtos/guia",
     tag: "Guia",
   },
 ];
 
 const sistemas = [
   {
-    titulo: "SOAF — Sistema Operacional de Auditoria Fiscal",
-    descricao: "Plataforma de auditoria fiscal com IA para prefeituras e secretarias municipais. Análise de ISSQN, ITBI e conformidade tributária com inteligência artificial.",
-    href: "https://soaf-triade.vercel.app",
+    titulo: "SOAF v3.0 — Sistema Operacional de Auditoria Fiscal",
+    descricao: "Plataforma de auditoria fiscal com IA para secretarias municipais. 7 agentes especializados: Terminal Fiscal, Investigador de Sonegação, Apontador de Omissão, Classificador de Conformidade e geração de autos de infração. Reforma Tributária integrada — ISS, IBS, ITBI, IPTU.",
+    href: "https://app.triadeiaos.com",
     tag: "Para prefeituras",
   },
   {
     titulo: "ContabOS — Sistema para Escritórios Contábeis",
     descricao: "Workspace de IA para contadores: análise de documentos, classificação automática, alertas de prazo e geração de relatórios. Operação contábil AI-First.",
-    href: "https://contabos-triadeiaos.vercel.app",
+    href: "https://pay.cakto.com.br/vrr4iz5_935787",
     tag: "Para contadores",
   },
 ];
@@ -85,25 +97,23 @@ export default function Ferramentas() {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             {ferramentas.map((f, i) => (
-              <a
+              <Link
                 key={i}
                 href={f.href}
-                target="_blank"
-                rel="noopener noreferrer"
                 className="group bg-white border border-paper-border rounded-2xl p-8 shadow-sm hover:shadow-md hover:border-brand/30 transition-all flex flex-col"
               >
                 <div className="flex items-center justify-between mb-4">
                   <span className="text-xs font-mono font-semibold text-ink-muted uppercase tracking-widest border border-paper-border px-2 py-0.5 rounded">
                     {f.tag}
                   </span>
-                  <ExternalLink className="w-4 h-4 text-ink-muted group-hover:text-brand transition-colors" strokeWidth={1.5} />
+                  <ArrowRight className="w-4 h-4 text-ink-muted group-hover:text-brand transition-colors" strokeWidth={1.5} />
                 </div>
                 <h3 className="font-display font-semibold text-ink text-lg mb-3">{f.titulo}</h3>
                 <p className="text-ink-soft text-sm leading-relaxed flex-1 mb-4">{f.descricao}</p>
                 <span className="inline-flex items-center gap-1.5 text-brand text-sm font-medium group-hover:gap-2.5 transition-all">
                   Acessar ferramenta <ArrowRight className="w-3.5 h-3.5" strokeWidth={2} />
                 </span>
-              </a>
+              </Link>
             ))}
           </div>
         </div>

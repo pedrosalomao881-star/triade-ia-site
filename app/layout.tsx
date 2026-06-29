@@ -24,7 +24,7 @@ const raleway = Raleway({
   weight: ["300"],
 });
 
-const BASE_URL = "https://triade-ia-site.vercel.app";
+const BASE_URL = "https://triadeiaos.com";
 
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
