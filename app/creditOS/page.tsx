@@ -310,14 +310,24 @@ export default function CreditOSPage() {
           <p className="text-ice/45 text-base leading-relaxed mb-10">
             Faça o diagnóstico gratuito. Em minutos você sabe o potencial da sua carteira de créditos — antes que a janela feche.
           </p>
-          <Link
-            href="/diagnostico"
-            className="inline-flex items-center gap-2 bg-brand text-navy font-semibold px-10 py-4 hover:bg-brand/90 transition-colors text-sm"
-            style={{ borderRadius: '2px' }}
-          >
-            Quero meu diagnóstico gratuito
-            <ArrowRight className="w-4 h-4" strokeWidth={2} />
-          </Link>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <Link
+              href="/diagnostico"
+              className="inline-flex items-center gap-2 bg-brand text-navy font-semibold px-10 py-4 hover:bg-brand/90 transition-colors text-sm"
+              style={{ borderRadius: '2px' }}
+            >
+              Quero meu diagnóstico gratuito
+              <ArrowRight className="w-4 h-4" strokeWidth={2} />
+            </Link>
+            <Link
+              href="/creditOS/sistema/"
+              className="inline-flex items-center gap-2 border border-brand/30 text-brand/70 font-semibold px-8 py-4 hover:border-brand hover:text-brand transition-colors text-sm"
+              style={{ borderRadius: '2px' }}
+            >
+              <Zap className="w-4 h-4" strokeWidth={1.5} />
+              Acessar o Sistema (Demo)
+            </Link>
+          </div>
           <p className="text-ice/20 text-xs mt-6">
             Sem compromisso · Resposta em até 24h · TRÍADE IA — Itumbiara, GO
           </p>
