@@ -9,14 +9,16 @@ const reforma = [
   { href: "/#reforma", label: "O que muda (EC 132/2023)" },
   { href: "/#split-payment", label: "Split Payment explicado" },
   { href: "/ferramentas", label: "Ferramentas gratuitas" },
-  { href: "https://soaf-triade.vercel.app", label: "SOAF para prefeituras", external: true },
+  { href: "https://app.triadeiaos.com", label: "SOAF para prefeituras", external: true },
 ];
 
 const produtos = [
-  { href: "https://soaf-triade.vercel.app", label: "SOAF — Auditoria Fiscal", external: true },
-  { href: "https://contabos-triadeiaos.vercel.app", label: "ContabOS — Para Contadores", external: true },
+  { href: "/produtos", label: "Ver catálogo de produtos" },
+  { href: "/creditOS", label: "CreditOS — Recuperar Créditos ⚡" },
+  { href: "/produtos/do-caos-ao-sistema", label: "Do Caos ao Sistema — R$37" },
+  { href: "https://soaf.triadeiaos.com", label: "SOAF — Auditoria Fiscal", external: true },
+  { href: "https://contabos.triadeiaos.com", label: "ContabOS — Para Contadores", external: true },
   { href: "/ferramentas", label: "Ferramentas tributárias" },
-  { href: "https://triade-guia-tributario.vercel.app", label: "Compêndio Tributário", external: true },
 ];
 
 export default function Navbar() {
@@ -101,6 +103,10 @@ export default function Navbar() {
               </div>
             </div>
           </div>
+
+          <Link href="/manuais" className="text-sm text-ice/60 hover:text-ice transition-colors">
+            Manuais
+          </Link>
 
           <Link href="/metodologia" className="text-sm text-ice/60 hover:text-ice transition-colors">
             Metodologia
@@ -208,6 +214,10 @@ export default function Navbar() {
               ))}
             </div>
           )}
+
+          <Link href="/manuais" className="text-sm text-ice/70 hover:text-ice py-2 transition-colors" onClick={() => setOpen(false)}>
+            Manuais
+          </Link>
 
           <Link href="/metodologia" className="text-sm text-ice/70 hover:text-ice py-2 transition-colors" onClick={() => setOpen(false)}>
             Metodologia

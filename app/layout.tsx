@@ -5,6 +5,7 @@ import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import AgentComercial from "./components/AgentComercial";
 import CookieBanner from "./components/CookieBanner";
+import AnnouncementBar from "./components/AnnouncementBar";
 
 const inter = Inter({ variable: "--font-inter", subsets: ["latin"] });
 const spaceGrotesk = Space_Grotesk({
@@ -106,6 +107,7 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-screen flex flex-col bg-navy text-ice font-sans antialiased">
+        <AnnouncementBar />
         <Navbar />
         <main className="flex-1">{children}</main>
         <Footer />
