@@ -212,6 +212,94 @@ export default function CreditOSPage() {
         </div>
       </section>
 
+      {/* ── OUTPUT REAL ── */}
+      <section className="py-20 px-6 border-t border-white/[0.06]">
+        <div className="max-w-3xl mx-auto">
+          <div className="flex items-center gap-2 mb-10">
+            <FileCheck className="w-3.5 h-3.5 text-brand/50" strokeWidth={1.5} />
+            <span className="text-xs font-mono font-semibold text-brand/60 uppercase tracking-widest">Output real do agente</span>
+          </div>
+          <h2 className="font-display font-bold text-3xl text-ice mb-4 leading-tight">
+            Parecer gerado em menos de 1 minuto.
+          </h2>
+          <p className="text-ice/50 text-base leading-relaxed mb-10">
+            Este é o resultado real do pipeline CreditOS rodando sobre um EFD-Contribuições de Jan/2025. Empresa: regime não-cumulativo, 8 créditos identificados.
+          </p>
+
+          {/* Terminal pipeline */}
+          <div className="bg-white/[0.02] border border-white/[0.06] rounded-xl overflow-hidden mb-6">
+            <div className="flex items-center gap-2 px-4 py-3 border-b border-white/[0.06] bg-white/[0.01]">
+              <div className="w-2.5 h-2.5 rounded-full bg-red-500/50" />
+              <div className="w-2.5 h-2.5 rounded-full bg-amber-400/50" />
+              <div className="w-2.5 h-2.5 rounded-full bg-emerald-400/50" />
+              <span className="ml-2 text-xs font-mono text-ice/20">creditOS — pipeline completo</span>
+            </div>
+            <div className="p-5 font-mono text-xs leading-relaxed">
+              <div className="text-ice/30">$ python3 skill_001_extrator_efd.py efd_jan2025.txt --json \</div>
+              <div className="text-ice/30 ml-4">| python3 skill_003_proporcionalidade.py - \</div>
+              <div className="text-ice/30 ml-4">| python3 skill_004_parecer_tecnico.py - --html</div>
+              <div className="mt-3 text-emerald-400/70">[001] Extrator EFD-Contribuições — OK</div>
+              <div className="text-ice/40 ml-4">└─ Créditos PIS (M100): R$ 11.220,00</div>
+              <div className="text-ice/40 ml-4">└─ Créditos COFINS (M500): R$ 51.680,00</div>
+              <div className="text-amber-400/70 ml-4">⚡ OPORTUNIDADE CRÍTICA — total ≥ R$50k detectado</div>
+              <div className="mt-2 text-emerald-400/70">[003] Calculador de Proporcionalidade — OK</div>
+              <div className="text-ice/40 ml-4">└─ Regime: Não-Cumulativo (Lucro Real) ✓ elegível</div>
+              <div className="text-ice/40 ml-4">└─ Coeficiente: 1,00 | Crédito líquido: R$ 62.900,00</div>
+              <div className="text-ice/40 ml-4">└─ Projeção 5 anos: R$ 534.600,00</div>
+              <div className="mt-2 text-emerald-400/70">[004] Gerador de Parecer Técnico — OK</div>
+              <div className="text-brand/60 ml-4">└─ Parecer: PT-CREDITOS-20260629-EF1E16 gerado</div>
+            </div>
+          </div>
+
+          {/* Parecer card */}
+          <div className="border border-brand/20 rounded-xl overflow-hidden">
+            <div className="bg-brand/[0.04] border-b border-brand/20 px-6 py-4 flex items-center justify-between">
+              <div>
+                <div className="text-xs font-mono text-brand/50 uppercase tracking-widest mb-1">Parecer Técnico · PT-CREDITOS-20260629-EF1E16</div>
+                <div className="text-ice/70 text-sm font-semibold">TECH INSUMOS INDUSTRIA LTDA · Jan/2025</div>
+              </div>
+              <span className="text-xs font-mono font-bold text-emerald-400 bg-emerald-400/10 border border-emerald-400/20 px-3 py-1 rounded-full">
+                FAVORÁVEL
+              </span>
+            </div>
+            <div className="p-6">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                {[
+                  { label: 'Total identificado', value: 'R$ 62.900', color: 'text-brand' },
+                  { label: 'Créditos avaliados', value: '8 itens', color: 'text-ice' },
+                  { label: 'Confiança média', value: '90%', color: 'text-emerald-400' },
+                  { label: 'Potencial 5 anos', value: 'R$ 534.600', color: 'text-amber-400' },
+                ].map(m => (
+                  <div key={m.label} className="bg-white/[0.02] border border-white/[0.05] rounded-lg p-4 text-center">
+                    <div className={`font-display font-bold text-xl mb-1 ${m.color}`}>{m.value}</div>
+                    <div className="text-ice/35 text-xs">{m.label}</div>
+                  </div>
+                ))}
+              </div>
+              <div className="space-y-2 mb-6">
+                {[
+                  { status: 'VERDE', label: 'Insumos de produção — Lei 10.637/2002 art. 3º, I', value: 'R$ 28.400' },
+                  { status: 'VERDE', label: 'Energia elétrica — STJ Tema 779 (essencialidade)', value: 'R$ 19.300' },
+                  { status: 'VERDE', label: 'Frete sobre vendas — IN RFB 1.911/2019 art. 167', value: 'R$ 15.200' },
+                ].map((row, i) => (
+                  <div key={i} className="flex items-center gap-3 text-sm">
+                    <span className="text-xs font-mono font-bold text-emerald-400 bg-emerald-400/10 border border-emerald-400/20 px-2 py-0.5 rounded shrink-0">{row.status}</span>
+                    <span className="text-ice/50 flex-1">{row.label}</span>
+                    <span className="text-ice/70 font-semibold font-mono">{row.value}</span>
+                  </div>
+                ))}
+              </div>
+              <div className="bg-white/[0.02] border border-white/[0.05] rounded-lg p-4 text-xs font-mono text-ice/35 leading-relaxed">
+                <span className="text-brand/50 uppercase tracking-wider">Tese aplicada: </span>
+                STJ REsp 1.221.170/PR (Tema 779) — créditos de insumos essenciais são aproveitáveis
+                independente de contato físico com o produto final. Prazo prescricional: 5 anos
+                (art. 168 CTN). Ação recomendada: PER/DCOMP antes de <span className="text-amber-400/60">Jan/2027</span>.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ── CTA FINAL ── */}
       <section className="py-24 px-6 border-t border-white/[0.06]">
         <div className="max-w-2xl mx-auto text-center">
