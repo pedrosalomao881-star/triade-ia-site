@@ -20,7 +20,7 @@ type LeadCapture = {
   segmento?: string;
 };
 
-const PHONE = "556492966118";
+const PHONE = "556496123145"; // Sofia IA — porta de entrada WhatsApp do site
 
 function buildAgentWaUrl(lead: LeadCapture): string {
   const parts = ["Olá!"];

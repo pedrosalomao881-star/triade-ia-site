@@ -1,4 +1,4 @@
-const PHONE = "556492966118";
+const PHONE = "556496123145"; // Sofia IA — porta de entrada WhatsApp do site
 
 interface WhatsAppContext {
   nome?: string;
