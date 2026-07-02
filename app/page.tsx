@@ -73,7 +73,8 @@ export default function Home() {
           <p className="animate-fade-up-delay-2 text-lg md:text-xl text-ice/50 leading-relaxed max-w-2xl mx-auto mb-10">
             O Split Payment vai reter o imposto antes de chegar na sua conta.
             O CBS e IBS substituem tudo que você conhecia sobre PIS, COFINS, ICMS e ISS.
-            Quem não se preparar vai pagar mais — e não vai saber por quê.
+            Quem não se preparar <span className="text-brand font-semibold">vai pagar mais</span> —{" "}
+            <span className="whitespace-nowrap">e não vai saber por quê.</span>
           </p>
           <div className="animate-fade-up-delay-3 flex flex-col sm:flex-row gap-3 justify-center mb-12">
             <Link href="/ferramentas" className="inline-flex items-center justify-center gap-2 bg-brand text-navy font-semibold text-sm px-7 py-3.5 rounded-lg hover:bg-brand-dark transition-colors">
