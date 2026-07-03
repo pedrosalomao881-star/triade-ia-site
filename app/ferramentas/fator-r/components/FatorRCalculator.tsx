@@ -124,10 +124,30 @@ export default function FatorRCalculator() {
             Calcular Fator R <ArrowRight className="w-4 h-4" />
           </button>
 
-          {/* Instrução */}
-          <p className="text-center text-sm text-gray-600">
-            Teste com seus números reais abaixo
-          </p>
+          {/* Instrução com Seta Animada */}
+          <style>{`
+            @keyframes arrowBounce {
+              0%, 100% { transform: translateY(0px); opacity: 0.6; }
+              50% { transform: translateY(8px); opacity: 1; }
+            }
+            @keyframes colorShift {
+              0% { color: rgb(34, 197, 94); }
+              33% { color: rgb(59, 130, 246); }
+              66% { color: rgb(168, 85, 247); }
+              100% { color: rgb(34, 197, 94); }
+            }
+            .arrow-down {
+              animation: arrowBounce 2s infinite, colorShift 3s infinite;
+              font-size: 32px;
+              font-weight: bold;
+            }
+          `}</style>
+          <div className="text-center pt-2">
+            <p className="text-sm font-semibold text-gray-700 mb-3">
+              Teste com seus números reais abaixo
+            </p>
+            <div className="arrow-down leading-none">↓</div>
+          </div>
         </div>
       </div>
 
