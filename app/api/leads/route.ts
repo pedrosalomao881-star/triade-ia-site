@@ -1,5 +1,20 @@
 import { NextRequest, NextResponse } from "next/server";
-import { readLeadsFromFile, saveLeadToFile } from "@/lib/leads";
+import { createClient } from "@supabase/supabase-js";
+
+// anon key: INSERT only (RLS policy permite). Leitura admin requer service role.
+function getSupabase() {
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  );
+}
+
+function getSupabaseAdmin() {
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY ?? process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  );
+}
 
 function scoreLead(lead: Record<string, unknown>): { score: number; temperatura: "quente" | "morno" | "frio" } {
   let score = 0;
@@ -30,21 +45,44 @@ export async function POST(request: NextRequest) {
     }
 
     const { score, temperatura } = scoreLead(body);
-    const saved = saveLeadToFile({ ...body, score, temperatura, fonte: "formulario" });
 
-    console.log("[TRÍADE IA] Lead:", { nome: body.nome, empresa: body.empresa, score, temperatura });
+    const supabase = getSupabase();
+    const { data, error } = await supabase.from("site_leads").insert({
+      nome: body.nome,
+      empresa: body.empresa,
+      whatsapp: body.whatsapp,
+      email: body.email ?? null,
+      setor: body.setor ?? null,
+      source: (body.source as string) ?? "site",
+      score,
+      temperatura,
+    }).select("id").single();
 
-    return NextResponse.json({ success: true, score, temperatura, id: saved.id });
+    if (error) {
+      console.error("[TRÍADE IA] Erro ao salvar lead:", error.message);
+      return NextResponse.json({ success: false, error: "Erro ao salvar" }, { status: 500 });
+    }
+
+    console.log("[TRÍADE IA] Lead salvo:", { nome: body.nome, empresa: body.empresa, score, temperatura, id: data.id });
+
+    return NextResponse.json({ success: true, score, temperatura, id: data.id });
   } catch {
     return NextResponse.json({ success: false, error: "Erro interno" }, { status: 500 });
   }
 }
 
 export async function GET(request: NextRequest) {
-  const secret = request.headers.get("x-admin-secret");
-  if (!process.env.ADMIN_SECRET || secret !== process.env.ADMIN_SECRET) {
+  const secret = (request.headers.get("x-admin-secret") ?? "").trim();
+  const adminSecret = (process.env.ADMIN_SECRET ?? "").trim();
+  if (!adminSecret || secret !== adminSecret) {
     return NextResponse.json({ error: "Não autorizado" }, { status: 401 });
   }
-  const leads = readLeadsFromFile();
+  const supabase = getSupabaseAdmin();
+  const { data: leads, error } = await supabase
+    .from("site_leads")
+    .select("*")
+    .order("criado_em", { ascending: false });
+
+  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
   return NextResponse.json({ leads });
 }

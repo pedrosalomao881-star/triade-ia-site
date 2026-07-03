@@ -1,7 +1,14 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { NextRequest } from "next/server";
 import { SYSTEM_PROMPT, LEAD_CAPTURE_TOOL } from "@/lib/agent/prompt";
-import { saveLeadToFile } from "@/lib/leads";
+import { createClient } from "@supabase/supabase-js";
+
+function getSupabase() {
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  );
+}
 
 export const runtime = "nodejs";
 
@@ -48,7 +55,16 @@ export async function POST(request: NextRequest) {
 
         if (toolUse && toolUse.name === "capturar_lead") {
           const leadInput = toolUse.input as Record<string, unknown>;
-          const saved = saveLeadToFile({ ...leadInput, fonte: "agente_comercial" });
+          const supabase = getSupabase();
+          const { data: savedLead } = await supabase.from("site_leads").insert({
+            nome: leadInput.nome ?? null,
+            empresa: leadInput.empresa ?? null,
+            whatsapp: leadInput.whatsapp ?? null,
+            setor: leadInput.segmento ?? null,
+            source: "agente_comercial",
+            temperatura: leadInput.temperatura ?? null,
+          }).select("id").single();
+          const savedId = savedLead?.id ?? crypto.randomUUID();
 
           enqueue({
             type: "lead_captured",
@@ -57,7 +73,7 @@ export async function POST(request: NextRequest) {
             empresa: leadInput.empresa,
             whatsapp: leadInput.whatsapp,
             segmento: leadInput.segmento,
-            id: saved.id,
+            id: savedId,
           });
 
           const followUpStream = anthropic.messages.stream({
@@ -74,7 +90,7 @@ export async function POST(request: NextRequest) {
                   {
                     type: "tool_result",
                     tool_use_id: toolUse.id,
-                    content: JSON.stringify({ success: true, id: saved.id }),
+                    content: JSON.stringify({ success: true, id: savedId }),
                   },
                 ],
               },
