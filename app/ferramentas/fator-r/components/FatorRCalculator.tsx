@@ -10,10 +10,8 @@ const EXEMPLO_RECEITA = 180000;
 export default function FatorRCalculator() {
   const [folha, setFolha] = useState(String(EXEMPLO_FOLHA));
   const [receita, setReceita] = useState(String(EXEMPLO_RECEITA));
-  const [result, setResult] = useState<FatorRResult | null>(
-    calculateFatorR(EXEMPLO_FOLHA, EXEMPLO_RECEITA)
-  );
-  const [calculado, setCalculado] = useState(true);
+  const [result, setResult] = useState<FatorRResult | null>(null);
+  const [calculado, setCalculado] = useState(false);
   const [showLeadModal, setShowLeadModal] = useState(false);
   const [leadData, setLeadData] = useState({ nome: "", email: "", whatsapp: "" });
 
@@ -69,7 +67,7 @@ export default function FatorRCalculator() {
             📊 Isto é um simulador interativo
           </p>
           <p className="text-sm text-blue-800">
-            Os campos já estão preenchidos com um exemplo para você ver como funciona. Mude os valores e clique em "Calcular Fator R".
+            Os campos estão preenchidos com um exemplo. Mude os valores conforme sua empresa e clique em "Calcular Fator R" para ver o resultado.
           </p>
         </div>
       </div>
