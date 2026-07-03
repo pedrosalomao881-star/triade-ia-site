@@ -1,229 +1,231 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 
-export const runtime = 'nodejs'
-
-// Tipos de evento do Cakto
-type CaktoEvent =
-  | 'payment.confirmed'
-  | 'payment.failed'
-  | 'payment.refunded'
-  | 'subscription.created'
-  | 'subscription.cancelled'
-
-interface CaktoPayload {
-  event: CaktoEvent
-  transaction_id: string
-  customer_email: string
-  amount: number
-  currency: string
-  product_id?: string
-  status: 'success' | 'failed' | 'pending'
-  created_at: string
-  metadata?: Record<string, any>
-}
-
-// Mapear plano baseado no product_id ou valor
-function getPlanType(amount: number, productId?: string): 'mensal' | 'semestral' | 'anual' {
-  // Baseado nos valores definidos
-  if (amount === 97 || productId === 'creditOS-mensal') return 'mensal'
-  if (amount === 147 || productId === 'creditOS-semestral') return 'semestral'
-  if (amount === 277 || productId === 'creditOS-anual') return 'anual'
-
-  // Fallback: calcular baseado no valor
-  if (amount < 120) return 'mensal'
-  if (amount < 200) return 'semestral'
-  return 'anual'
-}
-
-// Calcular data de expiração baseado no plano
-function getExpiryDate(planType: 'mensal' | 'semestral' | 'anual'): Date {
-  const now = new Date()
-
-  switch (planType) {
-    case 'mensal':
-      now.setMonth(now.getMonth() + 1)
-      break
-    case 'semestral':
-      now.setMonth(now.getMonth() + 6)
-      break
-    case 'anual':
-      now.setFullYear(now.getFullYear() + 1)
-      break
-  }
-
-  return now
-}
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL || '',
+  process.env.SUPABASE_SERVICE_ROLE_KEY || ''
+)
 
 export async function POST(request: NextRequest) {
   try {
-    // Validar método
-    if (request.method !== 'POST') {
-      return NextResponse.json(
-        { error: 'Método não permitido' },
-        { status: 405 }
-      )
-    }
+    const payload = await request.json()
 
-    // Obter payload
-    const payload: CaktoPayload = await request.json()
-
-    // Log do webhook recebido (para debugging)
+    // Log webhook para debug (remove em produção)
     console.log('[Cakto Webhook]', {
-      event: payload.event,
-      transaction_id: payload.transaction_id,
-      email: payload.customer_email,
-      status: payload.status,
       timestamp: new Date().toISOString(),
+      event: payload.event,
+      transactionId: payload.id,
+      status: payload.status,
     })
 
-    // Validar que é um evento de pagamento confirmado
-    if (payload.event !== 'payment.confirmed' || payload.status !== 'success') {
-      return NextResponse.json(
-        { ok: true, message: 'Evento ignorado' },
-        { status: 200 }
-      )
-    }
+    // Validar assinatura (se Cakto envia header de segurança)
+    const signature = request.headers.get('x-cakto-signature')
+    const webhookSecret = process.env.CAKTO_WEBHOOK_SECRET
 
-    // Inicializar cliente Supabase com service role
-    const supabase = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.SUPABASE_SERVICE_ROLE_KEY!
-    )
+    if (webhookSecret && signature) {
+      const crypto = await import('crypto')
+      const hash = crypto
+        .createHmac('sha256', webhookSecret)
+        .update(JSON.stringify(payload))
+        .digest('hex')
 
-    // 1. Buscar usuário pelo email
-    const { data: { users }, error: searchError } = await supabase.auth.admin.listUsers()
-
-    if (searchError) {
-      console.error('[Cakto] Erro ao buscar usuários:', searchError)
-      return NextResponse.json(
-        { ok: false, error: 'Erro ao processar usuário' },
-        { status: 500 }
-      )
-    }
-
-    const user = users?.find(u => u.email === payload.customer_email)
-
-    if (!user) {
-      console.warn('[Cakto] Usuário não encontrado:', payload.customer_email)
-
-      // TODO: Criar usuário automaticamente ou enviar email de validação
-      // Por enquanto, apenas registrar o pagamento como pendente
-
-      return NextResponse.json(
-        { ok: true, message: 'Usuário não encontrado - aguardando validação' },
-        { status: 200 }
-      )
-    }
-
-    // 2. Determinar plano baseado no valor
-    const planType = getPlanType(payload.amount, payload.metadata?.product_id)
-    const expiresAt = getExpiryDate(planType)
-
-    // 3. Criar ou atualizar subscription no Supabase
-    const { data: existingSub, error: fetchError } = await supabase
-      .from('creditOS_subscriptions')
-      .select('id')
-      .eq('user_id', user.id)
-      .single()
-
-    if (existingSub) {
-      // Atualizar subscription existente
-      const { error: updateError } = await supabase
-        .from('creditOS_subscriptions')
-        .update({
-          plan_type: planType,
-          cakto_transaction_id: payload.transaction_id,
-          amount: payload.amount,
-          active: true,
-          expires_at: expiresAt.toISOString(),
-          updated_at: new Date().toISOString(),
-        })
-        .eq('user_id', user.id)
-
-      if (updateError) {
-        console.error('[Cakto] Erro ao atualizar subscription:', updateError)
-        return NextResponse.json(
-          { ok: false, error: 'Erro ao atualizar subscription' },
-          { status: 500 }
-        )
+      if (hash !== signature) {
+        return NextResponse.json({ error: 'Assinatura inválida' }, { status: 401 })
       }
-
-      console.log('[Cakto] Subscription atualizada:', {
-        user_id: user.id,
-        plan_type: planType,
-        expires_at: expiresAt.toISOString(),
-      })
-    } else {
-      // Criar nova subscription
-      const { error: insertError } = await supabase
-        .from('creditOS_subscriptions')
-        .insert({
-          user_id: user.id,
-          plan_type: planType,
-          cakto_transaction_id: payload.transaction_id,
-          amount: payload.amount,
-          active: true,
-          expires_at: expiresAt.toISOString(),
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString(),
-        })
-
-      if (insertError) {
-        console.error('[Cakto] Erro ao criar subscription:', insertError)
-        return NextResponse.json(
-          { ok: false, error: 'Erro ao criar subscription' },
-          { status: 500 }
-        )
-      }
-
-      console.log('[Cakto] Subscription criada:', {
-        user_id: user.id,
-        plan_type: planType,
-        expires_at: expiresAt.toISOString(),
-      })
     }
 
-    // 4. TODO: Enviar email de confirmação ao usuário
-    // const { error: emailError } = await supabase.functions.invoke('send-email', {
-    //   body: {
-    //     to: user.email,
-    //     template: 'payment-confirmed',
-    //     data: {
-    //       plan: planType,
-    //       expires_at: expiresAt,
-    //     },
-    //   },
-    // })
+    // Processar eventos de pagamento
+    const { event, status, id, email, reference, amount } = payload
 
-    // Retornar sucesso
+    switch (event) {
+      case 'payment.approved':
+      case 'payment.success':
+        await handlePaymentSuccess({
+          transactionId: id,
+          email,
+          reference,
+          amount,
+        })
+        break
+
+      case 'payment.pending':
+        console.log(`[Cakto] Pagamento pendente: ${id}`)
+        break
+
+      case 'payment.failed':
+      case 'payment.error':
+        console.error(`[Cakto] Pagamento falhou: ${id}`)
+        await handlePaymentFailure({
+          transactionId: id,
+          email,
+          reference,
+        })
+        break
+
+      case 'payment.refunded':
+        console.log(`[Cakto] Pagamento reembolsado: ${id}`)
+        break
+
+      default:
+        console.warn(`[Cakto] Evento desconhecido: ${event}`)
+    }
+
+    // Responder com sucesso (Cakto precisa de 200 OK)
     return NextResponse.json(
-      {
-        ok: true,
-        message: 'Pagamento registrado com sucesso',
-        user_id: user.id,
-        plan_type: planType,
-      },
+      { success: true, message: 'Webhook processado' },
       { status: 200 }
     )
-
   } catch (error) {
-    console.error('[Cakto] Erro ao processar webhook:', error)
-
+    console.error('[Cakto Webhook Error]', error)
     return NextResponse.json(
-      {
-        ok: false,
-        error: error instanceof Error ? error.message : 'Erro ao processar webhook'
-      },
+      { error: 'Erro ao processar webhook' },
       { status: 500 }
     )
   }
 }
 
-// Health check
+async function handlePaymentSuccess(data: {
+  transactionId: string
+  email?: string
+  reference?: string
+  amount?: number
+}) {
+  try {
+    // Salvar transação em Supabase
+    const { data: transaction, error } = await supabase
+      .from('cakto_transactions')
+      .insert({
+        cakto_id: data.transactionId,
+        email: data.email,
+        reference: data.reference,
+        amount: data.amount,
+        status: 'paid',
+        created_at: new Date().toISOString(),
+      })
+      .select('id')
+      .single()
+
+    if (error) {
+      console.error('[Supabase Insert Error]', error)
+    } else {
+      console.log(`[Cakto] Pagamento salvo em BD: ${transaction?.id}`)
+    }
+
+    // Enviar email de confirmação (opcional)
+    if (data.email) {
+      await sendConfirmationEmail(data.email, data.reference)
+    }
+
+    console.log(`[Cakto] Pagamento confirmado: ${data.transactionId}`)
+  } catch (error) {
+    console.error('[Payment Success Handler]', error)
+  }
+}
+
+async function handlePaymentFailure(data: {
+  transactionId: string
+  email?: string
+  reference?: string
+}) {
+  try {
+    // Registrar falha em Supabase
+    const { error } = await supabase
+      .from('cakto_transactions')
+      .insert({
+        cakto_id: data.transactionId,
+        email: data.email,
+        reference: data.reference,
+        amount: 0,
+        status: 'failed',
+        created_at: new Date().toISOString(),
+      })
+
+    if (error) {
+      console.error('[Supabase Insert Error]', error)
+    }
+
+    // Notificar suporte
+    if (data.email) {
+      await sendFailureNotification(data.email, data.reference)
+    }
+
+    console.log(`[Cakto] Falha registrada: ${data.transactionId}`)
+  } catch (error) {
+    console.error('[Payment Failure Handler]', error)
+  }
+}
+
+async function sendConfirmationEmail(
+  email: string,
+  reference?: string
+): Promise<void> {
+  try {
+    // Enviar via Resend se disponível
+    if (process.env.RESEND_API_KEY) {
+      const { Resend } = await import('resend')
+      const resend = new Resend(process.env.RESEND_API_KEY)
+
+      await resend.emails.send({
+        from: 'noreply@triadeiaos.com',
+        to: email,
+        subject: 'Pagamento confirmado — CreditOS',
+        html: `
+          <h1>Bem-vindo ao CreditOS!</h1>
+          <p>Seu pagamento foi confirmado com sucesso.</p>
+          <p><strong>Referência:</strong> ${reference || 'N/A'}</p>
+          <p><a href="https://triadeiaos.com/creditOS/sistema/" style="display: inline-block; padding: 12px 24px; background: #059669; color: white; text-decoration: none; border-radius: 4px;">Acessar o Sistema</a></p>
+          <p style="color: #666; font-size: 14px; margin-top: 24px;">
+            Obrigado por usar CreditOS! Qualquer dúvida, entre em contato conosco.
+          </p>
+        `,
+      })
+      console.log(`[Email] Confirmação enviada para ${email} via Resend`)
+    } else {
+      console.log(`[Email] Confirmação para ${email} (Resend não configurado)`)
+    }
+  } catch (error) {
+    console.error('[Email Send Error]', error)
+  }
+}
+
+async function sendFailureNotification(
+  email: string,
+  reference?: string
+): Promise<void> {
+  try {
+    // Enviar via Resend se disponível
+    if (process.env.RESEND_API_KEY) {
+      const { Resend } = await import('resend')
+      const resend = new Resend(process.env.RESEND_API_KEY)
+
+      await resend.emails.send({
+        from: 'suporte@triadeiaos.com',
+        to: email,
+        subject: '⚠️ Problema no seu pagamento — CreditOS',
+        html: `
+          <h1>Opa, algo deu errado</h1>
+          <p>Seu pagamento não foi processado com sucesso.</p>
+          <p><strong>Referência:</strong> ${reference || 'N/A'}</p>
+          <p>Por favor, tente novamente clicando no link abaixo:</p>
+          <p><a href="https://triadeiaos.com/creditOS" style="display: inline-block; padding: 12px 24px; background: #dc2626; color: white; text-decoration: none; border-radius: 4px;">Tentar Novamente</a></p>
+          <p style="color: #666; font-size: 14px; margin-top: 24px;">
+            Precisamos de você! Se o problema persistir, entre em contato: suporte@triadeiaos.com
+          </p>
+        `,
+      })
+      console.log(`[Email] Notificação de falha enviada para ${email} via Resend`)
+    } else {
+      console.log(`[Email] Notificação de falha para ${email} (Resend não configurado)`)
+    }
+  } catch (error) {
+    console.error('[Email Send Error]', error)
+  }
+}
+
+// Health check (GET /api/webhooks/cakto)
 export async function GET() {
   return NextResponse.json(
-    { status: 'ok', message: 'Webhook Cakto pronto' },
+    { status: 'webhook cakto ativo' },
     { status: 200 }
   )
 }
