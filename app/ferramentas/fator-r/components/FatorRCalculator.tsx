@@ -69,7 +69,7 @@ export default function FatorRCalculator() {
             📊 Isto é um simulador interativo
           </p>
           <p className="text-sm text-blue-800">
-            Teste com seus números reais abaixo. Os campos já estão preenchidos com um exemplo para você ver como funciona. Mude os valores e clique em "Calcular Fator R".
+            Os campos já estão preenchidos com um exemplo para você ver como funciona. Mude os valores e clique em "Calcular Fator R".
           </p>
         </div>
       </div>
@@ -125,6 +125,11 @@ export default function FatorRCalculator() {
           >
             Calcular Fator R <ArrowRight className="w-4 h-4" />
           </button>
+
+          {/* Instrução */}
+          <p className="text-center text-sm text-gray-600">
+            Teste com seus números reais abaixo
+          </p>
         </div>
       </div>
 
