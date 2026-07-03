@@ -6,6 +6,13 @@ export const metadata: Metadata = {
   title: 'CreditOS — Recuperação de Créditos Tributários com IA | TRÍADE IA',
   description: 'Motor de IA que identifica, valida e homologa créditos de PIS/COFINS e ICMS antes da Reforma Tributária de 2027. Em minutos, não em semanas.',
   robots: { index: true, follow: true },
+  openGraph: {
+    title: 'CreditOS — Recuperação de Créditos Tributários com IA',
+    description: 'Identifique R$ 200k em créditos dormindo. Agente de IA processa em minutos.',
+    url: 'https://triadeiaos.com/creditOS',
+    type: 'website',
+  },
+  keywords: ['créditos tributários', 'PIS/COFINS', 'ICMS', 'reforma tributária', 'agente IA', 'contador', 'escritório contábil'],
 }
 
 const stats = [
@@ -47,9 +54,33 @@ const timeline = [
   { year: '2033', label: 'EXTINÇÃO', action: 'ICMS, ISS, PIS e COFINS extintos. Sem registro: auditoria retroativa de 5 anos, R$50–100k por empresa.', urgency: 'perigo', color: 'text-red-400 border-red-400/40 bg-red-400/[0.06]' },
 ]
 
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  'name': 'CreditOS',
+  'description': 'Agente de IA para recuperação de créditos tributários PIS/COFINS e ICMS',
+  'applicationCategory': 'FinanceApplication',
+  'offers': {
+    '@type': 'Offer',
+    'price': '97.00',
+    'priceCurrency': 'BRL',
+    'availability': 'https://schema.org/InStock',
+  },
+  'creator': {
+    '@type': 'Organization',
+    'name': 'TRÍADE IA',
+    'url': 'https://triadeiaos.com',
+  },
+}
+
 export default function CreditOSPage() {
   return (
-    <main className="min-h-screen bg-navy">
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <main className="min-h-screen bg-navy">
 
       {/* ── HERO ── */}
       <section className="pt-32 pb-20 px-6">
@@ -335,5 +366,6 @@ export default function CreditOSPage() {
       </section>
 
     </main>
+    </>
   )
 }

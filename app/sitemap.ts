@@ -24,5 +24,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE_URL}/ia-para-imobiliarias`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.85 },
     { url: `${BASE_URL}/ia-para-distribuidoras`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.85 },
     { url: `${BASE_URL}/ia-para-supermercados`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.85 },
+    { url: `${BASE_URL}/creditOS`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.95 },
   ];
 }
