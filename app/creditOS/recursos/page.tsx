@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { createClient } from '@/lib/supabase-client'
+import { getSupabaseClient } from '@/lib/supabase-client'
 
 export default function RecursosPage() {
   const [user, setUser] = useState<any>(null)
@@ -12,7 +12,7 @@ export default function RecursosPage() {
   useEffect(() => {
     const checkAccess = async () => {
       try {
-        const supabase = createClient()
+        const supabase = getSupabaseClient()
 
         // Verificar sessão do usuário
         const { data: { session }, error: sessionError } = await supabase.auth.getSession()
