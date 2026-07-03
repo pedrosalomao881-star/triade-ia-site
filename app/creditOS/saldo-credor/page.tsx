@@ -1,9 +1,8 @@
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'O Dinheiro Que Sua Empresa Está Perdendo — CreditOS · TRÍADE IA',
-  description: 'Identifique créditos tributários dormindo no seu balanço. Assinatura CreditOS com 7 agentes IA analisando PIS, COFINS, ICMS automaticamente.',
-  robots: { index: true, follow: true },
+  title: 'O Dinheiro Que Sua Empresa Está Perdendo — CreditOS',
+  description: 'Identifique créditos tributários. CreditOS com 7 agentes IA.',
 }
 
 export default function SaldoCredorPage() {
