@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   title: "Ferramentas Tributárias Gratuitas — Tríade IA",
   description:
     "Calculadoras e ferramentas gratuitas para navegar a Reforma Tributária EC 132/2023. Fator R, CBS/IBS, Split Payment e mais.",
-};
+}; // force rebuild
 
 const ferramentas = [
   {
