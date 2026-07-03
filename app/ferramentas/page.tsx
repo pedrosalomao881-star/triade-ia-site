@@ -10,45 +10,33 @@ export const metadata: Metadata = {
 
 const ferramentas = [
   {
-    titulo: "Regime Certo",
-    descricao: "Diagnóstico tributário gratuito: compare Simples Nacional, Lucro Presumido e Lucro Real e descubra qual regime economiza mais para a sua empresa. Resultado em 3 minutos, sem cadastro.",
-    href: "/ferramentas/regime-certo",
-    tag: "Diagnóstico",
-  },
-  {
-    titulo: "Calculadora CBS/IBS",
-    descricao: "Calcule o impacto real dos novos tributos da Reforma Tributária sobre o seu negócio. Considera atividade, regime, faturamento e insumos creditáveis. Resultado imediato.",
-    href: "/ferramentas/cbs",
-    tag: "EC 132/2023",
-  },
-  {
     titulo: "Simulador Fator R",
     descricao: "Descubra se sua empresa tem vantagem no Simples Nacional usando o Fator R — índice de folha sobre receita que define a alíquota do ISSQN.",
-    href: "/ferramentas/fator-r",
+    href: "https://fator-r-triade.vercel.app",
     tag: "Simples Nacional",
   },
   {
     titulo: "Recalculador CBS/IBS",
     descricao: "Estime o impacto da substituição do PIS/COFINS pelo CBS e do ICMS/ISS pelo IBS no preço dos seus produtos e serviços.",
-    href: "/ferramentas/recalculador",
+    href: "https://recalculador-preco-triade.vercel.app",
     tag: "EC 132/2023",
   },
   {
     titulo: "Checklist Split Payment",
     descricao: "Checklist completo de adequação ao Split Payment. Verifique se sua empresa está preparada para a retenção automática do imposto na transação.",
-    href: "/ferramentas/checklist-split",
+    href: "https://checklist-split-triade.vercel.app",
     tag: "Split Payment",
   },
   {
     titulo: "Planilha de Transição 2026–2033",
     descricao: "Calcule o impacto do Split Payment no seu caixa, ano a ano. Inputs: faturamento, regime, prazo de recebimento e margem. Output: capital de giro imobilizado + risco por fase.",
-    href: "/ferramentas/planilha",
+    href: "https://planilha-transicao.vercel.app",
     tag: "Split Payment",
   },
   {
     titulo: "Compêndio Tributário",
     descricao: "Guia completo dos regimes tributários brasileiros: Simples Nacional, Lucro Presumido e Lucro Real — com EC 132/2023 incorporada.",
-    href: "/produtos/guia",
+    href: "https://triade-guia-tributario.vercel.app",
     tag: "Guia",
   },
 ];
