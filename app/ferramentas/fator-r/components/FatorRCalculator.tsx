@@ -196,7 +196,7 @@ export default function FatorRCalculator() {
             onClick={handleUnlock}
             className="w-full bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-semibold py-3 rounded-lg transition-all"
           >
-            Desbloquear Análise Completa (R$ 9,90)
+            Desbloquear Análise Completa
           </button>
           <p className="text-xs text-gray-600 text-center mt-3">
             Acesso imediato via Cakto • Relatório em PDF • Histórico de simulações
@@ -210,7 +210,7 @@ export default function FatorRCalculator() {
           <div className="bg-white rounded-2xl p-8 max-w-md w-full">
             <div className="flex items-center justify-between mb-6">
               <h3 className="text-xl font-bold text-gray-900">
-                Desbloquear Análise Completa
+                Desbloquear Acesso Completo
               </h3>
               <button
                 onClick={() => setShowLeadModal(false)}
