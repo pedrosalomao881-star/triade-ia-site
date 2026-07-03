@@ -1,0 +1,31 @@
+Tipo de Despesa,Período (Mês/Ano),Valor Bruto (R$),Alíquota PIS (%),Alíquota COFINS (%),Crédito PIS (R$),Crédito COFINS (R$),Total Crédito (R$),Validado STJ Tema 779?,Observações
+Aluguel,01/2024,5000,0.75,3,37.5,150,187.5,Sim,100% essencial
+Energia Elétrica,01/2024,1200,0.75,3,9,36,45,Sim,100% essencial
+Materiais Produção,01/2024,8000,0.75,3,60,240,300,Sim,Matéria-prima recuperável
+Telecomunicações,01/2024,500,0.75,3,3.75,15,18.75,Sim,Telefone/Internet essencial
+Transporte Frete,01/2024,2000,0.75,3,15,60,75,Sim,Operacional
+Aluguel,02/2024,5000,0.75,3,37.5,150,187.5,Sim,100% essencial
+Energia Elétrica,02/2024,1200,0.75,3,9,36,45,Sim,100% essencial
+Materiais Produção,02/2024,8000,0.75,3,60,240,300,Sim,Matéria-prima recuperável
+Telecomunicações,02/2024,500,0.75,3,3.75,15,18.75,Sim,Telefone/Internet essencial
+Transporte Frete,02/2024,2000,0.75,3,15,60,75,Sim,Operacional
+Aluguel,03/2024,5000,0.75,3,37.5,150,187.5,Sim,100% essencial
+Energia Elétrica,03/2024,1200,0.75,3,9,36,45,Sim,100% essencial
+Materiais Produção,03/2024,8000,0.75,3,60,240,300,Sim,Matéria-prima recuperável
+Telecomunicações,03/2024,500,0.75,3,3.75,15,18.75,Sim,Telefone/Internet essencial
+Transporte Frete,03/2024,2000,0.75,3,15,60,75,Sim,Operacional
+,,TOTAL,,,,,2918.75,,
+,,,,,,,,
+,,Instruções:,,,,,,,
+,,1. Preencha "Tipo de Despesa" com a categoria da sua despesa,,,,,,,
+,,2. Insira o período em MM/AAAA (janeiro 2024 = 01/2024),,,,,,,
+,,3. Digite o valor bruto da despesa em reais,,,,,,,
+,,4. As alíquotas PIS (0,75%) e COFINS (3%) são fixas para cálculo,,,,,,,
+,,5. Os créditos são calculados automaticamente (Valor Bruto × Alíquota),,,,,,,
+,,6. Valide se a despesa se enquadra no Tema 779 do STJ (essencialidade),,,,,,,
+,,7. TOTAL CRÉDITO é a soma de todos os créditos PIS e COFINS identificados,,,,,,,
+,,,,,,,,
+,,Despesas Válidas STJ Tema 779:,,,,,,,
+,,✓ Aluguel,,✓ Energia,,✓ Água/Saneamento,,
+,,✓ Telefone/Internet,,✓ Materiais Produção,,✓ Combustível (atividade específica),,
+,,✗ Refeições,,✗ Viagens Aéreas,,✗ Manutenção Veicular (pessoal),,
