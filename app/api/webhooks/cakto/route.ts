@@ -172,16 +172,17 @@ async function sendConfirmationEmail(
   reference?: string
 ): Promise<void> {
   try {
-    // Enviar via Resend se disponível
+    // Enviar via Resend se disponível (dependência opcional — instale se necessário)
     if (process.env.RESEND_API_KEY) {
-      const { Resend } = await import('resend')
-      const resend = new Resend(process.env.RESEND_API_KEY)
+      try {
+        const { Resend } = await import('resend')
+        const resend = new Resend(process.env.RESEND_API_KEY)
 
-      await resend.emails.send({
-        from: 'noreply@triadeiaos.com',
-        to: email,
-        subject: 'Pagamento confirmado — CreditOS',
-        html: `
+        await resend.emails.send({
+          from: 'noreply@triadeiaos.com',
+          to: email,
+          subject: 'Pagamento confirmado — CreditOS',
+          html: `
           <h1>Bem-vindo ao CreditOS!</h1>
           <p>Seu pagamento foi confirmado com sucesso.</p>
           <p><strong>Referência:</strong> ${reference || 'N/A'}</p>
@@ -192,6 +193,9 @@ async function sendConfirmationEmail(
         `,
       })
       console.log(`[Email] Confirmação enviada para ${email} via Resend`)
+      } catch (resendError) {
+        console.log(`[Email] Resend não disponível, ignorando:`, resendError)
+      }
     } else {
       console.log(`[Email] Confirmação para ${email} (Resend não configurado)`)
     }
@@ -205,16 +209,17 @@ async function sendFailureNotification(
   reference?: string
 ): Promise<void> {
   try {
-    // Enviar via Resend se disponível
+    // Enviar via Resend se disponível (dependência opcional — instale se necessário)
     if (process.env.RESEND_API_KEY) {
-      const { Resend } = await import('resend')
-      const resend = new Resend(process.env.RESEND_API_KEY)
+      try {
+        const { Resend } = await import('resend')
+        const resend = new Resend(process.env.RESEND_API_KEY)
 
-      await resend.emails.send({
-        from: 'suporte@triadeiaos.com',
-        to: email,
-        subject: '⚠️ Problema no seu pagamento — CreditOS',
-        html: `
+        await resend.emails.send({
+          from: 'suporte@triadeiaos.com',
+          to: email,
+          subject: '⚠️ Problema no seu pagamento — CreditOS',
+          html: `
           <h1>Opa, algo deu errado</h1>
           <p>Seu pagamento não foi processado com sucesso.</p>
           <p><strong>Referência:</strong> ${reference || 'N/A'}</p>
@@ -226,6 +231,9 @@ async function sendFailureNotification(
         `,
       })
       console.log(`[Email] Notificação de falha enviada para ${email} via Resend`)
+      } catch (resendError) {
+        console.log(`[Email] Resend não disponível, ignorando:`, resendError)
+      }
     } else {
       console.log(`[Email] Notificação de falha para ${email} (Resend não configurado)`)
     }
