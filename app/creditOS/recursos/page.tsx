@@ -1,25 +1,60 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { createClient } from '@/lib/supabase-client'
 
 export default function RecursosPage() {
   const [user, setUser] = useState<any>(null)
   const [loading, setLoading] = useState(true)
   const [plano, setPlano] = useState<'mensal' | 'semestral' | 'anual' | null>(null)
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    // Verifica autenticação e acesso do usuário
     const checkAccess = async () => {
       try {
-        // Simular verificação (integrar com Supabase/Cakto)
-        const storedUser = localStorage.getItem('creditOS_user')
-        if (storedUser) {
-          const userData = JSON.parse(storedUser)
-          setUser(userData)
-          setPlano(userData.plano)
+        const supabase = createClient()
+
+        // Verificar sessão do usuário
+        const { data: { session }, error: sessionError } = await supabase.auth.getSession()
+
+        if (sessionError) {
+          console.error('Erro ao buscar sessão:', sessionError)
+          setError('Erro ao verificar autenticação')
+          setLoading(false)
+          return
         }
+
+        if (!session) {
+          // Usuário não autenticado
+          setUser(null)
+          setPlano(null)
+          setLoading(false)
+          return
+        }
+
+        // Usuário autenticado - buscar dados do plano
+        const { data: subscription, error: subError } = await supabase
+          .from('creditOS_subscriptions')
+          .select('*')
+          .eq('user_id', session.user.id)
+          .single()
+
+        if (subError && subError.code !== 'PGRST116') {
+          console.error('Erro ao buscar subscription:', subError)
+        }
+
+        setUser(session.user)
+
+        // Definir plano baseado na subscription
+        if (subscription) {
+          setPlano(subscription.plan_type) // 'mensal' | 'semestral' | 'anual'
+        } else {
+          setPlano(null)
+        }
+
       } catch (error) {
         console.error('Erro ao verificar acesso:', error)
+        setError('Erro ao verificar acesso aos recursos')
       } finally {
         setLoading(false)
       }
@@ -36,7 +71,40 @@ export default function RecursosPage() {
     )
   }
 
-  if (!user || !plano || (plano === 'mensal')) {
+  // Mostrar erro se houver
+  if (error) {
+    return (
+      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#0a0a0a', color: '#f5f5f5', padding: '24px' }}>
+        <div style={{ maxWidth: '600px', textAlign: 'center' }}>
+          <h1 style={{ fontSize: '32px', fontWeight: 900, marginBottom: '20px', color: '#ef4444' }}>Erro</h1>
+          <p style={{ fontSize: '18px', color: '#b4b8c0', marginBottom: '32px', lineHeight: '1.6' }}>{error}</p>
+          <a href="/" style={{ display: 'inline-block', padding: '14px 32px', background: '#6366f1', color: '#fff', textDecoration: 'none', borderRadius: '8px', fontWeight: 700, fontSize: '16px' }}>
+            Voltar ao início
+          </a>
+        </div>
+      </div>
+    )
+  }
+
+  // Não autenticado
+  if (!user) {
+    return (
+      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#0a0a0a', color: '#f5f5f5', padding: '24px' }}>
+        <div style={{ maxWidth: '600px', textAlign: 'center' }}>
+          <h1 style={{ fontSize: '32px', fontWeight: 900, marginBottom: '20px', color: '#ef4444' }}>Acesso Restrito</h1>
+          <p style={{ fontSize: '18px', color: '#b4b8c0', marginBottom: '32px', lineHeight: '1.6' }}>
+            Você precisa estar <strong>autenticado</strong> para acessar os recursos.
+          </p>
+          <a href="/creditOS/saldo-credor/" style={{ display: 'inline-block', padding: '14px 32px', background: '#6366f1', color: '#fff', textDecoration: 'none', borderRadius: '8px', fontWeight: 700, fontSize: '16px' }}>
+            Fazer login ou assinar
+          </a>
+        </div>
+      </div>
+    )
+  }
+
+  // Plano mensal (sem acesso)
+  if (!plano || plano === 'mensal') {
     return (
       <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#0a0a0a', color: '#f5f5f5', padding: '24px' }}>
         <div style={{ maxWidth: '600px', textAlign: 'center' }}>
