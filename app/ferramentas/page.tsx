@@ -85,9 +85,11 @@ export default function Ferramentas() {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             {ferramentas.map((f, i) => (
-              <Link
+              <a
                 key={i}
                 href={f.href}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="group bg-white border border-paper-border rounded-2xl p-8 shadow-sm hover:shadow-md hover:border-brand/30 transition-all flex flex-col"
               >
                 <div className="flex items-center justify-between mb-4">
@@ -101,7 +103,7 @@ export default function Ferramentas() {
                 <span className="inline-flex items-center gap-1.5 text-brand text-sm font-medium group-hover:gap-2.5 transition-all">
                   Acessar ferramenta <ArrowRight className="w-3.5 h-3.5" strokeWidth={2} />
                 </span>
-              </Link>
+              </a>
             ))}
           </div>
         </div>
