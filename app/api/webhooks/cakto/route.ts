@@ -1,13 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL || '',
-  process.env.SUPABASE_SERVICE_ROLE_KEY || ''
-)
-
 export async function POST(request: NextRequest) {
   try {
+    const supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL || '',
+      process.env.SUPABASE_SERVICE_ROLE_KEY || ''
+    )
+
     const payload = await request.json()
 
     // Log webhook para debug (remove em produção)
@@ -40,12 +40,15 @@ export async function POST(request: NextRequest) {
     switch (event) {
       case 'payment.approved':
       case 'payment.success':
-        await handlePaymentSuccess({
-          transactionId: id,
-          email,
-          reference,
-          amount,
-        })
+        await handlePaymentSuccess(
+          {
+            transactionId: id,
+            email,
+            reference,
+            amount,
+          },
+          supabase
+        )
         break
 
       case 'payment.pending':
@@ -55,11 +58,14 @@ export async function POST(request: NextRequest) {
       case 'payment.failed':
       case 'payment.error':
         console.error(`[Cakto] Pagamento falhou: ${id}`)
-        await handlePaymentFailure({
-          transactionId: id,
-          email,
-          reference,
-        })
+        await handlePaymentFailure(
+          {
+            transactionId: id,
+            email,
+            reference,
+          },
+          supabase
+        )
         break
 
       case 'payment.refunded':
@@ -84,12 +90,15 @@ export async function POST(request: NextRequest) {
   }
 }
 
-async function handlePaymentSuccess(data: {
-  transactionId: string
-  email?: string
-  reference?: string
-  amount?: number
-}) {
+async function handlePaymentSuccess(
+  data: {
+    transactionId: string
+    email?: string
+    reference?: string
+    amount?: number
+  },
+  supabase: any
+) {
   try {
     // Salvar transação em Supabase
     const { data: transaction, error } = await supabase
@@ -122,11 +131,14 @@ async function handlePaymentSuccess(data: {
   }
 }
 
-async function handlePaymentFailure(data: {
-  transactionId: string
-  email?: string
-  reference?: string
-}) {
+async function handlePaymentFailure(
+  data: {
+    transactionId: string
+    email?: string
+    reference?: string
+  },
+  supabase: any
+) {
   try {
     // Registrar falha em Supabase
     const { error } = await supabase
