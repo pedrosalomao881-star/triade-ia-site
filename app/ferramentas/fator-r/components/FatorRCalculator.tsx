@@ -144,7 +144,7 @@ export default function FatorRCalculator() {
           `}</style>
           <div className="text-center pt-2">
             <p className="text-sm font-semibold text-gray-700 mb-3">
-              Teste com seus números reais abaixo
+              Teste com seus números reais abaixo, após clicar no botão acima "Calcular Fator R".
             </p>
             <div className="arrow-down leading-none">↓</div>
           </div>
