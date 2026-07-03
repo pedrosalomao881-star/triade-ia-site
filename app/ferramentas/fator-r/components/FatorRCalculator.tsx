@@ -94,9 +94,9 @@ export default function FatorRCalculator() {
               value={folha}
               onChange={(e) => setFolha(e.target.value)}
               placeholder="Ex: 50.000"
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+              className="w-full px-4 py-4 text-lg font-semibold text-gray-900 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 focus:outline-none"
             />
-            <p className="text-xs text-gray-500 mt-1">
+            <p className="text-xs text-gray-500 mt-2">
               Soma de todos os salários pagos no mês
             </p>
           </div>
@@ -111,9 +111,9 @@ export default function FatorRCalculator() {
               value={receita}
               onChange={(e) => setReceita(e.target.value)}
               placeholder="Ex: 200.000"
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+              className="w-full px-4 py-4 text-lg font-semibold text-gray-900 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 focus:outline-none"
             />
-            <p className="text-xs text-gray-500 mt-1">
+            <p className="text-xs text-gray-500 mt-2">
               Receita total antes de impostos
             </p>
           </div>
