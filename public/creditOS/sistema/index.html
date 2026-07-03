@@ -280,7 +280,7 @@ textarea.efd-input:focus{border-color:var(--brand)}
     <input type="password" id="pwd" class="login-input" placeholder="••••••••" onkeydown="if(event.key==='Enter')login()">
     <button class="login-btn" onclick="login()">Acessar Sistema</button>
     <div class="login-error" id="login-err"></div>
-    <div class="login-hint">CreditOS v1.0-beta · Demo para Ilter Bispo · 2026</div>
+    <div class="login-hint">CreditOS v1.0-beta · Sistema de Análise de Créditos · 2026</div>
   </div>
 </div>
 
@@ -1070,13 +1070,16 @@ function renderPareceresPage() {
     return;
   }
   el.innerHTML = state.pareceres.map((p, i) => `
-    <div class="parecer-item" onclick="verParecer(${i})">
-      <div class="pi-id">${p.parecerId}</div>
-      <div class="pi-empresa">${p.empresa}</div>
-      <div style="text-align:right">
-        <div class="pi-valor">R$ ${fmt(p.totalGeral)}</div>
-        <div class="pi-data">${p.dataGeracao}</div>
+    <div class="parecer-item" style="display:flex;justify-content:space-between;align-items:center">
+      <div style="flex:1;cursor:pointer" onclick="verParecer(${i})">
+        <div class="pi-id">${p.parecerId}</div>
+        <div class="pi-empresa">${p.empresa}</div>
+        <div style="text-align:right">
+          <div class="pi-valor">R$ ${fmt(p.totalGeral)}</div>
+          <div class="pi-data">${p.dataGeracao}</div>
+        </div>
       </div>
+      <button onclick="excluirParecer(${i}); event.stopPropagation();" style="background:none;border:none;color:var(--red);cursor:pointer;font-size:18px;padding:8px;transition:.2s;margin-left:12px" title="Excluir parecer" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'">🗑️</button>
     </div>
   `).join('');
 }
@@ -1103,10 +1106,13 @@ function atualizarDashboard() {
     lista.innerHTML = '<div class="empty-state"><div class="ico">🔍</div><h3>Nenhuma análise realizada ainda</h3><p>Clique em "Nova Análise" para processar seu primeiro arquivo EFD-Contribuições</p></div>';
   } else {
     lista.innerHTML = '<div style="padding:0 4px">' + state.pareceres.slice(0,5).map((p, i) => `
-      <div class="parecer-item" onclick="verParecer(${i})">
-        <div class="pi-id">${p.parecerId}</div>
-        <div class="pi-empresa">${p.empresa}</div>
-        <div style="text-align:right"><div class="pi-valor">R$ ${fmt(p.totalGeral)}</div><div class="pi-data">${p.dataGeracao}</div></div>
+      <div class="parecer-item" style="display:flex;justify-content:space-between;align-items:center">
+        <div style="flex:1;cursor:pointer" onclick="verParecer(${i})">
+          <div class="pi-id">${p.parecerId}</div>
+          <div class="pi-empresa">${p.empresa}</div>
+          <div style="text-align:right"><div class="pi-valor">R$ ${fmt(p.totalGeral)}</div><div class="pi-data">${p.dataGeracao}</div></div>
+        </div>
+        <button onclick="excluirParecer(${i}); event.stopPropagation();" style="background:none;border:none;color:var(--red);cursor:pointer;font-size:16px;padding:6px;transition:.2s;margin-left:8px;flex-shrink:0" title="Excluir parecer" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'">🗑️</button>
       </div>`).join('') + '</div>';
   }
 }
@@ -1191,6 +1197,19 @@ function toast(msg, erro=false) {
   el.style.background = erro ? '#ef4444' : 'var(--brand)';
   el.classList.add('show');
   setTimeout(() => el.classList.remove('show'), 3000);
+}
+
+function excluirParecer(idx) {
+  const p = state.pareceres[idx];
+  if (!confirm(`Tem certeza que deseja excluir o parecer ${p.parecerId}?\n\nEsta ação não pode ser desfeita.`)) {
+    return;
+  }
+  state.pareceres.splice(idx, 1);
+  salvarStorage();
+  atualizarBadgeParecer();
+  atualizarDashboard();
+  renderPareceresPage();
+  toast('Parecer excluído com sucesso');
 }
 </script>
 </body>
