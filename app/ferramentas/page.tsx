@@ -12,7 +12,7 @@ const ferramentas = [
   {
     titulo: "Simulador Fator R",
     descricao: "Descubra se sua empresa tem vantagem no Simples Nacional usando o Fator R — índice de folha sobre receita que define a alíquota do ISSQN.",
-    href: "https://fator-r-triade.vercel.app",
+    href: "/ferramentas/fator-r",
     tag: "Simples Nacional",
   },
   {
