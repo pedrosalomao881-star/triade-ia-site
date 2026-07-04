@@ -32,7 +32,8 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--i
 #login{position:fixed;inset:0;z-index:9999;background:var(--bg);display:flex;align-items:center;justify-content:center;
   background-image:radial-gradient(ellipse 60% 50% at 50% 0%,rgba(99,102,241,0.08) 0%,transparent 70%)}
 .login-card{background:var(--bg2);border:1px solid var(--border2);border-radius:20px;padding:48px 44px;width:380px;text-align:center;box-shadow:0 32px 80px rgba(0,0,0,0.6)}
-.login-logo{width:60px;height:60px;background:linear-gradient(135deg,var(--brand),#4f46e5);border-radius:16px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:20px;color:#fff;margin:0 auto 20px;box-shadow:0 0 32px rgba(99,102,241,0.3)}
+.login-logo{width:60px;height:60px;background:transparent;border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;box-shadow:0 0 32px rgba(99,102,241,0.3)}
+.login-logo-img{width:100%;height:100%;object-fit:contain;border-radius:12px}
 .login-title{font-size:24px;font-weight:800;letter-spacing:-0.03em;margin-bottom:4px}
 .login-title span{color:var(--brand)}
 .login-sub{font-size:13px;color:var(--muted);margin-bottom:28px;line-height:1.5}
@@ -51,7 +52,8 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--i
 
 /* ── SIDEBAR ────────────────────────────────── */
 .s-logo{padding:20px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
-.s-logo-icon{width:36px;height:36px;background:linear-gradient(135deg,var(--brand),#4f46e5);border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:14px;color:#fff;flex-shrink:0}
+.s-logo-icon{width:36px;height:36px;background:transparent;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.s-logo-icon-img{width:100%;height:100%;object-fit:contain;border-radius:8px}
 .s-logo-text{font-size:15px;font-weight:800;letter-spacing:-0.02em}
 .s-logo-text span{color:var(--brand)}
 .s-logo-sub{font-size:10px;color:var(--muted);margin-top:1px}
@@ -273,7 +275,7 @@ textarea.efd-input:focus{border-color:var(--brand)}
 <!-- ══ LOGIN ══════════════════════════════════════════ -->
 <div id="login">
   <div class="login-card">
-    <div class="login-logo">C</div>
+    <div class="login-logo"><img src="triade-logo.png" alt="TRÍADE Logo" class="login-logo-img" /></div>
     <div class="login-title">Credit<span>OS</span></div>
     <div class="login-sub">Sistema Operacional de Créditos Tributários<br>TRÍADE IA · Powered by Sonnet 4.6</div>
     <div class="login-badge">⚡ EC 132/2023 · Janela fecha em 2027</div>
@@ -290,7 +292,7 @@ textarea.efd-input:focus{border-color:var(--brand)}
   <!-- SIDEBAR -->
   <div id="sidebar">
     <div class="s-logo">
-      <div class="s-logo-icon">C</div>
+      <div class="s-logo-icon"><img src="triade-logo.png" alt="TRÍADE Logo" class="s-logo-icon-img" /></div>
       <div>
         <div class="s-logo-text">Credit<span>OS</span></div>
         <div class="s-logo-sub">Motor de Créditos Tributários</div>
