@@ -23,8 +23,8 @@ const ferramentas = [
   },
   {
     titulo: "Checklist Split Payment",
-    descricao: "Checklist completo de adequação ao Split Payment. Verifique se sua empresa está preparada para a retenção automática do imposto na transação.",
-    href: "https://checklist-split-triade.vercel.app",
+    descricao: "8 itens críticos para sua empresa estar pronta para o Split Payment. Verifique cada ponto e receba um score personalizado.",
+    href: "/ferramentas/checklist-split",
     tag: "Split Payment",
   },
   {
