@@ -116,21 +116,25 @@ const ferramentasExtras = [
     titulo: "Fui Taxado!",
     descricao: "Plataforma de denúncia de arbitrariedade tributária.",
     href: "https://triadeiaos.com/fui-taxado",
+    preco: "R$ 9,90",
   },
   {
     titulo: "Lixômetro",
     descricao: "Medidor de conformidade tributária e fiscal.",
     href: "https://triadeiaos.com/lixometro",
+    preco: "R$ 9,90",
   },
   {
     titulo: "CreditOS Constelação",
     descricao: "Análise visual de créditos e saldo devedor.",
     href: "https://triadeiaos.com/creditOS/constelacao",
+    preco: "Gratuito",
   },
   {
     titulo: "Portfolio",
     descricao: "Recuperação de créditos tributários — cases de sucesso.",
     href: "https://triadeiaos.com/portfolio/recuperacao-creditos-tributarios",
+    preco: "Gratuito",
   },
 ];
 
@@ -266,9 +270,14 @@ export default function Solucoes() {
                 rel="noopener noreferrer"
                 className="group border-l-4 border-brand bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition-all hover:border-brand-dark"
               >
-                <h3 className="font-semibold text-gray-900 mb-2 group-hover:text-brand">
-                  {ferramenta.titulo}
-                </h3>
+                <div className="flex items-start justify-between mb-2">
+                  <h3 className="font-semibold text-gray-900 group-hover:text-brand flex-1">
+                    {ferramenta.titulo}
+                  </h3>
+                  <span className="text-xs font-bold text-brand ml-2 whitespace-nowrap">
+                    {ferramenta.preco}
+                  </span>
+                </div>
                 <p className="text-sm text-gray-600 mb-3">{ferramenta.descricao}</p>
                 <span className="inline-flex items-center gap-2 text-brand text-sm font-medium group-hover:gap-3 transition-all">
                   Acessar <ArrowRight className="w-3.5 h-3.5" />
