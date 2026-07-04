@@ -331,6 +331,46 @@ export default function CreditOSPage() {
         </div>
       </section>
 
+      {/* ── INTERFACE ── */}
+      <section className="py-20 px-6 border-t border-white/[0.06] bg-white/[0.01]">
+        <div className="max-w-4xl mx-auto">
+          <div className="flex items-center gap-2 mb-10">
+            <TrendingUp className="w-3.5 h-3.5 text-brand/50" strokeWidth={1.5} />
+            <span className="text-xs font-mono font-semibold text-brand/60 uppercase tracking-widest">Interface do agente</span>
+          </div>
+          <h2 className="font-display font-bold text-3xl text-ice mb-4 leading-tight">
+            Tela de login segura e intuitiva.
+          </h2>
+          <p className="text-ice/50 text-base leading-relaxed mb-12">
+            A interface do CreditOS foi projetada para contadores e gerentes financeiros. Login seguro, análise em tempo real, e pareceres técnicos em um clique.
+          </p>
+
+          {/* Tela de login */}
+          <div className="border border-white/[0.06] rounded-xl overflow-hidden bg-white/[0.01] p-8 flex justify-center">
+            <img
+              src="/images/creditOS/tela-login.png"
+              alt="CreditOS — Tela de Login com Logo TRÍADE"
+              className="max-w-sm h-auto rounded-lg shadow-2xl"
+            />
+          </div>
+
+          <div className="mt-10 grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="border border-white/[0.05] rounded-lg p-5 bg-white/[0.01]">
+              <div className="text-brand font-semibold text-sm mb-2">🔐 Autenticação Segura</div>
+              <p className="text-ice/40 text-xs leading-relaxed">OAuth2, MFA e criptografia de dados. Conformidade LGPD.</p>
+            </div>
+            <div className="border border-white/[0.05] rounded-lg p-5 bg-white/[0.01]">
+              <div className="text-brand font-semibold text-sm mb-2">⚡ Análise em Tempo Real</div>
+              <p className="text-ice/40 text-xs leading-relaxed">EFD, DCTF e razão contábil processados em paralelo.</p>
+            </div>
+            <div className="border border-white/[0.05] rounded-lg p-5 bg-white/[0.01]">
+              <div className="text-brand font-semibold text-sm mb-2">📊 Pareceres Prontos</div>
+              <p className="text-ice/40 text-xs leading-relaxed">PT em HTML, PDF e formato jurídico — pronto para protocolo.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ── CTA FINAL ── */}
       <section className="py-24 px-6 border-t border-white/[0.06]">
         <div className="max-w-2xl mx-auto text-center">
@@ -362,6 +402,54 @@ export default function CreditOSPage() {
           <p className="text-ice/20 text-xs mt-6">
             Sem compromisso · Resposta em até 24h · TRÍADE IA — Itumbiara, GO
           </p>
+        </div>
+      </section>
+
+      {/* ── FOOTER / CRÉDITOS ── */}
+      <section className="py-12 px-6 border-t border-white/[0.06] bg-white/[0.01]">
+        <div className="max-w-4xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left">
+            {/* Logo */}
+            <div className="flex flex-col items-center md:items-start gap-2">
+              <div className="text-brand font-display font-bold text-lg">
+                TR<span className="text-cyan-400">[</span>IA<span className="text-cyan-400">]</span>DE
+              </div>
+              <p className="text-ice/40 text-xs">Soluções de Inteligência Artificial</p>
+            </div>
+
+            {/* Créditos */}
+            <div className="flex flex-col items-center md:items-start gap-1.5">
+              <p className="text-ice/50 text-xs">
+                <span className="text-brand">©</span> <span className="text-brand">®</span> Criado por:
+              </p>
+              <p className="text-ice font-semibold text-sm">
+                TR<span className="text-cyan-400">[</span>IA<span className="text-cyan-400">]</span>DE | André Rocha Salomão
+              </p>
+              <p className="text-ice/40 text-xs mt-1">
+                Todos os direitos reservados
+              </p>
+            </div>
+
+            {/* Contato */}
+            <div className="flex flex-col items-center md:items-start gap-1.5">
+              <p className="text-ice/50 text-xs">Contato</p>
+              <p className="text-ice font-medium text-sm">
+                Sofia
+              </p>
+              <a
+                href="mailto:contato@triadeiaos.com"
+                className="text-brand hover:text-brand/80 text-xs transition-colors"
+              >
+                contato@triadeiaos.com
+              </a>
+            </div>
+          </div>
+
+          <div className="border-t border-white/[0.06] mt-8 pt-6 text-center">
+            <p className="text-ice/25 text-xs font-mono uppercase tracking-widest">
+              CreditOS v2.0 — Motor de Recuperação Tributária com IA
+            </p>
+          </div>
         </div>
       </section>
 

@@ -104,6 +104,10 @@ export default function Navbar() {
             </div>
           </div>
 
+          <Link href="/solucoes" className="text-sm text-ice/60 hover:text-ice transition-colors font-semibold text-brand">
+            Soluções
+          </Link>
+
           <Link href="/manuais" className="text-sm text-ice/60 hover:text-ice transition-colors">
             Manuais
           </Link>
@@ -214,6 +218,10 @@ export default function Navbar() {
               ))}
             </div>
           )}
+
+          <Link href="/solucoes" className="text-sm text-ice/70 hover:text-ice py-2 transition-colors font-semibold text-brand" onClick={() => setOpen(false)}>
+            Soluções
+          </Link>
 
           <Link href="/manuais" className="text-sm text-ice/70 hover:text-ice py-2 transition-colors" onClick={() => setOpen(false)}>
             Manuais
