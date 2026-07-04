@@ -17,8 +17,8 @@ const ferramentas = [
   },
   {
     titulo: "Recalculador CBS/IBS",
-    descricao: "Estime o impacto da substituição do PIS/COFINS pelo CBS e do ICMS/ISS pelo IBS no preço dos seus produtos e serviços.",
-    href: "https://recalculador-preco-triade.vercel.app",
+    descricao: "Calcule qual deve ser o novo preço de venda para manter a mesma margem após a entrada do CBS e IBS em 2027–2033.",
+    href: "/ferramentas/recalculador",
     tag: "EC 132/2023",
   },
   {
