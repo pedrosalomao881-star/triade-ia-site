@@ -29,8 +29,8 @@ const ferramentas = [
   },
   {
     titulo: "Planilha de Transição 2026–2033",
-    descricao: "Calcule o impacto do Split Payment no seu caixa, ano a ano. Inputs: faturamento, regime, prazo de recebimento e margem. Output: capital de giro imobilizado + risco por fase.",
-    href: "https://planilha-transicao.vercel.app",
+    descricao: "Simule o impacto do Split Payment no capital de giro da sua empresa ano a ano.",
+    href: "/ferramentas/planilha-transicao",
     tag: "Split Payment",
   },
   {
