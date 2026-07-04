@@ -34,6 +34,12 @@ const ferramentas = [
     tag: "Split Payment",
   },
   {
+    titulo: "Regime Certo",
+    descricao: "Compare Simples Nacional, Lucro Presumido e Lucro Real em 3 minutos. Descubra o melhor regime para sua empresa.",
+    href: "/ferramentas/regime-certo",
+    tag: "Diagnóstico",
+  },
+  {
     titulo: "Compêndio Tributário",
     descricao: "Guia completo dos regimes tributários brasileiros: Simples Nacional, Lucro Presumido e Lucro Real — com EC 132/2023 incorporada.",
     href: "https://triade-guia-tributario.vercel.app",
