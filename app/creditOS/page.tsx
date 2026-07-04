@@ -331,6 +331,46 @@ export default function CreditOSPage() {
         </div>
       </section>
 
+      {/* ── INTERFACE ── */}
+      <section className="py-20 px-6 border-t border-white/[0.06] bg-white/[0.01]">
+        <div className="max-w-4xl mx-auto">
+          <div className="flex items-center gap-2 mb-10">
+            <TrendingUp className="w-3.5 h-3.5 text-brand/50" strokeWidth={1.5} />
+            <span className="text-xs font-mono font-semibold text-brand/60 uppercase tracking-widest">Interface do agente</span>
+          </div>
+          <h2 className="font-display font-bold text-3xl text-ice mb-4 leading-tight">
+            Tela de login segura e intuitiva.
+          </h2>
+          <p className="text-ice/50 text-base leading-relaxed mb-12">
+            A interface do CreditOS foi projetada para contadores e gerentes financeiros. Login seguro, análise em tempo real, e pareceres técnicos em um clique.
+          </p>
+
+          {/* Tela de login */}
+          <div className="border border-white/[0.06] rounded-xl overflow-hidden bg-white/[0.01] p-8 flex justify-center">
+            <img
+              src="/images/creditOS/tela-login.png"
+              alt="CreditOS — Tela de Login com Logo TRÍADE"
+              className="max-w-sm h-auto rounded-lg shadow-2xl"
+            />
+          </div>
+
+          <div className="mt-10 grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="border border-white/[0.05] rounded-lg p-5 bg-white/[0.01]">
+              <div className="text-brand font-semibold text-sm mb-2">🔐 Autenticação Segura</div>
+              <p className="text-ice/40 text-xs leading-relaxed">OAuth2, MFA e criptografia de dados. Conformidade LGPD.</p>
+            </div>
+            <div className="border border-white/[0.05] rounded-lg p-5 bg-white/[0.01]">
+              <div className="text-brand font-semibold text-sm mb-2">⚡ Análise em Tempo Real</div>
+              <p className="text-ice/40 text-xs leading-relaxed">EFD, DCTF e razão contábil processados em paralelo.</p>
+            </div>
+            <div className="border border-white/[0.05] rounded-lg p-5 bg-white/[0.01]">
+              <div className="text-brand font-semibold text-sm mb-2">📊 Pareceres Prontos</div>
+              <p className="text-ice/40 text-xs leading-relaxed">PT em HTML, PDF e formato jurídico — pronto para protocolo.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ── CTA FINAL ── */}
       <section className="py-24 px-6 border-t border-white/[0.06]">
         <div className="max-w-2xl mx-auto text-center">
