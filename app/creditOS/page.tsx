@@ -365,6 +365,54 @@ export default function CreditOSPage() {
         </div>
       </section>
 
+      {/* ── FOOTER / CRÉDITOS ── */}
+      <section className="py-12 px-6 border-t border-white/[0.06] bg-white/[0.01]">
+        <div className="max-w-4xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left">
+            {/* Logo */}
+            <div className="flex flex-col items-center md:items-start gap-2">
+              <div className="text-brand font-display font-bold text-lg">
+                TR<span className="text-cyan-400">[</span>IA<span className="text-cyan-400">]</span>DE
+              </div>
+              <p className="text-ice/40 text-xs">Soluções de Inteligência Artificial</p>
+            </div>
+
+            {/* Créditos */}
+            <div className="flex flex-col items-center md:items-start gap-1.5">
+              <p className="text-ice/50 text-xs">
+                <span className="text-brand">©</span> <span className="text-brand">®</span> Criado por:
+              </p>
+              <p className="text-ice font-semibold text-sm">
+                TR<span className="text-cyan-400">[</span>IA<span className="text-cyan-400">]</span>DE | André Rocha Salomão
+              </p>
+              <p className="text-ice/40 text-xs mt-1">
+                Todos os direitos reservados
+              </p>
+            </div>
+
+            {/* Contato */}
+            <div className="flex flex-col items-center md:items-start gap-1.5">
+              <p className="text-ice/50 text-xs">Contato</p>
+              <p className="text-ice font-medium text-sm">
+                Sofia
+              </p>
+              <a
+                href="mailto:contato@triadeiaos.com"
+                className="text-brand hover:text-brand/80 text-xs transition-colors"
+              >
+                contato@triadeiaos.com
+              </a>
+            </div>
+          </div>
+
+          <div className="border-t border-white/[0.06] mt-8 pt-6 text-center">
+            <p className="text-ice/25 text-xs font-mono uppercase tracking-widest">
+              CreditOS v2.0 — Motor de Recuperação Tributária com IA
+            </p>
+          </div>
+        </div>
+      </section>
+
     </main>
     </>
   )
