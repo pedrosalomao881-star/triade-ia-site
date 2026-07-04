@@ -42,7 +42,7 @@ const ferramentas = [
   {
     titulo: "Compêndio Tributário",
     descricao: "Guia completo dos regimes tributários brasileiros: Simples Nacional, Lucro Presumido e Lucro Real — com EC 132/2023 incorporada.",
-    href: "https://triade-guia-tributario.vercel.app",
+    href: "/ferramentas/compendio",
     tag: "Guia",
   },
 ];
