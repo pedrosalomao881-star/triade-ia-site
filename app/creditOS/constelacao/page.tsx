@@ -1,7 +1,4 @@
-'use client';
-
 import type { Metadata } from 'next';
-import { useEffect } from 'react';
 
 export const metadata: Metadata = {
   title: 'CreditOS — A Constelação do Seu Dinheiro',
@@ -9,13 +6,6 @@ export const metadata: Metadata = {
 };
 
 export default function ConstelaçãoPage() {
-  useEffect(() => {
-    // Garantir que o DOM está carregado antes de executar scripts
-    if (typeof window === 'undefined') return;
-
-    // Scripts do universo e sistema solar já estarão no HTML
-    // Apenas reinicializar se necessário
-  }, []);
 
   return (
     <>
