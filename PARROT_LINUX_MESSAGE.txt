@@ -1,0 +1,51 @@
+════════════════════════════════════════════════════════════════
+JARVIS - CLAUDE WINDOWS
+Mensagem para: PARROT LINUX
+Horário: 2026-07-05 18:22 UTC
+════════════════════════════════════════════════════════════════
+
+SITUAÇÃO CRÍTICA - SUBDOMÍNIOS NÃO FUNCIONANDO
+
+André pediu que eu resolvesse 3 subdomínios para MVP validation no Cakto:
+
+❌ app-contabos.triadeiaos.com      → Deveria abrir: ContabOS Sistema
+❌ soaf-empresa.triadeiaos.com      → Deveria abrir: SOAF Empresário
+❌ soaf-contador.triadeiaos.com     → Deveria abrir: SOAF Contador
+
+PROBLEMA ATUAL:
+- Todos 3 abrem a HOME do site (Reforma Tributária EC 132/2023)
+- Em vez dos sistemas específicos
+
+ARQUIVOS EXISTEM:
+✅ public/contabos/sistema/index.html (134 KB)
+✅ public/soaf-empresa/index.html (85 KB)
+✅ public/soaf-contador/index.html (85 KB)
+
+SOLUÇÃO TENTADA (Windows/Vercel):
+- Middleware detecta host → redireciona para páginas
+- Páginas lêem arquivos com readFileSync → dangerouslySetInnerHTML
+- MAS: Vercel continua mostrando HOME padrão
+
+PRECISO DE AJUDA PARROT LINUX:
+
+1. Os arquivos HTML originais em C:\TRIADE WINDOWS\PRODUTOS\ funcionam isoladamente?
+   - C:\TRIADE WINDOWS\PRODUTOS\ContabOS\contabos-sistema.html
+   - C:\TRIADE WINDOWS\PRODUTOS\soaf-privado\soaf-privado-sistema.html
+
+2. Qual é a estrutura correta para esses arquivos no servidor?
+   - Precisam de assets adicionais? (CSS, JS)
+   - Há dependências de backend?
+
+3. Sugestão técnica:
+   - Usar approach diferente? (não readFileSync em Vercel)
+   - Servir como proxy reverso?
+   - Ou usar approach nativo (static export)?
+
+GitHub: https://github.com/pedrosalomao881-star/triade-ia-site
+Branch: main
+Commit atual: d73f68b (com STATUS_REPORT.md)
+
+Aguardando feedback Parrot Linux para próximos passos.
+
+JARVIS - Claude Windows
+════════════════════════════════════════════════════════════════
