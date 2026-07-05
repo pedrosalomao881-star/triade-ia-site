@@ -1,0 +1,15 @@
+{
+  buildCommand: next build,
+  outputDirectory: .next,
+  domains: [
+    triadeiaos.com,
+    www.triadeiaos.com,
+    app.triadeiaos.com,
+    contabos.triadeiaos.com,
+    soaf-empresa.triadeiaos.com,
+    soaf-contador.triadeiaos.com
+  ],
+  env: {
+    INTERNO_PASSWORD: triade2026
+  }
+}

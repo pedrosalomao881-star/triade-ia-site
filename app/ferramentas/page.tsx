@@ -6,21 +6,9 @@ export const metadata: Metadata = {
   title: "Ferramentas Tributárias Gratuitas — Tríade IA",
   description:
     "Calculadoras e ferramentas gratuitas para navegar a Reforma Tributária EC 132/2023. Fator R, CBS/IBS, Split Payment e mais.",
-};
+}; // force rebuild
 
 const ferramentas = [
-  {
-    titulo: "Regime Certo",
-    descricao: "Diagnóstico tributário gratuito: compare Simples Nacional, Lucro Presumido e Lucro Real e descubra qual regime economiza mais para a sua empresa. Resultado em 3 minutos, sem cadastro.",
-    href: "/ferramentas/regime-certo",
-    tag: "Diagnóstico",
-  },
-  {
-    titulo: "Calculadora CBS/IBS",
-    descricao: "Calcule o impacto real dos novos tributos da Reforma Tributária sobre o seu negócio. Considera atividade, regime, faturamento e insumos creditáveis. Resultado imediato.",
-    href: "/ferramentas/cbs",
-    tag: "EC 132/2023",
-  },
   {
     titulo: "Simulador Fator R",
     descricao: "Descubra se sua empresa tem vantagem no Simples Nacional usando o Fator R — índice de folha sobre receita que define a alíquota do ISSQN.",
@@ -29,26 +17,32 @@ const ferramentas = [
   },
   {
     titulo: "Recalculador CBS/IBS",
-    descricao: "Estime o impacto da substituição do PIS/COFINS pelo CBS e do ICMS/ISS pelo IBS no preço dos seus produtos e serviços.",
+    descricao: "Calcule qual deve ser o novo preço de venda para manter a mesma margem após a entrada do CBS e IBS em 2027–2033.",
     href: "/ferramentas/recalculador",
     tag: "EC 132/2023",
   },
   {
     titulo: "Checklist Split Payment",
-    descricao: "Checklist completo de adequação ao Split Payment. Verifique se sua empresa está preparada para a retenção automática do imposto na transação.",
+    descricao: "8 itens críticos para sua empresa estar pronta para o Split Payment. Verifique cada ponto e receba um score personalizado.",
     href: "/ferramentas/checklist-split",
     tag: "Split Payment",
   },
   {
     titulo: "Planilha de Transição 2026–2033",
-    descricao: "Calcule o impacto do Split Payment no seu caixa, ano a ano. Inputs: faturamento, regime, prazo de recebimento e margem. Output: capital de giro imobilizado + risco por fase.",
-    href: "/ferramentas/planilha",
+    descricao: "Simule o impacto do Split Payment no capital de giro da sua empresa ano a ano.",
+    href: "/ferramentas/planilha-transicao",
     tag: "Split Payment",
+  },
+  {
+    titulo: "Regime Certo",
+    descricao: "Compare Simples Nacional, Lucro Presumido e Lucro Real em 3 minutos. Descubra o melhor regime para sua empresa.",
+    href: "/ferramentas/regime-certo",
+    tag: "Diagnóstico",
   },
   {
     titulo: "Compêndio Tributário",
     descricao: "Guia completo dos regimes tributários brasileiros: Simples Nacional, Lucro Presumido e Lucro Real — com EC 132/2023 incorporada.",
-    href: "/produtos/guia",
+    href: "/ferramentas/compendio",
     tag: "Guia",
   },
 ];
@@ -97,9 +91,11 @@ export default function Ferramentas() {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             {ferramentas.map((f, i) => (
-              <Link
+              <a
                 key={i}
                 href={f.href}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="group bg-white border border-paper-border rounded-2xl p-8 shadow-sm hover:shadow-md hover:border-brand/30 transition-all flex flex-col"
               >
                 <div className="flex items-center justify-between mb-4">
@@ -113,7 +109,7 @@ export default function Ferramentas() {
                 <span className="inline-flex items-center gap-1.5 text-brand text-sm font-medium group-hover:gap-2.5 transition-all">
                   Acessar ferramenta <ArrowRight className="w-3.5 h-3.5" strokeWidth={2} />
                 </span>
-              </Link>
+              </a>
             ))}
           </div>
         </div>

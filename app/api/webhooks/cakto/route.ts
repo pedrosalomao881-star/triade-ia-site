@@ -172,29 +172,7 @@ async function sendConfirmationEmail(
   reference?: string
 ): Promise<void> {
   try {
-    // Enviar via Resend se disponível
-    if (process.env.RESEND_API_KEY) {
-      const { Resend } = await import('resend')
-      const resend = new Resend(process.env.RESEND_API_KEY)
-
-      await resend.emails.send({
-        from: 'noreply@triadeiaos.com',
-        to: email,
-        subject: 'Pagamento confirmado — CreditOS',
-        html: `
-          <h1>Bem-vindo ao CreditOS!</h1>
-          <p>Seu pagamento foi confirmado com sucesso.</p>
-          <p><strong>Referência:</strong> ${reference || 'N/A'}</p>
-          <p><a href="https://triadeiaos.com/creditOS/sistema/" style="display: inline-block; padding: 12px 24px; background: #059669; color: white; text-decoration: none; border-radius: 4px;">Acessar o Sistema</a></p>
-          <p style="color: #666; font-size: 14px; margin-top: 24px;">
-            Obrigado por usar CreditOS! Qualquer dúvida, entre em contato conosco.
-          </p>
-        `,
-      })
-      console.log(`[Email] Confirmação enviada para ${email} via Resend`)
-    } else {
-      console.log(`[Email] Confirmação para ${email} (Resend não configurado)`)
-    }
+    console.log(`[Email] Confirmação para ${email} (email service desativado)`)
   } catch (error) {
     console.error('[Email Send Error]', error)
   }
@@ -205,30 +183,7 @@ async function sendFailureNotification(
   reference?: string
 ): Promise<void> {
   try {
-    // Enviar via Resend se disponível
-    if (process.env.RESEND_API_KEY) {
-      const { Resend } = await import('resend')
-      const resend = new Resend(process.env.RESEND_API_KEY)
-
-      await resend.emails.send({
-        from: 'suporte@triadeiaos.com',
-        to: email,
-        subject: '⚠️ Problema no seu pagamento — CreditOS',
-        html: `
-          <h1>Opa, algo deu errado</h1>
-          <p>Seu pagamento não foi processado com sucesso.</p>
-          <p><strong>Referência:</strong> ${reference || 'N/A'}</p>
-          <p>Por favor, tente novamente clicando no link abaixo:</p>
-          <p><a href="https://triadeiaos.com/creditOS" style="display: inline-block; padding: 12px 24px; background: #dc2626; color: white; text-decoration: none; border-radius: 4px;">Tentar Novamente</a></p>
-          <p style="color: #666; font-size: 14px; margin-top: 24px;">
-            Precisamos de você! Se o problema persistir, entre em contato: suporte@triadeiaos.com
-          </p>
-        `,
-      })
-      console.log(`[Email] Notificação de falha enviada para ${email} via Resend`)
-    } else {
-      console.log(`[Email] Notificação de falha para ${email} (Resend não configurado)`)
-    }
+    console.log(`[Email] Notificação de falha para ${email} (email service desativado)`)
   } catch (error) {
     console.error('[Email Send Error]', error)
   }
