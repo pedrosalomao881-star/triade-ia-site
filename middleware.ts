@@ -4,19 +4,22 @@ export function middleware(request: NextRequest) {
   const hostname = request.headers.get('host') || '';
   const { pathname } = request.nextUrl;
 
-  // 1. app-contabos.triadeiaos.com → serve ContabOS sistema
+  // 1. app-contabos.triadeiaos.com → redirecionar para /contabos-app
   if (hostname.includes('app-contabos')) {
-    return NextResponse.rewrite(new URL('/api/contabos-system', request.url));
+    request.nextUrl.pathname = '/contabos-app';
+    return NextResponse.rewrite(request.nextUrl);
   }
 
-  // 2. soaf-empresa.triadeiaos.com → serve SOAF Empresário
+  // 2. soaf-empresa.triadeiaos.com → redirecionar para /soaf-empresa-app
   if (hostname.includes('soaf-empresa')) {
-    return NextResponse.rewrite(new URL('/api/soaf-empresa-system', request.url));
+    request.nextUrl.pathname = '/soaf-empresa-app';
+    return NextResponse.rewrite(request.nextUrl);
   }
 
-  // 3. soaf-contador.triadeiaos.com → serve SOAF Contador
+  // 3. soaf-contador.triadeiaos.com → redirecionar para /soaf-contador-app
   if (hostname.includes('soaf-contador')) {
-    return NextResponse.rewrite(new URL('/api/soaf-contador-system', request.url));
+    request.nextUrl.pathname = '/soaf-contador-app';
+    return NextResponse.rewrite(request.nextUrl);
   }
 
   // 3. Proteção /interno (mantém a segurança existente)
