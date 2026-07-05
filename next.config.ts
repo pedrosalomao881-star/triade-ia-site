@@ -1,7 +1,9 @@
-import type { NextConfig } from "next";
+import type { NextConfig } from next;
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  reactStrictMode: true,
+  poweredByHeader: false,
+  staticPageGenerationTimeout: 300,
 };
 
 export default nextConfig;

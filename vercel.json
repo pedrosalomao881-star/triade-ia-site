@@ -1,0 +1,33 @@
+{
+  buildCommand: next build,
+  outputDirectory: .next,
+  rewrites: [
+    {
+      source: /contabos.html,
+      destination: /contabos.html
+    },
+    {
+      source: /fui-taxado.html,
+      destination: /fui-taxado.html
+    },
+    {
+      source: /soaf-privado-empresario.html,
+      destination: /soaf-privado-empresario.html
+    },
+    {
+      source: /soaf-privado-contador.html,
+      destination: /soaf-privado-contador.html
+    }
+  ],
+  headers: [
+    {
+      source: /public/(.*),
+      headers: [
+        {
+          key: Cache-Control,
+          value: public, max-age=31536000
+        }
+      ]
+    }
+  ]
+}
