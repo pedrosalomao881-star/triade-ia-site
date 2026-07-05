@@ -1,0 +1,1438 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SOAF Privado — TRÍADE IA</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --navy:#1e2d3d;
+  --navy2:#253650;
+  --navy3:#2e4166;
+  --bg:#f1f5f9;
+  --white:#ffffff;
+  --border:#e2e8f0;
+  --border2:#f0f4f8;
+  --text:#1e293b;
+  --text2:#64748b;
+  --text3:#94a3b8;
+  --gold:#c8a84b;
+  --gold-bg:#fdf8ed;
+  --blue:#3b82f6;
+  --blue-bg:#eff6ff;
+  --green:#10b981;
+  --green-bg:#ecfdf5;
+  --red:#ef4444;
+  --red-bg:#fef2f2;
+  --amber:#f59e0b;
+  --amber-bg:#fffbeb;
+  --sw:232px;
+  --r:10px;
+  --sh:0 1px 3px rgba(0,0,0,.06),0 1px 2px rgba(0,0,0,.04);
+  --sh2:0 4px 12px rgba(0,0,0,.08);
+}
+body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,-apple-system,sans-serif;display:flex;min-height:100vh;font-size:14px;-webkit-font-smoothing:antialiased;}
+
+/* ─── SIDEBAR ─── */
+#sb{width:var(--sw);background:var(--navy);display:flex;flex-direction:column;position:fixed;top:0;left:0;height:100vh;z-index:200;overflow-y:auto;}
+.sb-logo{padding:20px 18px 16px;display:flex;align-items:center;gap:10px;border-bottom:1px solid rgba(255,255,255,.07);}
+.sb-mark{width:34px;height:34px;background:var(--gold);border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;color:#1e2d3d;flex-shrink:0;}
+.sb-title{font-size:13.5px;font-weight:700;color:#fff;}
+.sb-sub{font-size:9.5px;color:rgba(255,255,255,.3);margin-top:1px;letter-spacing:.05em;}
+.sb-section{padding:14px 0 2px;}
+.sb-sec-label{font-size:9px;font-weight:700;color:rgba(255,255,255,.22);letter-spacing:.12em;text-transform:uppercase;padding:4px 18px 6px;}
+.sb-link{display:flex;align-items:center;gap:9px;padding:9px 18px;color:rgba(255,255,255,.48);font-size:12.5px;cursor:pointer;transition:.12s;border-left:2px solid transparent;position:relative;user-select:none;}
+.sb-link:hover{background:rgba(255,255,255,.06);color:rgba(255,255,255,.8);}
+.sb-link.on{background:rgba(255,255,255,.09);color:#fff;border-left-color:var(--gold);}
+.sb-link svg{width:15px;height:15px;flex-shrink:0;stroke-width:1.8;}
+.sb-count{margin-left:auto;font-size:10px;font-weight:700;padding:1px 6px;border-radius:20px;background:rgba(255,255,255,.12);color:rgba(255,255,255,.5);}
+.sb-count.red{background:var(--red);color:#fff;}
+.sb-foot{margin-top:auto;padding:14px 18px;border-top:1px solid rgba(255,255,255,.07);}
+.sb-user{display:flex;align-items:center;gap:9px;}
+.sb-av{width:30px;height:30px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#1e2d3d;flex-shrink:0;}
+.sb-uname{font-size:12px;font-weight:600;color:rgba(255,255,255,.75);}
+.sb-plan{font-size:10px;color:rgba(255,255,255,.28);margin-top:1px;}
+.sb-perfil{display:inline-block;margin-bottom:9px;font-size:9.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);background:rgba(200,168,75,.12);border:1px solid rgba(200,168,75,.18);padding:2px 8px;border-radius:20px;}
+
+/* ─── MAIN ─── */
+#main{margin-left:var(--sw);flex:1;display:flex;flex-direction:column;min-height:100vh;}
+.topbar{background:var(--white);border-bottom:1px solid var(--border);height:56px;padding:0 26px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
+.tb-left .tb-title{font-size:16px;font-weight:700;color:var(--text);}
+.tb-left .tb-sub{font-size:11px;color:var(--text2);margin-top:2px;}
+.tb-right{display:flex;align-items:center;gap:10px;}
+.co-chip{font-size:11px;background:var(--bg);border:1px solid var(--border);border-radius:20px;padding:5px 13px;color:var(--text2);}
+.co-chip strong{color:var(--text);font-weight:600;}
+.btn{border:none;border-radius:7px;cursor:pointer;font-size:12px;font-weight:600;padding:7px 16px;transition:.13s;line-height:1.1;}
+.btn-gold{background:var(--gold);color:#1e2d3d;}
+.btn-gold:hover{background:#b8964a;}
+.btn-outline{background:transparent;color:var(--text2);border:1px solid var(--border);}
+.btn-outline:hover{border-color:var(--gold);color:var(--gold);}
+.btn-ghost{background:transparent;color:var(--text2);border:1px solid var(--border);}
+.btn-ghost:hover{background:var(--bg);}
+.btn-sm{padding:5px 12px;font-size:11px;}
+#content{padding:22px 26px;flex:1;}
+.page{display:none;}
+.page.on{display:block;}
+
+/* ─── KPI CARDS ─── */
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px;}
+.kpi-card{background:var(--white);border-radius:var(--r);padding:18px 20px;box-shadow:var(--sh);}
+.kpi-label{font-size:11px;color:var(--text2);font-weight:500;margin-bottom:10px;}
+.kpi-val{font-size:24px;font-weight:800;color:var(--text);letter-spacing:-.5px;line-height:1;}
+.kpi-val.sm{font-size:17px;letter-spacing:0;}
+.kpi-foot{margin-top:7px;display:flex;align-items:center;gap:6px;}
+.kpi-sub{font-size:11px;color:var(--text3);}
+.delta{display:inline-flex;align-items:center;gap:2px;font-size:10.5px;font-weight:700;padding:2px 7px;border-radius:20px;}
+.delta.up{background:var(--red-bg);color:var(--red);}
+.delta.dn{background:var(--green-bg);color:var(--green);}
+.delta.warn{background:var(--amber-bg);color:var(--amber);}
+.delta.info{background:var(--blue-bg);color:var(--blue);}
+
+/* ─── PANEL CARD ─── */
+.pcard{background:var(--white);border-radius:var(--r);box-shadow:var(--sh);overflow:hidden;margin-bottom:16px;}
+.pcard-head{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.pcard-title{font-size:13px;font-weight:700;color:var(--text);}
+.pcard-sub{font-size:11px;color:var(--text2);margin-top:2px;}
+.pcard-body{padding:18px;}
+.link-see{font-size:11px;font-weight:600;color:var(--gold);cursor:pointer;}
+.link-see:hover{text-decoration:underline;}
+
+/* ─── ALERT LIST ─── */
+.alert-item{display:flex;align-items:flex-start;gap:12px;padding:13px 18px;border-bottom:1px solid var(--border);cursor:pointer;transition:.1s;}
+.alert-item:last-child{border-bottom:none;}
+.alert-item:hover{background:var(--bg);}
+.al-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:5px;}
+.al-dot.red{background:var(--red);}
+.al-dot.amber{background:var(--amber);}
+.al-dot.blue{background:var(--blue);}
+.al-dot.green{background:var(--green);}
+.al-body{flex:1;}
+.al-title{font-size:12.5px;font-weight:700;color:var(--text);margin-bottom:2px;}
+.al-desc{font-size:12px;color:var(--text2);line-height:1.5;}
+.al-time{font-size:10px;color:var(--text3);white-space:nowrap;margin-top:1px;}
+.sev{font-size:9.5px;font-weight:700;padding:1px 6px;border-radius:8px;margin-left:5px;vertical-align:middle;}
+.sev-r{background:var(--red-bg);color:var(--red);}
+.sev-a{background:var(--amber-bg);color:var(--amber);}
+.sev-b{background:var(--blue-bg);color:var(--blue);}
+
+/* ─── SHORTCUT GRID ─── */
+.sc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:16px 18px;}
+.sc-item{border:1px solid var(--border);border-radius:8px;padding:13px 14px;cursor:pointer;transition:.13s;}
+.sc-item:hover{border-color:var(--gold);box-shadow:0 2px 8px rgba(200,168,75,.1);}
+.sc-title{font-size:12px;font-weight:700;color:var(--text);margin-bottom:3px;}
+.sc-desc{font-size:11px;color:var(--text2);line-height:1.4;}
+.sc-go{font-size:11px;color:var(--gold);font-weight:600;margin-top:6px;}
+
+/* ─── BANNER COUNTDOWN ─── */
+.cd-banner{background:var(--navy);border-radius:var(--r);padding:18px 24px;display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;}
+.cd-item .cd-label{font-size:10px;color:rgba(255,255,255,.35);text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px;}
+.cd-item .cd-val{font-size:26px;font-weight:800;color:#fff;letter-spacing:-1px;}
+.cd-item .cd-note{font-size:10px;color:rgba(255,255,255,.3);margin-top:2px;}
+.cd-item.accent .cd-val{color:var(--gold);}
+.cd-divider{width:1px;height:36px;background:rgba(255,255,255,.1);}
+
+/* ─── GRID HELPERS ─── */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;}
+
+/* ─── TABLE ─── */
+table{width:100%;border-collapse:collapse;}
+thead tr{border-bottom:2px solid var(--border);}
+th{padding:9px 14px;text-align:left;font-size:10.5px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.07em;white-space:nowrap;}
+td{padding:11px 14px;font-size:12.5px;border-bottom:1px solid var(--border);}
+tbody tr:last-child td{border-bottom:none;}
+tbody tr:hover td{background:var(--bg);}
+.td-main{font-weight:600;color:var(--text);}
+.td-sub{font-size:10.5px;color:var(--text3);margin-top:1px;}
+
+/* ─── BADGES ─── */
+.badge{display:inline-block;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:700;white-space:nowrap;}
+.b-green{background:var(--green-bg);color:var(--green);}
+.b-red{background:var(--red-bg);color:var(--red);}
+.b-amber{background:var(--amber-bg);color:var(--amber);}
+.b-blue{background:var(--blue-bg);color:var(--blue);}
+.b-gray{background:var(--bg);color:var(--text2);border:1px solid var(--border);}
+
+/* ─── FORM ─── */
+.fg{margin-bottom:13px;}
+.fg label{display:block;font-size:10.5px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.07em;margin-bottom:5px;}
+.fg input,.fg select,.fg textarea{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:7px;padding:9px 12px;color:var(--text);font-size:13px;outline:none;transition:.13s;font-family:inherit;}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(200,168,75,.1);background:var(--white);}
+.fr2{display:grid;grid-template-columns:1fr 1fr;gap:13px;}
+.fr3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:13px;}
+
+/* ─── AGENTES LAYOUT ─── */
+.ag-layout{display:grid;grid-template-columns:316px 1fr;gap:16px;height:calc(100vh - 144px);}
+.ag-list{background:var(--white);border-radius:var(--r);box-shadow:var(--sh);overflow-y:auto;display:flex;flex-direction:column;}
+.ag-list-head{padding:13px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;position:sticky;top:0;background:var(--white);z-index:1;}
+.ag-list-head-title{font-size:12px;font-weight:700;color:var(--text);}
+.ag-list-head-sub{font-size:10px;color:var(--text2);}
+.ag-item{padding:12px 16px;border-bottom:1px solid var(--border);cursor:pointer;transition:.1s;display:flex;gap:10px;align-items:flex-start;}
+.ag-item:last-child{border-bottom:none;}
+.ag-item:hover{background:var(--bg);}
+.ag-item.sel{background:var(--gold-bg);border-left:3px solid var(--gold);}
+.ag-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;margin-top:3px;}
+.ag-info{flex:1;min-width:0;}
+.ag-name{font-size:12.5px;font-weight:700;color:var(--text);margin-bottom:1px;}
+.ag-role{font-size:11px;color:var(--text2);margin-bottom:5px;}
+.ag-tags{display:flex;gap:4px;flex-wrap:wrap;}
+.ag-tag{font-size:9.5px;background:var(--bg);border:1px solid var(--border);color:var(--text2);padding:1px 6px;border-radius:10px;}
+.ag-lvl{font-size:9px;font-weight:700;padding:1px 5px;border-radius:4px;background:var(--border);color:var(--text2);margin-left:4px;}
+
+/* ─── CHAT ─── */
+.chat-wrap{background:var(--white);border-radius:var(--r);box-shadow:var(--sh);display:flex;flex-direction:column;height:100%;overflow:hidden;}
+.chat-head{padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+.chat-agent-dot{width:11px;height:11px;border-radius:50%;flex-shrink:0;}
+.chat-agent-name{font-size:13px;font-weight:700;color:var(--text);}
+.chat-agent-role{font-size:11px;color:var(--text2);}
+.skill-row{display:flex;gap:5px;flex-wrap:wrap;}
+.sk{font-size:10px;font-weight:600;padding:3px 9px;border-radius:20px;border:1px solid var(--border);color:var(--text2);cursor:pointer;transition:.12s;background:var(--bg);}
+.sk:hover,.sk.on{background:var(--gold);color:#1e2d3d;border-color:var(--gold);}
+.chat-msgs{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:11px;}
+.msg-u{align-self:flex-end;max-width:76%;background:var(--navy);color:#fff;border-radius:12px 12px 3px 12px;padding:10px 14px;font-size:13px;line-height:1.55;}
+.msg-ai{align-self:flex-start;max-width:90%;background:var(--bg);border:1px solid var(--border);border-radius:3px 12px 12px 12px;padding:12px 15px;font-size:13px;line-height:1.65;white-space:pre-wrap;}
+.msg-ai-badge{font-size:9.5px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.07em;margin-bottom:7px;}
+.chat-empty{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--text2);text-align:center;padding:40px;}
+.chat-empty-icon{width:44px;height:44px;border-radius:10px;background:var(--bg);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;margin-bottom:13px;}
+.chat-empty-title{font-size:14px;font-weight:700;color:var(--text);margin-bottom:5px;}
+.chat-empty-sub{font-size:12px;max-width:260px;line-height:1.5;}
+.chat-hint{font-size:10px;color:var(--text3);padding:0 14px 6px;}
+.chat-input-row{padding:12px 14px;border-top:1px solid var(--border);display:flex;gap:8px;align-items:flex-end;flex-shrink:0;}
+.chat-input{flex:1;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:9px 12px;font-size:13px;color:var(--text);outline:none;resize:none;min-height:38px;max-height:96px;font-family:inherit;transition:.12s;}
+.chat-input:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(200,168,75,.1);background:var(--white);}
+
+/* ─── SIMULADOR ─── */
+.sim-result{display:none;}
+.sim-result.vis{display:block;}
+.sim-kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:13px;margin-bottom:16px;}
+.sim-kpi{background:var(--white);border-radius:var(--r);padding:17px 18px;box-shadow:var(--sh);text-align:center;}
+.sim-kpi.hl{border:2px solid var(--gold);}
+.sim-kpi-label{font-size:10px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.07em;margin-bottom:8px;}
+.sim-kpi-val{font-size:23px;font-weight:800;letter-spacing:-.5px;}
+.sim-kpi-note{font-size:11px;color:var(--text3);margin-top:3px;}
+.rec-panel{background:var(--gold-bg);border:1px solid rgba(200,168,75,.25);border-radius:var(--r);padding:16px 18px;margin-top:14px;}
+.rec-panel-title{font-size:11px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px;}
+.rec-panel-text{font-size:13px;color:var(--text);line-height:1.6;}
+
+/* ─── REGIME ─── */
+.reg-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+.reg-card{background:var(--white);border-radius:var(--r);padding:20px;box-shadow:var(--sh);border:2px solid transparent;}
+.reg-card.best{border-color:var(--gold);}
+.reg-tag{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;display:inline-block;margin-bottom:10px;}
+.reg-name{font-size:15px;font-weight:800;color:var(--text);margin-bottom:2px;}
+.reg-limit{font-size:11px;color:var(--text3);margin-bottom:14px;}
+.reg-aliq{font-size:28px;font-weight:900;color:var(--text);letter-spacing:-1px;}
+.reg-aliq-lbl{font-size:11px;color:var(--text2);margin-bottom:14px;}
+.reg-item{font-size:12px;color:var(--text2);padding:5px 0;border-bottom:1px solid var(--border);display:flex;gap:7px;}
+.reg-item:last-of-type{border-bottom:none;}
+.reg-ok{color:var(--green);font-weight:700;flex-shrink:0;}
+.reg-no{color:var(--red);font-weight:700;flex-shrink:0;}
+.reg-note{background:var(--bg);border-radius:7px;padding:10px 12px;font-size:11px;color:var(--text2);line-height:1.5;margin:12px 0;}
+.reg-note strong{color:var(--text);}
+
+/* ─── PRECIF ─── */
+.calc-metric{background:var(--bg);border-radius:8px;padding:13px;}
+.calc-metric.hl{background:var(--gold-bg);border:1px solid rgba(200,168,75,.2);}
+.cm-label{font-size:10px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.07em;margin-bottom:4px;}
+.cm-val{font-size:21px;font-weight:800;color:var(--text);}
+.cm-val.gold{color:var(--gold);}
+.cm-note{font-size:11px;color:var(--text2);margin-top:2px;}
+
+/* ─── SCROLL ─── */
+::-webkit-scrollbar{width:5px;}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
+::-webkit-scrollbar-track{background:transparent;}
+
+/* ─── TOAST ─── */
+#toast{position:fixed;bottom:22px;right:22px;background:var(--text);color:#fff;padding:10px 18px;border-radius:8px;font-size:12px;font-weight:600;transform:translateY(60px);opacity:0;transition:.22s;z-index:9999;pointer-events:none;}
+#toast.on{transform:translateY(0);opacity:1;}
+
+/* ─── LOGIN ─── */
+#login-screen{position:fixed;inset:0;background:var(--bg);z-index:9999;display:flex;align-items:center;justify-content:center;}
+.login-card{background:var(--white);border-radius:14px;padding:40px 36px;width:420px;box-shadow:var(--sh2);}
+.login-mark{width:42px;height:42px;background:var(--navy);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;color:var(--gold);margin-bottom:18px;}
+.login-title{font-size:20px;font-weight:800;color:var(--text);margin-bottom:4px;}
+.login-desc{font-size:12.5px;color:var(--text2);line-height:1.55;margin-bottom:22px;}
+.login-divider{display:flex;align-items:center;gap:10px;margin:16px 0;color:var(--text3);font-size:11px;}
+.login-divider::before,.login-divider::after{content:'';flex:1;height:1px;background:var(--border);}
+.login-error{background:var(--red-bg);border:1px solid rgba(239,68,68,.2);border-radius:7px;padding:9px 12px;font-size:12px;color:var(--red);margin-bottom:12px;display:none;}
+.login-error.show{display:block;}
+.pf-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px;}
+.pf-card{border:2px solid var(--border);border-radius:9px;padding:14px 12px;cursor:pointer;transition:.13s;text-align:center;}
+.pf-card:hover{border-color:var(--gold);}
+.pf-card.sel{border-color:var(--gold);background:var(--gold-bg);}
+.pf-icon{width:30px;height:30px;border-radius:7px;background:var(--bg);display:flex;align-items:center;justify-content:center;margin:0 auto 8px;}
+.pf-icon svg{width:16px;height:16px;color:var(--text2);}
+.pf-card.sel .pf-icon{background:var(--gold);}
+.pf-card.sel .pf-icon svg{color:#fff;}
+.pf-name{font-size:12.5px;font-weight:700;color:var(--text);margin-bottom:2px;}
+.pf-desc{font-size:11px;color:var(--text2);}
+.login-btn{width:100%;background:var(--navy);color:#fff;border:none;border-radius:8px;padding:12px;font-size:13.5px;font-weight:700;cursor:pointer;transition:.13s;}
+.login-btn:hover{background:var(--navy2);}
+.login-foot{text-align:center;font-size:10.5px;color:var(--text3);margin-top:14px;}
+/* logout */
+.logout-btn{display:flex;align-items:center;gap:7px;width:100%;background:transparent;border:1px solid rgba(255,255,255,.1);border-radius:7px;padding:7px 10px;color:rgba(255,255,255,.4);font-size:11.5px;cursor:pointer;transition:.13s;margin-top:10px;}
+.logout-btn:hover{background:rgba(255,255,255,.06);color:rgba(255,255,255,.7);border-color:rgba(255,255,255,.18);}
+.logout-btn svg{width:13px;height:13px;flex-shrink:0;}
+
+/* ─── SEC HEADER ─── */
+.sh-row{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:16px;}
+.sh-title{font-size:15px;font-weight:700;color:var(--text);}
+.sh-sub{font-size:11.5px;color:var(--text2);margin-top:2px;}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="login-card">
+    <div class="login-mark">SP</div>
+    <div class="login-title">SOAF Privado</div>
+    <div class="login-desc">Inteligência tributária com IA para empresários e contadores.<br>Reforma EC 132/2023 — TRÍADE IA.</div>
+    <div class="login-error" id="login-err">E-mail ou senha incorretos. Tente novamente.</div>
+    <div class="fg" style="margin-bottom:12px">
+      <label>E-mail</label>
+      <input type="email" id="login-email" placeholder="seu@email.com" onkeydown="if(event.key==='Enter')document.getElementById('login-senha').focus()">
+    </div>
+    <div class="fg" style="margin-bottom:18px">
+      <label>Senha</label>
+      <input type="password" id="login-senha" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()">
+    </div>
+    <div class="login-divider">ou acesse como</div>
+    <div class="pf-row">
+      <div class="pf-card sel" id="pf-emp" onclick="selPerfil('empresario')">
+        <div class="pf-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="7" width="18" height="14" rx="2"/><path d="M8 7V5a2 2 0 014 0v2"/></svg></div>
+        <div class="pf-name">Empresário</div>
+        <div class="pf-desc">Demo — 1 CNPJ</div>
+      </div>
+      <div class="pf-card" id="pf-cont" onclick="selPerfil('contador')">
+        <div class="pf-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4z"/><path d="M8 8h8M8 12h8M8 16h4"/></svg></div>
+        <div class="pf-name">Contador</div>
+        <div class="pf-desc">Demo — carteira</div>
+      </div>
+    </div>
+    <button class="login-btn" onclick="doLogin()">Entrar na plataforma</button>
+    <div class="login-foot">SOAF Privado v1.0 &nbsp;·&nbsp; TRÍADE IA &nbsp;·&nbsp; EC 132/2023</div>
+  </div>
+</div>
+
+<!-- SIDEBAR -->
+<div id="sb">
+  <div class="sb-logo">
+    <div class="sb-mark">SP</div>
+    <div>
+      <div class="sb-title">SOAF Privado</div>
+      <div class="sb-sub">EC 132/2023 · TRÍADE IA</div>
+    </div>
+  </div>
+
+  <div class="sb-section">
+    <div class="sb-sec-label">Visão geral</div>
+    <div class="sb-link on" onclick="go('painel')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+      Painel
+    </div>
+  </div>
+
+  <div class="sb-section">
+    <div class="sb-sec-label">Análise tributária</div>
+    <div class="sb-link" onclick="go('agentes')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="8" r="4"/><path d="M6 20v-2a6 6 0 0112 0v2"/></svg>
+      Agentes IA
+      <span class="sb-count">9</span>
+    </div>
+    <div class="sb-link" onclick="go('simulador')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6M9 12h6M9 15h4"/></svg>
+      Simulador
+    </div>
+    <div class="sb-link" onclick="go('regime')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+      Regime Tributário
+    </div>
+  </div>
+
+  <div class="sb-section" id="nav-emp">
+    <div class="sb-sec-label">Meu negócio</div>
+    <div class="sb-link" onclick="go('empresa')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="7" width="18" height="14" rx="2"/><path d="M8 7V5a2 2 0 014 0v2"/></svg>
+      Empresa
+    </div>
+    <div class="sb-link" onclick="go('precificacao')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 100 7h5a3.5 3.5 0 110 7H6"/></svg>
+      Precificação
+    </div>
+  </div>
+
+  <div class="sb-section" id="nav-cont" style="display:none">
+    <div class="sb-sec-label">Escritório</div>
+    <div class="sb-link" onclick="go('clientes')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+      Clientes
+      <span class="sb-count red">2</span>
+    </div>
+    <div class="sb-link" onclick="go('obrigacoes')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+      Obrigações
+    </div>
+  </div>
+
+  <div class="sb-section">
+    <div class="sb-sec-label">Sistema</div>
+    <div class="sb-link" onclick="go('config')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+      Configurações
+    </div>
+  </div>
+
+  <div class="sb-foot">
+    <div class="sb-perfil" id="sb-chip">EMPRESÁRIO</div>
+    <div class="sb-user">
+      <div class="sb-av" id="sb-av-init">A</div>
+      <div>
+        <div class="sb-uname" id="sb-uname">André Salomão</div>
+        <div class="sb-plan" id="sb-plan-label">Plano Profissional</div>
+      </div>
+    </div>
+    <button class="logout-btn" onclick="doLogout()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      Sair da plataforma
+    </button>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div id="main">
+  <div class="topbar">
+    <div class="tb-left">
+      <div class="tb-title" id="tb-title">Painel</div>
+      <div class="tb-sub" id="tb-sub">Visão geral tributária · EC 132/2023</div>
+    </div>
+    <div class="tb-right">
+      <div class="co-chip" id="co-chip"><strong>Tech Solutions Ltda</strong> · Simples Nacional</div>
+      <button class="btn btn-gold btn-sm" onclick="go('agentes')">Nova análise</button>
+    </div>
+  </div>
+
+  <div id="content">
+
+    <!-- ══ PAINEL ══ -->
+    <div id="page-painel" class="page on">
+      <div class="cd-banner">
+        <div class="cd-item">
+          <div class="cd-label">Dias até IBS pleno</div>
+          <div class="cd-val" id="cd-dias">—</div>
+          <div class="cd-note">Extinção do ISS em 01/01/2033</div>
+        </div>
+        <div class="cd-divider"></div>
+        <div class="cd-item">
+          <div class="cd-label">Fase atual da transição</div>
+          <div class="cd-val">2026</div>
+          <div class="cd-note">Alíquota teste IBS 0,1%</div>
+        </div>
+        <div class="cd-divider"></div>
+        <div class="cd-item accent">
+          <div class="cd-label">Alíquota IBS+CBS plena estimada</div>
+          <div class="cd-val">26,5%</div>
+          <div class="cd-note">vs. ISS atual de 2–5%</div>
+        </div>
+      </div>
+
+      <div class="kpi-row">
+        <div class="kpi-card">
+          <div class="kpi-label">Regime atual</div>
+          <div class="kpi-val sm">Simples · Anexo III</div>
+          <div class="kpi-foot"><span class="kpi-sub">CNAE 6201-5 · TI / Software</span></div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Carga tributária atual</div>
+          <div class="kpi-val">12,0%</div>
+          <div class="kpi-foot"><span class="kpi-sub">R$ 6.000/mês sobre R$ 50k</span></div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Carga estimada 2033</div>
+          <div class="kpi-val" style="color:var(--red)">14,4%</div>
+          <div class="kpi-foot"><span class="delta up">+2,4 p.p.</span><span class="kpi-sub">R$ 1.200/mês a mais</span></div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Fator R atual</div>
+          <div class="kpi-val" style="color:var(--amber)">22,0%</div>
+          <div class="kpi-foot"><span class="delta warn">Abaixo de 28%</span></div>
+        </div>
+      </div>
+
+      <div class="g2">
+        <div class="pcard">
+          <div class="pcard-head">
+            <div>
+              <div class="pcard-title">Alertas ativos</div>
+              <div class="pcard-sub">3 pontos que requerem atenção</div>
+            </div>
+            <span class="link-see" onclick="go('agentes')">Ver análise</span>
+          </div>
+          <div class="alert-item" onclick="openAgent('regime','003','r003')">
+            <div class="al-dot red"></div>
+            <div class="al-body">
+              <div class="al-title">Fator R abaixo do limite <span class="sev sev-r">Urgente</span></div>
+              <div class="al-desc">Sua folha representa 22% da receita. Abaixo de 28%, risco de enquadramento no Anexo V com alíquota até 8 p.p. maior. Recomendamos aumentar o pró-labore.</div>
+            </div>
+            <div class="al-time">hoje</div>
+          </div>
+          <div class="alert-item" onclick="openAgent('obrigacoes','007')">
+            <div class="al-dot amber"></div>
+            <div class="al-body">
+              <div class="al-title">Nota Nacional obrigatória <span class="sev sev-a">Atenção</span></div>
+              <div class="al-desc">Municípios com mais de 100 mil hab. migram para NFS-e federal (Nota Nacional) a partir de jan/2026. Verifique se seu emissor está adaptado à NT 2024.001.</div>
+            </div>
+            <div class="al-time">30/04</div>
+          </div>
+          <div class="alert-item" onclick="openAgent('servicos','007')">
+            <div class="al-dot blue"></div>
+            <div class="al-body">
+              <div class="al-title">Resolução CGIBS 6/2026 publicada <span class="sev sev-b">Info</span></div>
+              <div class="al-desc">Regulamento do IBS com 617 artigos foi publicado em 30/04/2026. Consulte o Agente Serviços para análise de impacto no CNAE 6201-5.</div>
+            </div>
+            <div class="al-time">30/04</div>
+          </div>
+        </div>
+
+        <div class="pcard">
+          <div class="pcard-head">
+            <div>
+              <div class="pcard-title">Acesso rápido</div>
+              <div class="pcard-sub">Análises frequentes para o seu perfil</div>
+            </div>
+          </div>
+          <div class="sc-grid">
+            <div class="sc-item" onclick="openAgent('simulador','002')">
+              <div class="sc-title">Simular carga pós-reforma</div>
+              <div class="sc-desc">Compare hoje vs. 2028 vs. 2033 em R$ e %</div>
+              <div class="sc-go">Abrir →</div>
+            </div>
+            <div class="sc-item" onclick="openAgent('regime','003')">
+              <div class="sc-title">Diagnóstico de regime</div>
+              <div class="sc-desc">Simples, Lucro Presumido ou Real em 2027?</div>
+              <div class="sc-go">Abrir →</div>
+            </div>
+            <div class="sc-item" onclick="openAgent('defesa','001')">
+              <div class="sc-title">Defesa tributária</div>
+              <div class="sc-desc">Auto de infração — orientação jurídica</div>
+              <div class="sc-go">Abrir →</div>
+            </div>
+            <div class="sc-item" onclick="openAgent('servicos','007')">
+              <div class="sc-title">ISS vira IBS no meu setor</div>
+              <div class="sc-desc">Impacto da transição no CNAE 6201-5</div>
+              <div class="sc-go">Abrir →</div>
+            </div>
+            <div class="sc-item" onclick="openAgent('precificacao','002')">
+              <div class="sc-title">Reajuste de preços</div>
+              <div class="sc-desc">Preciso repassar o aumento de alíquota?</div>
+              <div class="sc-go">Abrir →</div>
+            </div>
+            <div class="sc-item" onclick="openAgent('diretor','000')">
+              <div class="sc-title">Plano de ação</div>
+              <div class="sc-desc">30/90/180 dias para a transição tributária</div>
+              <div class="sc-go">Abrir →</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ AGENTES ══ -->
+    <div id="page-agentes" class="page">
+      <div class="ag-layout">
+        <div class="ag-list">
+          <div class="ag-list-head">
+            <div class="ag-list-head-title">9 Agentes disponíveis</div>
+            <div class="ag-list-head-sub">Clique para conversar</div>
+          </div>
+          <div class="ag-item" id="ai-diretor" onclick="selAgent('diretor')">
+            <div class="ag-dot" style="background:#c8a84b"></div>
+            <div class="ag-info">
+              <div class="ag-name">Diretor Financeiro IA <span class="ag-lvl">Nível 1</span></div>
+              <div class="ag-role">Estratégico · Plano de ação 30/90/180 dias</div>
+              <div class="ag-tags"><span class="ag-tag">Planejador</span><span class="ag-tag">Benchmarking</span><span class="ag-tag">Reforma</span></div>
+            </div>
+          </div>
+          <div class="ag-item" id="ai-consultor" onclick="selAgent('consultor')">
+            <div class="ag-dot" style="background:#94a3b8"></div>
+            <div class="ag-info">
+              <div class="ag-name">Consultor Tributário IA <span class="ag-lvl">Nível 2</span></div>
+              <div class="ag-role">Orquestrador · Roteia para o especialista certo</div>
+              <div class="ag-tags"><span class="ag-tag">Todas as 8 skills</span></div>
+            </div>
+          </div>
+          <div class="ag-item" id="ai-servicos" onclick="selAgent('servicos')">
+            <div class="ag-dot" style="background:#7c3aed"></div>
+            <div class="ag-info">
+              <div class="ag-name">Agente Serviços (ISS → IBS)</div>
+              <div class="ag-role">Especialista · Prestadores de serviço</div>
+              <div class="ag-tags"><span class="ag-tag">Jurídico</span><span class="ag-tag">Simulador</span><span class="ag-tag">Extrator</span></div>
+            </div>
+          </div>
+          <div class="ag-item" id="ai-produtos" onclick="selAgent('produtos')">
+            <div class="ag-dot" style="background:#1d4ed8"></div>
+            <div class="ag-info">
+              <div class="ag-name">Agente Produtos (ICMS → IBS)</div>
+              <div class="ag-role">Especialista · Comércio e indústria</div>
+              <div class="ag-tags"><span class="ag-tag">Jurídico</span><span class="ag-tag">Simulador</span><span class="ag-tag">Benchmarking</span></div>
+            </div>
+          </div>
+          <div class="ag-item" id="ai-regime" onclick="selAgent('regime')">
+            <div class="ag-dot" style="background:#059669"></div>
+            <div class="ag-info">
+              <div class="ag-name">Agente Regime Tributário</div>
+              <div class="ag-role">Especialista · Simples / Lucro Presumido / Real</div>
+              <div class="ag-tags"><span class="ag-tag">Planejador</span><span class="ag-tag">Regime</span><span class="ag-tag">Simulador</span></div>
+            </div>
+          </div>
+          <div class="ag-item" id="ai-simulador" onclick="selAgent('simulador')">
+            <div class="ag-dot" style="background:#dc2626"></div>
+            <div class="ag-info">
+              <div class="ag-name">Agente Simulador da Reforma</div>
+              <div class="ag-role">Especialista · Carga tributária hoje vs. 2033</div>
+              <div class="ag-tags"><span class="ag-tag">Simulador</span><span class="ag-tag">Regime</span><span class="ag-tag">Jurídico</span></div>
+            </div>
+          </div>
+          <div class="ag-item" id="ai-precificacao" onclick="selAgent('precificacao')">
+            <div class="ag-dot" style="background:#c8a84b"></div>
+            <div class="ag-info">
+              <div class="ag-name">Agente Precificação &amp; Margem <span class="badge b-gray" style="font-size:9px">Empresário</span></div>
+              <div class="ag-role">Especialista · Repasse de alíquota e margens</div>
+              <div class="ag-tags"><span class="ag-tag">Planejador</span><span class="ag-tag">Benchmarking</span></div>
+            </div>
+          </div>
+          <div class="ag-item" id="ai-defesa" onclick="selAgent('defesa')">
+            <div class="ag-dot" style="background:#b45309"></div>
+            <div class="ag-info">
+              <div class="ag-name">Agente Defesa &amp; Regularização</div>
+              <div class="ag-role">Especialista · Autos, impugnações, decadência</div>
+              <div class="ag-tags"><span class="ag-tag">Jurídico</span><span class="ag-tag">Redator</span><span class="ag-tag">Extrator</span></div>
+            </div>
+          </div>
+          <div class="ag-item" id="ai-obrigacoes" onclick="selAgent('obrigacoes')">
+            <div class="ag-dot" style="background:#0369a1"></div>
+            <div class="ag-info">
+              <div class="ag-name">Agente Obrigações Acessórias <span class="badge b-gray" style="font-size:9px">Contador</span></div>
+              <div class="ag-role">Especialista · Calendário, NFS-e, SPED, prazos</div>
+              <div class="ag-tags"><span class="ag-tag">Jurídico</span><span class="ag-tag">Redator</span><span class="ag-tag">Reforma</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="chat-wrap">
+          <div class="chat-empty" id="chat-empty">
+            <div class="chat-empty-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--text3)" stroke-width="1.8"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+            </div>
+            <div class="chat-empty-title">Selecione um agente</div>
+            <div class="chat-empty-sub">Escolha um dos 9 especialistas ao lado para iniciar uma análise sobre a EC 132/2023.</div>
+          </div>
+          <div id="chat-active" style="display:none;flex-direction:column;height:100%">
+            <div class="chat-head">
+              <div style="display:flex;align-items:center;gap:9px">
+                <div class="chat-agent-dot" id="ch-dot"></div>
+                <div>
+                  <div class="chat-agent-name" id="ch-name">—</div>
+                  <div class="chat-agent-role" id="ch-role">—</div>
+                </div>
+              </div>
+              <div class="skill-row" id="sk-row"></div>
+            </div>
+            <div class="chat-msgs" id="chat-msgs"></div>
+            <div class="chat-hint">Enter para enviar · Shift+Enter para nova linha</div>
+            <div class="chat-input-row">
+              <textarea class="chat-input" id="chat-in" rows="2" placeholder="Digite sua pergunta tributária..."
+                onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendMsg();}"></textarea>
+              <button class="btn btn-gold" onclick="sendMsg()">Enviar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ SIMULADOR ══ -->
+    <div id="page-simulador" class="page">
+      <div class="pcard" style="margin-bottom:16px">
+        <div class="pcard-head">
+          <div>
+            <div class="pcard-title">Simulador de impacto tributário — EC 132/2023</div>
+            <div class="pcard-sub">Carga atual vs. 2028 (transição) vs. 2033 (IBS pleno)</div>
+          </div>
+        </div>
+        <div class="pcard-body">
+          <div class="fr2">
+            <div class="fg"><label>CNAE principal</label>
+              <select id="s-cnae">
+                <option value="6201">6201-5 · TI / Desenvolvimento de Software</option>
+                <option value="4711">4711-3 · Comércio varejista</option>
+                <option value="4120">4120-4 · Construção civil</option>
+                <option value="8630">8630-5 · Saúde / Clínicas</option>
+                <option value="6911">6911-7 · Advocacia</option>
+                <option value="111">0111-3 · Agronegócio</option>
+                <option value="8511">8511-2 · Educação infantil</option>
+              </select>
+            </div>
+            <div class="fg"><label>Regime tributário atual</label>
+              <select id="s-reg">
+                <option value="si3">Simples Nacional — Anexo III</option>
+                <option value="si5">Simples Nacional — Anexo V</option>
+                <option value="mei">MEI</option>
+                <option value="lp">Lucro Presumido</option>
+                <option value="lr">Lucro Real</option>
+              </select>
+            </div>
+          </div>
+          <div class="fr3">
+            <div class="fg"><label>Receita bruta mensal (R$)</label><input type="number" id="s-rec" value="50000"></div>
+            <div class="fg"><label>Folha de pagamento mensal (R$)</label><input type="number" id="s-fol" value="11000"></div>
+            <div class="fg"><label>Compras com ICMS / PIS (R$)</label><input type="number" id="s-cmp" value="5000"></div>
+          </div>
+          <button class="btn btn-gold" style="width:100%;padding:11px;font-size:13px" onclick="runSim()">Calcular impacto da Reforma</button>
+        </div>
+      </div>
+
+      <div class="sim-result" id="sim-res">
+        <div class="sim-kpi-row">
+          <div class="sim-kpi"><div class="sim-kpi-label">Hoje</div><div class="sim-kpi-val" id="sr-a" style="color:var(--text)">—</div><div class="sim-kpi-note" id="sr-ap">—</div></div>
+          <div class="sim-kpi"><div class="sim-kpi-label">2028 — Transição</div><div class="sim-kpi-val" id="sr-t" style="color:var(--amber)">—</div><div class="sim-kpi-note" id="sr-tp">—</div></div>
+          <div class="sim-kpi hl"><div class="sim-kpi-label">2033 — IBS Pleno</div><div class="sim-kpi-val" id="sr-p" style="color:var(--red)">—</div><div class="sim-kpi-note" id="sr-pp">—</div></div>
+          <div class="sim-kpi"><div class="sim-kpi-label">Variação mensal</div><div class="sim-kpi-val" id="sr-d">—</div><div class="sim-kpi-note" id="sr-dp">—</div></div>
+        </div>
+        <div class="pcard" style="margin-bottom:0">
+          <div class="pcard-head"><div class="pcard-title">Comparativo de carga tributária (%)</div></div>
+          <div class="pcard-body"><canvas id="chart-s" height="85"></canvas></div>
+        </div>
+        <div class="rec-panel">
+          <div class="rec-panel-title">Recomendação do Agente Simulador</div>
+          <div class="rec-panel-text" id="sr-rec">—</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ REGIME ══ -->
+    <div id="page-regime" class="page">
+      <div class="sh-row">
+        <div>
+          <div class="sh-title">Comparativo de regimes tributários</div>
+          <div class="sh-sub">Perfil: CNAE 6201-5 · Receita R$ 50k/mês · Folha R$ 11k/mês · EC 132/2023</div>
+        </div>
+      </div>
+      <div class="reg-grid" style="margin-bottom:16px">
+        <div class="reg-card best">
+          <div class="reg-tag" style="color:var(--gold)">Recomendado para seu perfil</div>
+          <div class="reg-name">Simples Nacional</div>
+          <div class="reg-limit">Até R$ 4,8M de receita/ano</div>
+          <div class="reg-aliq">12,0%</div>
+          <div class="reg-aliq-lbl">alíquota efetiva atual · Anexo III</div>
+          <div class="reg-item"><span class="reg-ok">+</span> DAS unificado — uma guia para todos os tributos</div>
+          <div class="reg-item"><span class="reg-ok">+</span> Menor burocracia e custo de escritório contábil</div>
+          <div class="reg-item"><span class="reg-ok">+</span> IBS/CBS com alíquota reduzida pós-reforma</div>
+          <div class="reg-item"><span class="reg-no">−</span> Sem crédito de ICMS/PIS nas entradas hoje</div>
+          <div class="reg-item"><span class="reg-no">−</span> Risco Anexo V se Fator R ficar abaixo de 28%</div>
+          <div class="reg-note"><strong>Pós-reforma 2033:</strong> IBS+CBS reduzidos permanecem no DAS. Alíquota estimada 14,4%. Continua vantajoso para a maioria dos prestadores de serviço.</div>
+          <button class="btn btn-gold btn-sm" onclick="openAgent('regime','003','r003')">Analisar com IA</button>
+        </div>
+        <div class="reg-card">
+          <div class="reg-tag" style="color:var(--text2)">Segunda opção</div>
+          <div class="reg-name">Lucro Presumido</div>
+          <div class="reg-limit">Até R$ 78M de receita/ano</div>
+          <div class="reg-aliq">16,3%</div>
+          <div class="reg-aliq-lbl">alíquota efetiva estimada atual</div>
+          <div class="reg-item"><span class="reg-ok">+</span> Base de cálculo presumida de 32% para serviços</div>
+          <div class="reg-item"><span class="reg-ok">+</span> Pós-reforma: CBS não cumulativa com crédito</div>
+          <div class="reg-item"><span class="reg-ok">+</span> Sem limite de receita bruta anual</div>
+          <div class="reg-item"><span class="reg-no">−</span> PIS/COFINS cumulativos hoje — sem crédito</div>
+          <div class="reg-item"><span class="reg-no">−</span> Mais obrigações acessórias vs. Simples</div>
+          <div class="reg-note"><strong>Pós-reforma 2033:</strong> CBS não cumulativa — cadeia formal ganha crédito. Alíquota estimada 17,5% para serviços.</div>
+          <button class="btn btn-ghost btn-sm" onclick="openAgent('regime','003')">Simular neste regime</button>
+        </div>
+        <div class="reg-card">
+          <div class="reg-tag" style="color:var(--text2)">Avançado</div>
+          <div class="reg-name">Lucro Real</div>
+          <div class="reg-limit">Obrigatório acima de R$ 78M ou financeiras</div>
+          <div class="reg-aliq">19,8%</div>
+          <div class="reg-aliq-lbl">alíquota efetiva estimada atual</div>
+          <div class="reg-item"><span class="reg-ok">+</span> PIS/COFINS não cumulativos — crédito nas entradas</div>
+          <div class="reg-item"><span class="reg-ok">+</span> Maior beneficiado da não cumulatividade IBS+CBS</div>
+          <div class="reg-item"><span class="reg-ok">+</span> Compensação de prejuízos fiscais acumulados</div>
+          <div class="reg-item"><span class="reg-no">−</span> Alta complexidade contábil e custo de escritório</div>
+          <div class="reg-item"><span class="reg-no">−</span> Exige escrituração contábil completa e rigorosa</div>
+          <div class="reg-note"><strong>Pós-reforma 2033:</strong> Maior ganho com crédito IBS+CBS pleno. Para empresas com alto volume de insumos tributados pode <strong>reduzir a carga</strong>.</div>
+          <button class="btn btn-ghost btn-sm" onclick="openAgent('regime','003')">Simular neste regime</button>
+        </div>
+      </div>
+      <div class="alert-item" style="background:var(--amber-bg);border:1px solid rgba(245,158,11,.2);border-radius:var(--r);cursor:default">
+        <div class="al-dot amber"></div>
+        <div class="al-body">
+          <div class="al-title">Situação atual — Fator R em 22%</div>
+          <div class="al-desc">Fator R abaixo de 28% significa risco de enquadramento no Anexo V com alíquota até 8 p.p. maior. Recomendamos aumentar o pró-labore para R$ 14.000/mês para atingir o mínimo exigido. Consulte o Agente Regime para análise detalhada com seus dados.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ EMPRESA ══ -->
+    <div id="page-empresa" class="page">
+      <div class="sh-row"><div><div class="sh-title">Minha empresa</div><div class="sh-sub">Dados utilizados pelos agentes nas análises tributárias</div></div></div>
+      <div style="max-width:580px">
+        <div class="pcard">
+          <div class="pcard-body">
+            <div class="fr2">
+              <div class="fg"><label>CNPJ</label><input value="12.345.678/0001-99"></div>
+              <div class="fg"><label>Razão social</label><input value="Tech Solutions Ltda"></div>
+            </div>
+            <div class="fr2">
+              <div class="fg"><label>CNAE principal</label><select><option selected>6201-5 · TI / Software</option><option>4711-3 · Varejo</option></select></div>
+              <div class="fg"><label>Regime tributário</label><select><option selected>Simples Nacional — Anexo III</option><option>Lucro Presumido</option><option>Lucro Real</option></select></div>
+            </div>
+            <div class="fr3">
+              <div class="fg"><label>Receita bruta mensal (R$)</label><input type="number" value="50000"></div>
+              <div class="fg"><label>Folha mensal (R$)</label><input type="number" value="11000"></div>
+              <div class="fg"><label>Compras c/ ICMS/PIS (R$)</label><input type="number" value="5000"></div>
+            </div>
+            <div class="fr2">
+              <div class="fg"><label>UF</label><select><option>GO</option><option>SP</option><option>MG</option><option>RJ</option></select></div>
+              <div class="fg"><label>Município</label><input value="Itumbiara"></div>
+            </div>
+            <button class="btn btn-gold btn-sm" onclick="toast('Empresa atualizada.')">Salvar dados</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ PRECIFICAÇÃO ══ -->
+    <div id="page-precificacao" class="page">
+      <div class="sh-row"><div><div class="sh-title">Calculadora de precificação</div><div class="sh-sub">Descubra se e quanto reajustar seus preços em função da Reforma</div></div></div>
+      <div class="g2">
+        <div class="pcard">
+          <div class="pcard-head"><div class="pcard-title">Dados do serviço ou produto</div></div>
+          <div class="pcard-body">
+            <div class="fg"><label>Preço atual cobrado (R$)</label><input type="number" id="pc-p" value="1000"></div>
+            <div class="fg"><label>Custo direto (R$)</label><input type="number" id="pc-c" value="400"></div>
+            <div class="fg"><label>Tributos hoje (% sobre o preço)</label><input type="number" id="pc-ta" value="12"></div>
+            <div class="fg"><label>Tributos estimados pós-reforma (%)</label><input type="number" id="pc-tn" value="14.4"></div>
+            <button class="btn btn-gold" style="width:100%" onclick="calcPreco()">Calcular</button>
+          </div>
+        </div>
+        <div id="pc-res" style="display:none">
+          <div class="pcard">
+            <div class="pcard-head"><div class="pcard-title">Resultado da análise</div></div>
+            <div class="pcard-body" style="display:flex;flex-direction:column;gap:10px">
+              <div class="calc-metric"><div class="cm-label">Margem atual</div><div class="cm-val" id="pc-m1">—</div></div>
+              <div class="calc-metric"><div class="cm-label">Margem pós-reforma sem reajuste</div><div class="cm-val" id="pc-m2" style="color:var(--red)">—</div></div>
+              <div class="calc-metric hl"><div class="cm-label">Preço sugerido para manter margem</div><div class="cm-val gold" id="pc-sg">—</div><div class="cm-note" id="pc-rj">—</div></div>
+              <button class="btn btn-outline btn-sm" onclick="openAgent('precificacao','000')">Estratégia de repasse com IA</button>
+            </div>
+          </div>
+        </div>
+        <div id="pc-ph" class="pcard" style="display:flex;align-items:center;justify-content:center;min-height:220px">
+          <div style="text-align:center;color:var(--text2);font-size:12px">Preencha os dados ao lado e clique em Calcular.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ CLIENTES ══ -->
+    <div id="page-clientes" class="page">
+      <div class="sh-row">
+        <div><div class="sh-title">Carteira de clientes</div><div class="sh-sub">Análise de impacto da Reforma Tributária por empresa</div></div>
+        <button class="btn btn-gold btn-sm" onclick="toast('Em breve.')">Adicionar cliente</button>
+      </div>
+      <div class="kpi-row" style="grid-template-columns:repeat(4,1fr);margin-bottom:18px">
+        <div class="kpi-card"><div class="kpi-label">Total de clientes</div><div class="kpi-val">5</div></div>
+        <div class="kpi-card"><div class="kpi-label">Risco alto</div><div class="kpi-val" style="color:var(--red)">2</div><div class="kpi-foot"><span class="kpi-sub">Ação urgente necessária</span></div></div>
+        <div class="kpi-card"><div class="kpi-label">Risco médio</div><div class="kpi-val" style="color:var(--amber)">1</div></div>
+        <div class="kpi-card"><div class="kpi-label">Impacto médio da carteira</div><div class="kpi-val" style="color:var(--red)">+3,1 p.p.</div><div class="kpi-foot"><span class="kpi-sub">aumento estimado na carga</span></div></div>
+      </div>
+      <div class="pcard">
+        <div class="pcard-head">
+          <div class="pcard-title">Clientes — Impacto da Reforma</div>
+          <button class="btn btn-ghost btn-sm" onclick="toast('Exportando...')">Exportar relatório</button>
+        </div>
+        <table>
+          <thead><tr><th>Cliente</th><th>CNAE</th><th>Regime</th><th>Receita / mês</th><th>Carga atual</th><th>Carga 2033</th><th>Variação</th><th>Risco</th><th></th></tr></thead>
+          <tbody>
+            <tr>
+              <td><div class="td-main">Construtech Obras</div><div class="td-sub">98.765.432/0001-11</div></td>
+              <td style="color:var(--text2)">4120-4 · Construção</td>
+              <td><span class="badge b-blue">Simples</span></td>
+              <td>R$ 120.000</td><td>11,5%</td>
+              <td style="color:var(--red);font-weight:700">15,8%</td>
+              <td><span class="delta up">+4,3 p.p.</span></td>
+              <td><span class="badge b-red">Alto</span></td>
+              <td><button class="btn btn-ghost btn-sm" onclick="openAgent('servicos','002','c001')">Analisar</button></td>
+            </tr>
+            <tr>
+              <td><div class="td-main">Saúde Bem Clínica</div><div class="td-sub">11.222.333/0001-44</div></td>
+              <td style="color:var(--text2)">8630-5 · Saúde</td>
+              <td><span class="badge b-amber">Lucro Presumido</span></td>
+              <td>R$ 80.000</td><td>16,2%</td>
+              <td style="color:var(--green);font-weight:700">14,5%</td>
+              <td><span class="delta dn">−1,7 p.p.</span></td>
+              <td><span class="badge b-green">Baixo</span></td>
+              <td><button class="btn btn-ghost btn-sm" onclick="openAgent('servicos','002','c002')">Analisar</button></td>
+            </tr>
+            <tr>
+              <td><div class="td-main">Mercado Vale Verde</div><div class="td-sub">44.555.666/0001-77</div></td>
+              <td style="color:var(--text2)">4711-3 · Varejo</td>
+              <td><span class="badge b-amber">Lucro Presumido</span></td>
+              <td>R$ 200.000</td><td>14,8%</td>
+              <td style="color:var(--amber);font-weight:700">16,9%</td>
+              <td><span class="delta warn">+2,1 p.p.</span></td>
+              <td><span class="badge b-amber">Médio</span></td>
+              <td><button class="btn btn-ghost btn-sm" onclick="openAgent('produtos','002','c003')">Analisar</button></td>
+            </tr>
+            <tr>
+              <td><div class="td-main">Adv. Rodrigues &amp; Assoc.</div><div class="td-sub">77.888.999/0001-00</div></td>
+              <td style="color:var(--text2)">6911-7 · Advocacia</td>
+              <td><span class="badge b-blue">Simples Anexo V</span></td>
+              <td>R$ 35.000</td><td>17,5%</td>
+              <td style="color:var(--red);font-weight:700">21,2%</td>
+              <td><span class="delta up">+3,7 p.p.</span></td>
+              <td><span class="badge b-red">Alto</span></td>
+              <td><button class="btn btn-ghost btn-sm" onclick="openAgent('regime','003','c004')">Analisar</button></td>
+            </tr>
+            <tr>
+              <td><div class="td-main">Agro Cerrado SA</div><div class="td-sub">55.444.333/0001-22</div></td>
+              <td style="color:var(--text2)">0111-3 · Agronegócio</td>
+              <td><span class="badge b-green">Lucro Real</span></td>
+              <td>R$ 500.000</td><td>22,1%</td>
+              <td style="color:var(--green);font-weight:700">19,3%</td>
+              <td><span class="delta dn">−2,8 p.p.</span></td>
+              <td><span class="badge b-green">Baixo</span></td>
+              <td><button class="btn btn-ghost btn-sm" onclick="openAgent('produtos','007','c005')">Analisar</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ══ OBRIGAÇÕES ══ -->
+    <div id="page-obrigacoes" class="page">
+      <div class="sh-row"><div><div class="sh-title">Obrigações acessórias — Julho/2026</div><div class="sh-sub">Prazos críticos da carteira · 5 clientes monitorados</div></div></div>
+      <div class="kpi-row" style="grid-template-columns:repeat(3,1fr);margin-bottom:18px">
+        <div class="kpi-card"><div class="kpi-label">Vencendo esta semana</div><div class="kpi-val" style="color:var(--red)">3</div></div>
+        <div class="kpi-card"><div class="kpi-label">Vencendo este mês</div><div class="kpi-val" style="color:var(--amber)">8</div></div>
+        <div class="kpi-card"><div class="kpi-label">Em atraso</div><div class="kpi-val" style="color:var(--green)">0</div><div class="kpi-foot"><span class="kpi-sub">Tudo em dia</span></div></div>
+      </div>
+      <div class="pcard">
+        <div class="pcard-head"><div class="pcard-title">Próximos vencimentos</div></div>
+        <table>
+          <thead><tr><th>Obrigação</th><th>Cliente</th><th>Vencimento</th><th>Competência</th><th>Status</th><th></th></tr></thead>
+          <tbody>
+            <tr><td><div class="td-main">DAS — Simples Nacional</div></td><td>Construtech Obras</td><td style="color:var(--red);font-weight:700">20/07/2026</td><td>Jun/2026</td><td><span class="badge b-amber">Pendente</span></td><td><button class="btn btn-ghost btn-sm" onclick="toast('Gerando guia...')">Gerar guia</button></td></tr>
+            <tr><td><div class="td-main">DAS — Simples Nacional</div></td><td>Adv. Rodrigues</td><td style="color:var(--red);font-weight:700">20/07/2026</td><td>Jun/2026</td><td><span class="badge b-amber">Pendente</span></td><td><button class="btn btn-ghost btn-sm" onclick="toast('Gerando guia...')">Gerar guia</button></td></tr>
+            <tr><td><div class="td-main">DARF — PIS/COFINS</div></td><td>Mercado Vale Verde</td><td>25/07/2026</td><td>Jun/2026</td><td><span class="badge b-amber">Pendente</span></td><td><button class="btn btn-ghost btn-sm" onclick="toast('Gerando DARF...')">Gerar DARF</button></td></tr>
+            <tr><td><div class="td-main">EFD-Contribuições</div></td><td>Mercado Vale Verde</td><td>10/07/2026</td><td>Jun/2026</td><td><span class="badge b-green">Entregue</span></td><td><button class="btn btn-ghost btn-sm">Ver</button></td></tr>
+            <tr><td><div class="td-main">Nota Nacional — Credenciamento</div></td><td>Todos os clientes</td><td style="color:var(--red);font-weight:700">Jan/2026</td><td>—</td><td><span class="badge b-red">Urgente</span></td><td><button class="btn btn-gold btn-sm" onclick="openAgent('obrigacoes','007','o001')">Analisar com IA</button></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ══ CONFIG ══ -->
+    <div id="page-config" class="page">
+      <div class="sh-row"><div class="sh-title">Configurações</div></div>
+      <div style="max-width:500px;display:flex;flex-direction:column;gap:14px">
+        <div class="pcard">
+          <div class="pcard-head"><div class="pcard-title">Perfil do usuário</div></div>
+          <div class="pcard-body">
+            <div class="fg"><label>Nome</label><input value="André Rocha Salomão"></div>
+            <div class="fg"><label>E-mail</label><input value="pedrosalomao881@gmail.com"></div>
+            <div class="fg"><label>Perfil de acesso</label>
+              <select onchange="setProfile(this.value)"><option value="empresario">Empresário</option><option value="contador">Contador</option></select>
+            </div>
+            <button class="btn btn-gold btn-sm" onclick="toast('Perfil salvo.')">Salvar</button>
+          </div>
+        </div>
+        <div class="pcard">
+          <div class="pcard-head">
+            <div><div class="pcard-title">Plano atual</div><div class="pcard-sub">1 CNPJ · Agentes ilimitados</div></div>
+            <button class="btn btn-outline btn-sm" onclick="toast('Em breve: plano para escritório.')">Fazer upgrade</button>
+          </div>
+          <div class="pcard-body" style="display:flex;align-items:baseline;gap:8px">
+            <div style="font-size:20px;font-weight:800;color:var(--gold)">Profissional</div>
+            <div style="font-size:13px;color:var(--text2)">R$ 197/mês</div>
+          </div>
+        </div>
+        <div class="pcard">
+          <div class="pcard-head"><div class="pcard-title">Notificações</div></div>
+          <div class="pcard-body" style="display:flex;flex-direction:column;gap:10px;font-size:13px">
+            <label style="display:flex;align-items:center;gap:9px;cursor:pointer"><input type="checkbox" checked> Novas publicações do CGIBS e decretos CBS/IBS</label>
+            <label style="display:flex;align-items:center;gap:9px;cursor:pointer"><input type="checkbox" checked> Alertas de Fator R abaixo de 28%</label>
+            <label style="display:flex;align-items:center;gap:9px;cursor:pointer"><input type="checkbox"> Vencimentos de obrigações com 3 dias de antecedência</label>
+            <label style="display:flex;align-items:center;gap:9px;cursor:pointer"><input type="checkbox" checked> Resumo mensal de impacto tributário</label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+// ── dados ──
+const AGENTS={
+  diretor:    {n:'Diretor Financeiro IA',       r:'Estratégico · Nível 1',           c:'#c8a84b', s:['Planejador','Benchmarking','Reforma']},
+  consultor:  {n:'Consultor Tributário IA',     r:'Orquestrador · Nível 2',          c:'#94a3b8', s:['Planejador','Jurídico','Simulador','Regime','Redator','Benchmarking','Extrator','Reforma']},
+  servicos:   {n:'Agente Serviços (ISS→IBS)',   r:'Especialista · Prestadores',      c:'#7c3aed', s:['Jurídico','Simulador','Regime','Extrator']},
+  produtos:   {n:'Agente Produtos (ICMS→IBS)',  r:'Especialista · Comércio / Ind.',  c:'#1d4ed8', s:['Jurídico','Simulador','Benchmarking','Extrator']},
+  regime:     {n:'Agente Regime Tributário',    r:'Especialista · Enquadramento',    c:'#059669', s:['Planejador','Simulador','Regime','Benchmarking']},
+  simulador:  {n:'Agente Simulador da Reforma', r:'Especialista · Carga tributária', c:'#dc2626', s:['Jurídico','Simulador','Regime']},
+  precificacao:{n:'Agente Precificação & Margem',r:'Especialista · Estratégia preço',c:'#c8a84b', s:['Planejador','Simulador','Benchmarking']},
+  defesa:     {n:'Agente Defesa & Regularização',r:'Especialista · Contencioso',    c:'#b45309', s:['Jurídico','Redator','Extrator']},
+  obrigacoes: {n:'Agente Obrigações Acessórias', r:'Especialista · Compliance',     c:'#0369a1', s:['Jurídico','Redator','Extrator','Reforma']},
+};
+const RESP={
+  diretor:`Diretor Financeiro IA · Skill 000 — Planejador Tributário
+
+OBJETIVO: Diagnóstico estratégico e plano de ação para a transição EC 132/2023.
+
+FATO: Sua empresa (CNAE 6201-5, Simples Anexo III) terá aumento estimado de 2,4 p.p. na carga tributária até 2033. Em valores: +R$ 1.200/mês sobre faturamento atual de R$ 50k.
+
+ANÁLISE — dois riscos imediatos:
+1. Fator R em 22% → risco de migrar para o Anexo V (alíquota até 33% maior)
+2. Nota Nacional obrigatória em 2026 → adequar sistema emissor de NFS-e
+
+PLANO DE AÇÃO:
+  30 dias · Aumentar pró-labore para R$ 14.000/mês — Fator R ≥ 28%
+  90 dias · Adequar emissor NFS-e à Nota Nacional (NT 2024.001)
+  180 dias · Simular Lucro Presumido com crédito IBS se carteira de clientes PJ crescer
+
+NÍVEL DE CONFIANÇA: Alto
+BASE: EC 132/2023 · LC 123/2006 · Res. CGIBS 6/2026 · LC 214/2025`,
+
+  simulador:`Agente Simulador · Skill 002 — Simulador de Alíquotas
+
+OBJETIVO: Carga tributária atual vs. pós-reforma
+
+SIMULAÇÃO — Tech Solutions Ltda · CNAE 6201-5 · TI
+Receita R$ 50.000/mês · Simples Anexo III
+
+CARGA ATUAL
+  DAS Simples (ISS + PIS + COFINS + IRPJ + CSLL + CPP): R$ 6.000 (12,0%)
+  TOTAL: R$ 6.000/mês
+
+CARGA 2028 (transição)
+  DAS adaptado + IBS 0,1% + CBS reduzida: R$ 6.800 (13,6%)
+
+CARGA 2033 (pleno)
+  IBS+CBS Simples reduzido + IRPJ+CSLL: R$ 7.500 — créditos estimados: −R$ 300
+  TOTAL: R$ 7.200/mês (14,4%)
+
+VARIAÇÃO: +R$ 1.200/mês · +2,4 p.p.
+
+NÍVEL DE CONFIANÇA: Médio
+DADOS ADICIONAIS ÚTEIS: folha de pagamento detalhada para Fator R exato.`,
+
+  servicos:`Agente Serviços · Skill 001 — Interpretador Jurídico
+
+OBJETIVO: Impacto do ISS → IBS para prestadores de serviço de TI
+
+FATO: ISS atual (LC 116/2003) → IBS a partir de 2026 (EC 132 / Res. CGIBS 6/2026).
+Para TI no Simples: ISS 2–5% no DAS → IBS+CBS em alíquota reduzida estimada 12–15%.
+
+ANÁLISE — CNAE 6201-5 (TI/Software):
+  Há discussão se software é serviço ou bem digital — impacto direto na alíquota IBS.
+  Res. CGIBS 6/2026 art. 312: software sob encomenda = serviço → IBS municipal.
+  Software de prateleira / licença = bem digital → CBS federal, sem IBS municipal.
+
+RECOMENDAÇÕES:
+  1. Separar contratos: software sob encomenda vs. licenças — tributação diferente
+  2. Cadastrar CCM no município e credenciar para a Nota Nacional antes de jan/2026
+  3. Monitorar Fator R mensalmente para manter Anexo III
+
+NÍVEL DE CONFIANÇA: Alto
+BASE: LC 116/2003 art. 1º · Res. CGIBS 6/2026 art. 312 · NT 2024.001`,
+
+  regime:`Agente Regime Tributário · Skill 003 — Diagnóstico de Regime
+
+OBJETIVO: Comparativo Simples vs. LP vs. LR para o perfil informado
+
+Receita: R$ 50k/mês · Folha: R$ 11k/mês · CNAE: 6201-5
+
+FATOR R ATUAL: R$ 11k ÷ R$ 50k = 22% → ABAIXO DE 28%
+Com folha em 22%, risco de enquadramento no Anexo V (alíquota 15,5% vs. 10,5% no Anexo III).
+SOLUÇÃO: aumentar pró-labore para R$ 14.000/mês (Fator R = 28%).
+
+COMPARATIVO 2033:
+  Simples Anexo III (com Fator R corrigido): 14,4%  — MELHOR OPÇÃO
+  Lucro Presumido: 17,5%
+  Lucro Real: 16,8% (se compras com crédito forem > R$ 15k/mês)
+
+RECOMENDAÇÃO: Permanecer no Simples, corrigir o Fator R agora e revisar em 2028.
+
+NÍVEL DE CONFIANÇA: Alto
+BASE: LC 123/2006 art. 18 · Tabelas Simples vigentes · Res. CGIBS 6/2026`,
+
+  defesa:`Agente Defesa & Regularização · Skill 001 — Interpretador Jurídico
+
+OBJETIVO: Orientação sobre auto de infração ou notificação fiscal
+
+PRIMEIRO PASSO SEMPRE: verificar o prazo de impugnação.
+O prazo padrão é 30 dias a partir do recebimento (conferir no documento recebido).
+
+PROTOCOLO DE ANÁLISE:
+  1. VÍCIO FORMAL — o AI tem todos os elementos do CTN art. 142?
+     (sujeito passivo, base de cálculo, alíquota, penalidade)
+     Vício formal = nulidade → arguir em primeiro lugar.
+
+  2. DECADÊNCIA (CTN art. 173) — o fisco tem 5 anos para lançar.
+     Calcular: o fato gerador está dentro do prazo?
+
+  3. BASE DE CÁLCULO — conferir se os valores lançados correspondem às NFs emitidas.
+
+  4. PENALIDADE — verificar se a multa está dentro dos limites legais do CTM municipal.
+
+RECOMENDAÇÃO: Não pague antes de analisar vício formal e decadência. Impugne dentro do prazo — suspende a exigibilidade (CTN art. 151, III).
+
+NÍVEL DE CONFIANÇA: Alto
+BASE: CTN arts. 142, 173, 151`,
+
+  precificacao:`Agente Precificação & Margem · Skill 000 — Planejador Tributário
+
+OBJETIVO: Estratégia de reajuste de preço em função da Reforma
+
+FATO: com aumento de carga de 12% para 14,4%, sua margem líquida cai proporcionalmente.
+Em um serviço de R$ 1.000: tributo sobe de R$ 120 para R$ 144 → queda de R$ 24 na margem.
+
+CENÁRIOS DE REPASSE:
+  ABSORVER — possível se margem atual for superior a 35%. Perda de R$ 24 por contrato.
+  REPASSAR GRADUALMENTE — reajuste de 2,5% ao ano a partir de 2026.
+  REPASSAR INTEGRALMENTE — novo preço R$ 1.024 (+2,4%). Aceitável para contratos B2B.
+
+CONTRATOS: incluir cláusula "reajuste por variação tributária EC 132/2023" nos novos contratos.
+
+RECOMENDAÇÃO:
+  Clientes B2B (PJ) → repassar: eles têm crédito IBS e absorvem melhor.
+  Clientes B2C (PF) → absorver parcialmente ou repassar de forma gradual.
+
+NÍVEL DE CONFIANÇA: Alto`,
+
+  obrigacoes:`Agente Obrigações Acessórias · Skill 007 — Observatório da Reforma
+
+OBJETIVO: Calendário de obrigações e impacto da Nota Nacional
+
+OBRIGAÇÕES JULHO/2026 — Simples Nacional:
+  DAS: vence dia 20 — R$ 6.000 (CNAE 6201-5, Anexo III)
+  DEFIS: já entregue em março/2026
+  Nota Nacional: credenciamento obrigatório → municípios com + 100k hab: jan/2026
+
+NOTA NACIONAL (NT 2024.001):
+  A NFS-e municipal está sendo substituída pela Nota Nacional federal.
+  Passos:
+  1. Verificar se o município está no calendário de implementação
+  2. Credenciar a empresa no portal da Nota Nacional
+  3. Atualizar o sistema emissor para o novo layout XML
+  4. Período de convivência em paralelo com NFS-e municipal até 2028
+
+RISCO: prestadores sem credenciamento ficam impedidos de emitir NFS-e após o prazo.
+
+NÍVEL DE CONFIANÇA: Alto
+BASE: NT 2024.001 · LC 214/2025 · Informe Técnico NFS-e 2025`,
+
+  consultor:`Consultor Tributário IA · Orquestrador
+
+Recebi sua demanda. Analisando o perfil:
+  CNAE 6201-5 (TI) · Simples Anexo III · Receita R$ 50k/mês
+
+DIAGNÓSTICO RÁPIDO — 3 pontos de atenção:
+
+  1. Urgente — Fator R em 22% (abaixo de 28%). Risco de Anexo V.
+     → Agente Regime Tributário
+
+  2. Atenção — Nota Nacional obrigatória antes de jan/2026.
+     → Agente Obrigações Acessórias
+
+  3. Aviso — Simular impacto 2033 com dados completos.
+     → Agente Simulador da Reforma
+
+Qual prioridade você quer resolver primeiro?`,
+
+  produtos:`Agente Produtos (ICMS→IBS) · Skill 001 — Interpretador Jurídico
+
+OBJETIVO: Impacto do ICMS → IBS para comércio e indústria
+
+FATO: ICMS (médio 17%) + PIS/COFINS (3,65% LP / 9,25% LR) → IBS estadual+municipal + CBS federal.
+Alíquota de referência total: 26,5%.
+
+PRINCIPAL MUDANÇA — NÃO CUMULATIVIDADE PLENA:
+No regime atual (LP), PIS/COFINS incidem sobre receita sem crédito das compras.
+No IBS+CBS: crédito em todas as etapas → empresas com muitos insumos formais ganham.
+
+EXEMPLO — Varejista (LP, receita R$ 200k, compras R$ 120k):
+  Hoje: PIS/COFINS = R$ 7.300 (3,65%) — sem crédito das compras
+  2033: CBS = R$ 11.440 (8,8%) — com crédito das compras → crédito R$ 10.560
+  Carga líquida CBS: R$ 880 vs. R$ 7.300 hoje — redução expressiva
+
+RECOMENDAÇÃO: varejistas com LP devem simular migração para LR pós-2028.
+
+NÍVEL DE CONFIANÇA: Médio
+BASE: Decreto 12.955/2026 (CBS) · Res. CGIBS 6/2026`,
+};
+
+// ── contextos pré-carregados para análise automática ──
+const CONTEXTOS={
+  r003:`Analise meu perfil tributário:\n\nEmpresa: Tech Solutions Ltda\nCNAE: 6201-5 · Desenvolvimento de Software\nRegime atual: Simples Nacional (Anexo III)\nReceita mensal: R$ 50.000\nFolha de pagamento: R$ 11.000\nFator R atual: 22% (abaixo dos 28% — risco Anexo V)\n\nQuero entender o impacto da Reforma Tributária EC 132/2023 no meu regime atual e se devo considerar migração para outro enquadramento. Elabore um parecer técnico com passo a passo de ações recomendadas.`,
+
+  c001:`Analise este cliente da minha carteira:\n\nCliente: Construtech Obras\nCNPJ: 98.765.432/0001-11\nCNAE: 4120-4 · Construção Civil\nRegime: Simples Nacional\nReceita mensal: R$ 120.000\nCarga tributária atual: 11,5%\nCarga estimada 2033 (EC 132/2023): 15,8%\nVariação: +4,3 p.p.\nRisco: ALTO\n\nElabore um parecer técnico completo com passo a passo de ações recomendadas para minimizar o impacto da Reforma Tributária neste cliente.`,
+
+  c002:`Analise este cliente da minha carteira:\n\nCliente: Saúde Bem Clínica\nCNPJ: 11.222.333/0001-44\nCNAE: 8630-5 · Serviços de Saúde\nRegime: Lucro Presumido\nReceita mensal: R$ 80.000\nCarga tributária atual: 16,2%\nCarga estimada 2033 (EC 132/2023): 14,5%\nVariação: −1,7 p.p.\nRisco: BAIXO\n\nExplique por que este cliente será beneficiado pela Reforma Tributária e quais ações deve tomar para maximizar os benefícios com IBS/CBS no setor de saúde.`,
+
+  c003:`Analise este cliente da minha carteira:\n\nCliente: Mercado Vale Verde\nCNPJ: 44.555.666/0001-77\nCNAE: 4711-3 · Comércio Varejista\nRegime: Lucro Presumido\nReceita mensal: R$ 200.000\nCarga tributária atual: 14,8%\nCarga estimada 2033 (EC 132/2023): 16,9%\nVariação: +2,1 p.p.\nRisco: MÉDIO\n\nElabore parecer técnico com análise do impacto do IBS/CBS no varejo e passo a passo de ações recomendadas para mitigação.`,
+
+  c004:`Analise este cliente da minha carteira:\n\nCliente: Adv. Rodrigues & Assoc.\nCNPJ: 77.888.999/0001-00\nCNAE: 6911-7 · Advocacia\nRegime: Simples Nacional — Anexo V\nReceita mensal: R$ 35.000\nCarga tributária atual: 17,5%\nCarga estimada 2033 (EC 132/2023): 21,2%\nVariação: +3,7 p.p.\nRisco: ALTO\n\nAnalise o enquadramento tributário desta sociedade de advogados no Simples Anexo V e elabore recomendações para otimização diante da Reforma Tributária.`,
+
+  c005:`Analise este cliente da minha carteira:\n\nCliente: Agro Cerrado SA\nCNPJ: 55.444.333/0001-22\nCNAE: 0111-3 · Agronegócio\nRegime: Lucro Real\nReceita mensal: R$ 500.000\nCarga tributária atual: 22,1%\nCarga estimada 2033 (EC 132/2023): 19,3%\nVariação: −2,8 p.p.\nRisco: BAIXO\n\nExplique como o regime Lucro Real posiciona este cliente favoravelmente na Reforma Tributária, especialmente com créditos IBS/CBS nas cadeias de insumos do agronegócio.`,
+
+  o001:`Obrigação acessória urgente na minha carteira:\n\nObrigação: Nota Nacional — Credenciamento\nClientes afetados: Todos os clientes da carteira\nPrazo limite: Janeiro/2026\nStatus: URGENTE\n\nPreciso de um passo a passo completo para credenciar meus clientes no sistema da Nota Nacional, quais os riscos de não cumprir o prazo e como isso impacta a emissão de NFS-e a partir de 2026.`,
+};
+
+// ── estado ──
+let perfil='empresario', agAtivo=null, chartS=null;
+let pfLogin='empresario';
+
+// credenciais válidas (demo + admin)
+const USERS=[
+  {email:'admin@triadeiaos.com',   senha:'triade2026', nome:'André Salomão', perfil:'empresario', plano:'Admin'},
+  {email:'empresa@demo.com',        senha:'demo1234',   nome:'Demo Empresa',  perfil:'empresario', plano:'Profissional'},
+  {email:'contador@demo.com',       senha:'demo1234',   nome:'Demo Escritório',perfil:'contador',   plano:'Escritório'},
+];
+
+// ── login ──
+function selPerfil(p){
+  pfLogin=p;
+  document.getElementById('pf-emp').classList.toggle('sel',p==='empresario');
+  document.getElementById('pf-cont').classList.toggle('sel',p==='contador');
+}
+function doLogin(){
+  const email=(document.getElementById('login-email').value||'').trim().toLowerCase();
+  const senha=document.getElementById('login-senha').value||'';
+  const errEl=document.getElementById('login-err');
+
+  // se preencheu credenciais, valida
+  if(email||senha){
+    const user=USERS.find(u=>u.email===email&&u.senha===senha);
+    if(!user){errEl.classList.add('show');return;}
+    errEl.classList.remove('show');
+    document.getElementById('sb-uname').textContent=user.nome;
+    document.getElementById('sb-plan-label').textContent='Plano '+user.plano;
+    document.getElementById('sb-av-init').textContent=user.nome.charAt(0);
+    setProfile(user.perfil);
+  } else {
+    // demo sem credenciais — usa perfil selecionado
+    setProfile(pfLogin);
+  }
+  document.getElementById('login-screen').style.display='none';
+  go('painel');
+  toast('Bem-vindo ao SOAF Privado');
+}
+function doLogout(){
+  document.getElementById('login-email').value='';
+  document.getElementById('login-senha').value='';
+  document.getElementById('login-err').classList.remove('show');
+  document.getElementById('login-screen').style.display='flex';
+  agAtivo=null;
+  document.getElementById('chat-msgs').innerHTML='';
+  document.getElementById('chat-active').style.display='none';
+  document.getElementById('chat-empty').style.display='flex';
+  document.querySelectorAll('.ag-item').forEach(c=>c.classList.remove('sel'));
+  go('painel');
+}
+function setProfile(p){
+  perfil=p;
+  document.getElementById('sb-chip').textContent=p==='contador'?'CONTADOR':'EMPRESÁRIO';
+  document.getElementById('nav-emp').style.display=p==='empresario'?'':'none';
+  document.getElementById('nav-cont').style.display=p==='contador'?'':'none';
+}
+
+// ── navegação ──
+const META={
+  painel:      {t:'Painel',              s:'Visão geral tributária · EC 132/2023'},
+  agentes:     {t:'Agentes IA',          s:'9 especialistas em Reforma Tributária'},
+  simulador:   {t:'Simulador',           s:'Carga tributária atual vs. 2028 vs. 2033'},
+  regime:      {t:'Regime Tributário',   s:'Simples · Lucro Presumido · Lucro Real'},
+  empresa:     {t:'Empresa',             s:'Dados cadastrais utilizados pelos agentes'},
+  precificacao:{t:'Precificação',        s:'Calculadora de repasse de alíquota'},
+  clientes:    {t:'Clientes',            s:'Análise de impacto por empresa'},
+  obrigacoes:  {t:'Obrigações',          s:'Calendário e Nota Nacional · Jul/2026'},
+  config:      {t:'Configurações',       s:'Perfil, plano e preferências'},
+};
+function go(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.sb-link').forEach(n=>n.classList.remove('on'));
+  const pg=document.getElementById('page-'+id);
+  if(pg) pg.classList.add('on');
+  document.querySelectorAll('.sb-link').forEach(n=>{
+    if((n.getAttribute('onclick')||'').includes("'"+id+"'")) n.classList.add('on');
+  });
+  const m=META[id]||{t:id,s:''};
+  document.getElementById('tb-title').textContent=m.t;
+  document.getElementById('tb-sub').textContent=m.s;
+}
+
+// ── agentes ──
+function selAgent(id){
+  agAtivo=id;
+  document.querySelectorAll('.ag-item').forEach(c=>c.classList.remove('sel'));
+  const el=document.getElementById('ai-'+id);
+  if(el) el.classList.add('sel');
+  const ag=AGENTS[id];
+  document.getElementById('chat-empty').style.display='none';
+  const ca=document.getElementById('chat-active');
+  ca.style.display='flex';
+  document.getElementById('ch-dot').style.background=ag.c;
+  document.getElementById('ch-name').textContent=ag.n;
+  document.getElementById('ch-role').textContent=ag.r;
+  const sr=document.getElementById('sk-row');
+  sr.innerHTML='';
+  ag.s.forEach((s,i)=>{
+    const b=document.createElement('button');
+    b.className='sk'+(i===0?' on':'');
+    b.textContent=s;
+    b.onclick=()=>{sr.querySelectorAll('.sk').forEach(x=>x.classList.remove('on'));b.classList.add('on');};
+    sr.appendChild(b);
+  });
+  const msgs=document.getElementById('chat-msgs');
+  msgs.innerHTML='';
+  addMsg('ai',RESP[id]||`${ag.n}\n\nPronto para análises sobre EC 132/2023. Qual a sua dúvida?`);
+  document.getElementById('chat-in').focus();
+}
+function addMsg(role,txt){
+  const msgs=document.getElementById('chat-msgs');
+  const d=document.createElement('div');
+  if(role==='user'){d.className='msg-u';d.textContent=txt;}
+  else{
+    d.className='msg-ai';
+    const tag=document.createElement('div');tag.className='msg-ai-badge';
+    const agName=agAtivo&&AGENTS[agAtivo]?AGENTS[agAtivo].n:'IA';
+    tag.textContent='SOAF Privado · '+agName;
+    d.appendChild(tag);
+    const body=document.createElement('div');body.textContent=txt;d.appendChild(body);
+  }
+  msgs.appendChild(d);msgs.scrollTop=msgs.scrollHeight;
+}
+function sendMsg(){
+  const inp=document.getElementById('chat-in');
+  const txt=inp.value.trim();
+  if(!txt||!agAtivo) return;
+  addMsg('user',txt);inp.value='';
+  setTimeout(()=>{
+    const p=txt.toLowerCase();
+    let r=RESP[agAtivo];
+    if(p.includes('fator r')||p.includes('anexo')) r=RESP.regime;
+    else if(p.includes('preço')||p.includes('margem')) r=RESP.precificacao;
+    else if(p.includes('nota nacional')||p.includes('nfs')) r=RESP.obrigacoes;
+    else if(p.includes('auto')||p.includes('infração')||p.includes('defesa')) r=RESP.defesa;
+    else if(p.includes('simul')||p.includes('quanto')||p.includes('carga')) r=RESP.simulador;
+    else if(p.includes('regime')||p.includes('simples')||p.includes('lucro')) r=RESP.regime;
+    addMsg('ai',r);
+  },650);
+}
+function openAgent(id,sk,ctxKey){
+  go('agentes');
+  setTimeout(()=>{
+    selAgent(id);
+    if(ctxKey && CONTEXTOS[ctxKey]){
+      const msg=CONTEXTOS[ctxKey];
+      setTimeout(()=>{
+        addMsg('user',msg);
+        setTimeout(()=>{
+          const p=msg.toLowerCase();
+          let r=RESP[id];
+          if(p.includes('nota nacional')||p.includes('credenciamento')) r=RESP.obrigacoes;
+          else if(p.includes('carga')&&p.includes('reforma')) r=RESP.simulador;
+          else if(p.includes('regime')||p.includes('anexo')) r=RESP.regime;
+          addMsg('ai',r);
+        },700);
+      },300);
+    }
+  },80);
+}
+
+// ── simulador ──
+const TX={si3:{a:12,t:13.6,p:14.4},si5:{a:17.5,t:18.8,p:19.8},mei:{a:6,t:7.2,p:8},lp:{a:15.8,t:16.5,p:17.5},lr:{a:22,t:20.5,p:18.8}};
+const ADJ={6201:0,4711:-1.5,4120:2.5,8630:-3,6911:3,111:-4,8511:-5};
+function runSim(){
+  const rec=parseFloat(document.getElementById('s-rec').value)||50000;
+  const reg=document.getElementById('s-reg').value;
+  const cn=document.getElementById('s-cnae').value;
+  const tx=TX[reg]||TX.si3;
+  const adj=ADJ[cn]||0;
+  const ta=tx.a,tt=tx.t+adj*.3,tp=tx.p+adj;
+  const va=rec*ta/100,vt=rec*tt/100,vp=rec*tp/100,dd=vp-va;
+  const fmt=v=>'R$ '+v.toLocaleString('pt-BR',{minimumFractionDigits:0});
+  document.getElementById('sr-a').textContent=fmt(va);
+  document.getElementById('sr-ap').textContent=ta.toFixed(1)+'% da receita';
+  document.getElementById('sr-t').textContent=fmt(vt);
+  document.getElementById('sr-tp').textContent=tt.toFixed(1)+'% da receita';
+  document.getElementById('sr-p').textContent=fmt(vp);
+  document.getElementById('sr-pp').textContent=tp.toFixed(1)+'% da receita';
+  const dEl=document.getElementById('sr-d'),dpEl=document.getElementById('sr-dp');
+  if(dd>0){dEl.style.color='var(--red)';dEl.textContent='+ '+fmt(Math.abs(dd));dpEl.textContent='+'+( tp-ta).toFixed(1)+' p.p.';}
+  else{dEl.style.color='var(--green)';dEl.textContent='− '+fmt(Math.abs(dd));dpEl.textContent=(tp-ta).toFixed(1)+' p.p.';}
+  let rec_t='';
+  if(dd>0){
+    if(reg==='lp') rec_t=`Aumento de ${(tp-ta).toFixed(1)} p.p. estimado. Simule migração para Lucro Real em 2028 se suas compras com crédito IBS superarem 30% da receita. Inclua cláusula de reajuste tributário nos novos contratos.`;
+    else if(reg.startsWith('si')) rec_t=`Aumento de ${(tp-ta).toFixed(1)} p.p. estimado. Corrija o Fator R para manter-se no Anexo III (menor alíquota Simples). Simule Lucro Presumido a partir de 2028 se a carteira PJ crescer, pois o crédito IBS pode compensar.`;
+    else rec_t=`Variação estimada de ${(tp-ta).toFixed(1)} p.p. Consulte o Agente Regime Tributário para análise individualizada do melhor enquadramento pós-2026.`;
+  } else {
+    rec_t=`A Reforma traz redução estimada de ${Math.abs(tp-ta).toFixed(1)} p.p. no seu caso. ${reg==='lr'?'A não cumulatividade plena do IBS+CBS beneficia quem tem alto volume de insumos.':'Seu setor tem regime diferenciado que se beneficia da nova sistemática.'} Aproveite para revisar preços e ganhar competitividade.`;
+  }
+  document.getElementById('sr-rec').textContent=rec_t;
+  if(chartS) chartS.destroy();
+  const ctx=document.getElementById('chart-s').getContext('2d');
+  const bc=(v,b)=>v>b?'rgba(239,68,68,.65)':'rgba(16,185,129,.65)';
+  const brd=(v,b)=>v>b?'#ef4444':'#10b981';
+  chartS=new Chart(ctx,{
+    type:'bar',
+    data:{
+      labels:['Hoje','2028 — Transição','2033 — IBS Pleno'],
+      datasets:[{data:[ta,tt,tp],backgroundColor:['rgba(148,163,184,.4)',bc(tt,ta),bc(tp,ta)],borderColor:['#94a3b8',brd(tt,ta),brd(tp,ta)],borderWidth:1,borderRadius:6}]
+    },
+    options:{responsive:true,plugins:{legend:{display:false},tooltip:{callbacks:{label:v=>v.raw.toFixed(1)+'%'}}},
+      scales:{y:{grid:{color:'rgba(0,0,0,.04)'},ticks:{color:'#94a3b8',callback:v=>v+'%'},border:{display:false}},x:{grid:{display:false},ticks:{color:'#94a3b8'},border:{display:false}}}}
+  });
+  document.getElementById('sim-res').classList.add('vis');
+}
+
+// ── precificação ──
+function calcPreco(){
+  const p=parseFloat(document.getElementById('pc-p').value)||1000;
+  const c=parseFloat(document.getElementById('pc-c').value)||400;
+  const ta=parseFloat(document.getElementById('pc-ta').value)||12;
+  const tn=parseFloat(document.getElementById('pc-tn').value)||14.4;
+  const m1=((p-c-p*ta/100)/p*100).toFixed(1);
+  const m2=((p-c-p*tn/100)/p*100).toFixed(1);
+  const sg=(c/(1-tn/100-parseFloat(m1)/100)).toFixed(2);
+  const rj=((parseFloat(sg)-p)/p*100).toFixed(1);
+  document.getElementById('pc-m1').textContent=m1+'%';
+  document.getElementById('pc-m2').textContent=m2+'%';
+  document.getElementById('pc-sg').textContent='R$ '+parseFloat(sg).toLocaleString('pt-BR',{minimumFractionDigits:2});
+  document.getElementById('pc-rj').textContent='Reajuste necessário: +'+rj+'% para manter a margem';
+  document.getElementById('pc-res').style.display='block';
+  document.getElementById('pc-ph').style.display='none';
+}
+
+// ── countdown ──
+function calcCD(){
+  const d=Math.ceil((new Date('2033-01-01')-new Date())/86400000);
+  const el=document.getElementById('cd-dias');
+  if(el) el.textContent=d.toLocaleString('pt-BR');
+}
+
+// ── toast ──
+function toast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('on');
+  setTimeout(()=>t.classList.remove('on'),2500);
+}
+
+calcCD();
+setInterval(calcCD,3600000);
+</script>
+</body>
+</html>

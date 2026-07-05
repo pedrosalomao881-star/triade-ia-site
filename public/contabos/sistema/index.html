@@ -1,0 +1,2417 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ContabOS Sistema — TRÍADE IA</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+  :root {
+    --bg: #07100A;
+    --bg2: #0e1f12;
+    --bg3: #152b18;
+    --gold: #C8A84B;
+    --gold2: #e8c76a;
+    --green: #2ecc71;
+    --red: #e74c3c;
+    --blue: #3498db;
+    --text: #e8f0ea;
+    --text2: #8fa896;
+    --border: #1e3522;
+    --card: #0f1e13;
+    --sidebar-w: 240px;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--bg); color:var(--text); font-family:'Segoe UI',system-ui,sans-serif; display:flex; min-height:100vh; }
+
+  /* SIDEBAR */
+  #sidebar {
+    width:var(--sidebar-w); background:var(--bg2); border-right:1px solid var(--border);
+    display:flex; flex-direction:column; position:fixed; height:100vh; z-index:100; overflow-y:auto;
+  }
+  .logo {
+    padding:20px 16px; border-bottom:1px solid var(--border);
+    display:flex; align-items:center; gap:10px;
+  }
+  .logo-icon {
+    width:36px; height:36px; background:var(--gold); border-radius:8px;
+    display:flex; align-items:center; justify-content:center; font-weight:900; font-size:14px; color:#07100A;
+  }
+  .logo-text { font-size:15px; font-weight:700; color:var(--text); }
+  .logo-sub { font-size:10px; color:var(--text2); margin-top:2px; }
+
+  .nav-section { padding:12px 0; }
+  .nav-label {
+    font-size:10px; font-weight:700; color:var(--text2); letter-spacing:1px;
+    padding:8px 16px 4px; text-transform:uppercase;
+  }
+  .nav-item {
+    display:flex; align-items:center; gap:10px; padding:10px 16px;
+    cursor:pointer; transition:.15s; border-left:3px solid transparent;
+    font-size:13px; color:var(--text2);
+  }
+  .nav-item:hover { background:var(--bg3); color:var(--text); }
+  .nav-item.active { background:var(--bg3); color:var(--gold); border-left-color:var(--gold); }
+  .nav-item .icon { font-size:16px; width:20px; text-align:center; }
+  .nav-badge {
+    margin-left:auto; background:var(--red); color:#fff;
+    font-size:10px; padding:2px 6px; border-radius:10px; font-weight:700;
+  }
+  .nav-badge.ok { background:var(--green); }
+
+  .sidebar-footer { margin-top:auto; padding:16px; border-top:1px solid var(--border); }
+  .version { font-size:10px; color:var(--text2); }
+
+  /* MAIN */
+  #main { margin-left:var(--sidebar-w); flex:1; display:flex; flex-direction:column; }
+  .topbar {
+    background:var(--bg2); border-bottom:1px solid var(--border);
+    padding:14px 24px; display:flex; align-items:center; justify-content:space-between;
+    position:sticky; top:0; z-index:50;
+  }
+  .page-title { font-size:18px; font-weight:700; }
+  .page-sub { font-size:12px; color:var(--text2); margin-top:2px; }
+  .topbar-actions { display:flex; gap:10px; align-items:center; }
+  .btn {
+    padding:8px 16px; border-radius:8px; border:none; cursor:pointer;
+    font-size:13px; font-weight:600; transition:.15s;
+  }
+  .btn-gold { background:var(--gold); color:#07100A; }
+  .btn-gold:hover { background:var(--gold2); }
+  .btn-outline { background:transparent; color:var(--gold); border:1px solid var(--gold); }
+  .btn-outline:hover { background:var(--gold); color:#07100A; }
+  .btn-danger { background:var(--red); color:#fff; }
+  .btn-sm { padding:5px 12px; font-size:12px; }
+
+  #content { padding:24px; flex:1; }
+
+  /* PAGE */
+  .page { display:none; }
+  .page.active { display:block; }
+
+  /* CARDS GRID */
+  .cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:16px; margin-bottom:24px; }
+  .card {
+    background:var(--card); border:1px solid var(--border); border-radius:12px; padding:20px;
+  }
+  .card-label { font-size:11px; color:var(--text2); text-transform:uppercase; letter-spacing:.5px; margin-bottom:8px; }
+  .card-value { font-size:28px; font-weight:800; color:var(--text); }
+  .card-sub { font-size:12px; color:var(--text2); margin-top:4px; }
+  .card-trend { font-size:12px; margin-top:6px; }
+  .trend-up { color:var(--green); }
+  .trend-down { color:var(--red); }
+  .card-icon { font-size:28px; margin-bottom:8px; }
+
+  /* GRID 2 COL */
+  .grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  .grid-3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px; }
+  @media(max-width:900px){ .grid-2,.grid-3 { grid-template-columns:1fr; } }
+
+  /* TABLE */
+  .table-card { background:var(--card); border:1px solid var(--border); border-radius:12px; overflow:hidden; }
+  .table-header { padding:16px 20px; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; }
+  .table-title { font-size:14px; font-weight:700; }
+  table { width:100%; border-collapse:collapse; }
+  thead { background:var(--bg3); }
+  th { padding:10px 16px; text-align:left; font-size:11px; font-weight:700; color:var(--text2); text-transform:uppercase; letter-spacing:.5px; }
+  td { padding:12px 16px; font-size:13px; border-top:1px solid var(--border); }
+  tr:hover td { background:var(--bg3); }
+
+  /* STATUS BADGES */
+  .badge { padding:3px 10px; border-radius:20px; font-size:11px; font-weight:700; }
+  .badge-green { background:#1a4d2a; color:#5dde8d; }
+  .badge-red { background:#4d1a1a; color:#e88080; }
+  .badge-yellow { background:#4d3d1a; color:#e8c06a; }
+  .badge-blue { background:#1a2d4d; color:#6aaae8; }
+  .badge-gray { background:#1a2520; color:var(--text2); }
+
+  /* FORM */
+  .form-group { margin-bottom:16px; }
+  .form-group label { display:block; font-size:12px; font-weight:600; color:var(--text2); margin-bottom:6px; text-transform:uppercase; letter-spacing:.5px; }
+  .form-group input, .form-group select, .form-group textarea {
+    width:100%; background:var(--bg3); border:1px solid var(--border); border-radius:8px;
+    padding:10px 14px; color:var(--text); font-size:14px; outline:none; transition:.15s;
+  }
+  .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color:var(--gold); }
+  .form-group textarea { min-height:120px; resize:vertical; font-family:inherit; }
+  .form-group select option { background:var(--bg2); }
+
+  /* CALENDARIO */
+  .cal-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:4px; margin-top:12px; }
+  .cal-day-name { text-align:center; font-size:11px; color:var(--text2); font-weight:700; padding:6px 0; }
+  .cal-day {
+    background:var(--bg3); border:1px solid var(--border); border-radius:6px;
+    padding:6px; min-height:64px; font-size:12px; cursor:pointer; transition:.15s;
+  }
+  .cal-day:hover { border-color:var(--gold); }
+  .cal-day.today { border-color:var(--gold); background:rgba(200,168,75,.08); }
+  .cal-day .day-num { font-weight:700; font-size:13px; margin-bottom:4px; }
+  .cal-day.other-month .day-num { color:var(--text2); }
+  .cal-event {
+    background:var(--red); color:#fff; border-radius:3px;
+    font-size:9px; padding:1px 4px; margin-top:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  }
+  .cal-event.obrig { background:#c0392b; }
+  .cal-event.das { background:#2980b9; }
+  .cal-event.sped { background:#8e44ad; }
+  .cal-event.irpf { background:#27ae60; }
+
+  /* IRPF CALC */
+  .calc-result { background:var(--bg3); border:1px solid var(--border); border-radius:12px; padding:20px; margin-top:16px; }
+  .calc-row { display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid var(--border); font-size:13px; }
+  .calc-row:last-child { border-bottom:none; }
+  .calc-row.total { font-size:16px; font-weight:800; color:var(--gold); padding-top:12px; }
+  .calc-label { color:var(--text2); }
+  .calc-value { font-weight:600; }
+
+  /* COMUNICADO */
+  .preview-box {
+    background:var(--bg3); border:1px solid var(--border); border-radius:12px;
+    padding:24px; font-size:13px; line-height:1.8; white-space:pre-wrap;
+    max-height:400px; overflow-y:auto;
+  }
+
+  /* ALERT */
+  .alert { padding:12px 16px; border-radius:8px; font-size:13px; margin-bottom:16px; }
+  .alert-warning { background:#3d2e08; border:1px solid #8a6a15; color:#e8c06a; }
+  .alert-success { background:#0d3320; border:1px solid #1a6640; color:#5dde8d; }
+  .alert-info { background:#0d2030; border:1px solid #1a4060; color:#6aaae8; }
+
+  /* CHART CONTAINER */
+  .chart-box { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:20px; }
+  .chart-title { font-size:14px; font-weight:700; margin-bottom:16px; }
+
+  /* CLIENTES */
+  .cliente-avatar {
+    width:36px; height:36px; border-radius:50%; background:var(--bg3);
+    display:flex; align-items:center; justify-content:center; font-weight:700; font-size:14px; color:var(--gold);
+    border:1px solid var(--border); flex-shrink:0;
+  }
+  .cliente-info { flex:1; }
+  .cliente-nome { font-size:13px; font-weight:600; }
+  .cliente-detail { font-size:11px; color:var(--text2); margin-top:2px; }
+  .cliente-row { display:flex; align-items:center; gap:12px; padding:12px 16px; border-top:1px solid var(--border); }
+  .cliente-row:hover { background:var(--bg3); }
+
+  /* TABS */
+  .tabs { display:flex; gap:0; border-bottom:1px solid var(--border); margin-bottom:20px; }
+  .tab { padding:10px 20px; font-size:13px; cursor:pointer; border-bottom:2px solid transparent; color:var(--text2); transition:.15s; }
+  .tab.active { color:var(--gold); border-bottom-color:var(--gold); }
+  .tab-content { display:none; }
+  .tab-content.active { display:block; }
+
+  /* SIMPLES */
+  .anexo-table { width:100%; border-collapse:collapse; font-size:12px; }
+  .anexo-table th { background:var(--bg3); padding:8px 12px; text-align:left; color:var(--text2); font-size:10px; text-transform:uppercase; }
+  .anexo-table td { padding:8px 12px; border-top:1px solid var(--border); }
+  .anexo-table tr.highlight td { background:rgba(200,168,75,.1); color:var(--gold); }
+
+  /* MODAL */
+  .modal-overlay {
+    display:none; position:fixed; inset:0; background:rgba(0,0,0,.7);
+    z-index:1000; align-items:center; justify-content:center;
+  }
+  .modal-overlay.open { display:flex; }
+  .modal { background:var(--bg2); border:1px solid var(--border); border-radius:16px; padding:24px; width:520px; max-width:90vw; max-height:80vh; overflow-y:auto; }
+  .modal h3 { font-size:16px; font-weight:700; margin-bottom:16px; }
+  .modal-footer { display:flex; gap:8px; justify-content:flex-end; margin-top:16px; }
+
+  /* ACTION BUTTONS */
+  .action-bar { display:flex; gap:8px; margin-top:12px; flex-wrap:wrap; }
+  .btn-pdf { background:#e74c3c; color:#fff; }
+  .btn-pdf:hover { background:#c0392b; }
+  .btn-email { background:#3498db; color:#fff; }
+  .btn-email:hover { background:#2980b9; }
+  .btn-whats { background:#25D366; color:#fff; }
+  .btn-whats:hover { background:#1ebe5d; }
+
+  /* CONFIG */
+  .logo-upload-area {
+    border:2px dashed var(--border); border-radius:12px; padding:32px;
+    text-align:center; cursor:pointer; transition:.2s;
+  }
+  .logo-upload-area:hover { border-color:var(--gold); }
+  .logo-preview { max-height:80px; max-width:240px; margin:0 auto; display:block; border-radius:6px; }
+
+  /* PRINT */
+  @media print {
+    body * { visibility:hidden; }
+    #print-area, #print-area * { visibility:visible; }
+    #print-area { position:fixed; left:0; top:0; width:100%; background:#fff; z-index:99999; }
+  }
+
+  /* SCROLL */
+  ::-webkit-scrollbar { width:6px; }
+  ::-webkit-scrollbar-track { background:var(--bg2); }
+  ::-webkit-scrollbar-thumb { background:var(--border); border-radius:3px; }
+  ::-webkit-scrollbar-thumb:hover { background:var(--gold); }
+
+  /* TOAST */
+  #toast {
+    position:fixed; bottom:24px; right:24px; background:var(--gold); color:#07100A;
+    padding:12px 20px; border-radius:10px; font-weight:700; font-size:13px;
+    transform:translateY(80px); opacity:0; transition:.3s; z-index:9999;
+  }
+  #toast.show { transform:translateY(0); opacity:1; }
+
+  /* LOGIN */
+  #login-screen {
+    position:fixed; inset:0; background:var(--bg); z-index:99999;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .login-card {
+    background:var(--bg2); border:1px solid var(--border); border-radius:20px;
+    padding:48px 44px; width:380px; text-align:center;
+    box-shadow:0 24px 80px rgba(0,0,0,.5);
+  }
+  .login-logo {
+    width:56px; height:56px; background:var(--gold); border-radius:14px;
+    display:flex; align-items:center; justify-content:center;
+    font-weight:900; font-size:22px; color:#07100A; margin:0 auto 18px;
+  }
+  .login-title { font-size:22px; font-weight:800; margin-bottom:4px; }
+  .login-sub { font-size:13px; color:var(--text2); margin-bottom:28px; line-height:1.5; }
+  .login-input {
+    width:100%; background:var(--bg3); border:1px solid var(--border); border-radius:10px;
+    padding:13px 16px; color:var(--text); font-size:16px; outline:none;
+    text-align:center; letter-spacing:6px; margin-bottom:12px; transition:.2s;
+  }
+  .login-input:focus { border-color:var(--gold); }
+  .login-btn {
+    width:100%; background:var(--gold); color:#07100A; border:none; border-radius:10px;
+    padding:13px; font-size:15px; font-weight:700; cursor:pointer; transition:.15s;
+  }
+  .login-btn:hover { background:var(--gold2); }
+  .login-error { color:var(--red); font-size:13px; margin-top:10px; min-height:20px; }
+  .login-version { font-size:11px; color:var(--text2); margin-top:20px; }
+  .login-reset { font-size:11px; color:var(--text2); margin-top:8px; cursor:pointer; text-decoration:underline; }
+
+  /* KANBAN */
+  .kanban-board { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; align-items:start; }
+  @media(max-width:1100px){ .kanban-board { grid-template-columns:repeat(2,1fr); } }
+  .kanban-col {
+    background:var(--card); border:1px solid var(--border); border-radius:12px;
+    padding:14px; min-height:420px; transition:.15s;
+  }
+  .kanban-col.drag-over { border-color:var(--gold); background:rgba(200,168,75,.04); }
+  .kanban-col-header {
+    display:flex; align-items:center; justify-content:space-between;
+    margin-bottom:12px; padding-bottom:10px; border-bottom:1px solid var(--border);
+  }
+  .kanban-col-title { font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.5px; }
+  .kanban-count {
+    background:var(--bg3); color:var(--text2); font-size:11px;
+    font-weight:700; padding:2px 8px; border-radius:20px;
+  }
+  .kanban-card {
+    background:var(--bg2); border:1px solid var(--border); border-radius:8px;
+    padding:12px; margin-bottom:8px; cursor:grab; transition:.15s; user-select:none;
+  }
+  .kanban-card:hover { border-color:var(--gold); }
+  .kanban-card.dragging { opacity:.35; cursor:grabbing; }
+  .kanban-card-title { font-size:13px; font-weight:600; margin-bottom:6px; line-height:1.4; }
+  .kanban-card-meta { font-size:11px; color:var(--text2); display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
+  .kanban-add {
+    width:100%; background:transparent; border:1px dashed var(--border); border-radius:8px;
+    padding:9px; color:var(--text2); font-size:12px; cursor:pointer; margin-top:6px; transition:.15s;
+  }
+  .kanban-add:hover { border-color:var(--gold); color:var(--gold); }
+  .p-alta { color:var(--red); font-weight:700; }
+  .p-media { color:var(--gold); font-weight:700; }
+  .p-baixa { color:var(--green); font-weight:700; }
+  .sidebar-backup { display:flex; gap:6px; margin-bottom:10px; }
+  .btn-backup {
+    flex:1; background:transparent; border:1px solid var(--border); border-radius:6px;
+    padding:6px 4px; color:var(--text2); font-size:10px; cursor:pointer; transition:.15s; text-align:center;
+  }
+  .btn-backup:hover { border-color:var(--gold); color:var(--gold); }
+</style>
+</head>
+<body>
+
+<!-- LOGIN SCREEN -->
+<div id="login-screen">
+  <div class="login-card">
+    <div class="login-logo">C</div>
+    <div class="login-title">ContabOS</div>
+    <div class="login-sub" id="login-sub-text">Sistema Operacional Contábil<br>TRÍADE IA</div>
+    <input type="password" id="login-pwd" class="login-input" placeholder="••••••••"
+           onkeydown="if(event.key==='Enter')fazerLogin()">
+    <button class="login-btn" id="login-btn-label" onclick="fazerLogin()">Entrar</button>
+    <div class="login-error" id="login-error"></div>
+    <div class="login-reset" id="login-reset-link" onclick="resetarSenha()" style="display:none">Esqueci minha senha (apagar dados de acesso)</div>
+    <div class="login-version">ContabOS v1.0 · © 2026 TRÍADE IA</div>
+  </div>
+</div>
+
+<!-- SIDEBAR -->
+<div id="sidebar">
+  <div class="logo">
+    <div class="logo-icon">C</div>
+    <div>
+      <div class="logo-text">ContabOS</div>
+      <div class="logo-sub">Sistema v1.0 — TRÍADE IA</div>
+    </div>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-label">Principal</div>
+    <div class="nav-item active" onclick="showPage('dashboard')">
+      <span class="icon">📊</span> Dashboard
+    </div>
+    <div class="nav-item" onclick="showPage('clientes')">
+      <span class="icon">👥</span> Clientes
+      <span class="nav-badge" id="badge-clientes">8</span>
+    </div>
+    <div class="nav-item" onclick="showPage('calendario')">
+      <span class="icon">📅</span> Calendário Fiscal
+      <span class="nav-badge" id="badge-cal">3</span>
+    </div>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-label">Cálculos</div>
+    <div class="nav-item" onclick="showPage('irpf')">
+      <span class="icon">🧮</span> Calculadora IRPF
+    </div>
+    <div class="nav-item" onclick="showPage('simples')">
+      <span class="icon">📋</span> DAS / Simples
+    </div>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-label">Documentos</div>
+    <div class="nav-item" onclick="showPage('comunicado')">
+      <span class="icon">✉️</span> Comunicados
+    </div>
+    <div class="nav-item" onclick="showPage('parecer')">
+      <span class="icon">⚖️</span> Pareceres
+    </div>
+    <div class="nav-item" onclick="showPage('sped')">
+      <span class="icon">📁</span> Obrigações SPED
+    </div>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-label">Reforma Tributária</div>
+    <div class="nav-item" onclick="showPage('reforma')">
+      <span class="icon">🏛️</span> EC 132 / IBS / CBS
+    </div>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-label">Gestão</div>
+    <div class="nav-item" onclick="showPage('kanban');renderKanban()">
+      <span class="icon">🗂️</span> Kanban
+    </div>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-label">Escritório</div>
+    <div class="nav-item" onclick="showPage('config')">
+      <span class="icon">⚙️</span> Configurações
+    </div>
+  </div>
+
+  <div class="sidebar-footer">
+    <div class="sidebar-backup">
+      <button class="btn-backup" onclick="exportarDados()" title="Exportar backup JSON">⬆ Exportar</button>
+      <button class="btn-backup" onclick="document.getElementById('import-input').click()" title="Importar backup JSON">⬇ Importar</button>
+      <input type="file" id="import-input" accept=".json" style="display:none" onchange="importarDados(this)">
+      <button class="btn-backup" onclick="logout()" title="Sair do sistema">⏏ Sair</button>
+    </div>
+    <div class="version">ContabOS Sistema v1.0<br>© 2026 TRÍADE IA</div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div id="main">
+  <div class="topbar">
+    <div>
+      <div class="page-title" id="topbar-title">Dashboard</div>
+      <div class="page-sub" id="topbar-sub">Visão geral do escritório</div>
+    </div>
+    <div class="topbar-actions">
+      <span id="topbar-date" style="font-size:12px;color:var(--text2)"></span>
+      <button class="btn btn-gold btn-sm" onclick="showPage('comunicado')">+ Comunicado</button>
+    </div>
+  </div>
+
+  <div id="content">
+
+    <!-- ===== DASHBOARD ===== -->
+    <div id="page-dashboard" class="page active">
+      <div class="alert alert-warning" id="alert-venc"></div>
+      <div class="cards">
+        <div class="card">
+          <div class="card-icon">👥</div>
+          <div class="card-label">Clientes Ativos</div>
+          <div class="card-value" id="kpi-clientes">8</div>
+          <div class="card-sub">5 PJ · 3 PF</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">⚠️</div>
+          <div class="card-label">Vencimentos em 7 dias</div>
+          <div class="card-value trend-down" id="kpi-venc">3</div>
+          <div class="card-sub">DAS, DCTF, ECD</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">✅</div>
+          <div class="card-label">Obrigações no Mês</div>
+          <div class="card-value" id="kpi-obrig">12</div>
+          <div class="card-sub trend-up">9 entregues · 3 pendentes</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">💰</div>
+          <div class="card-label">Honorários/Mês</div>
+          <div class="card-value" style="color:var(--gold)">R$8.400</div>
+          <div class="card-sub">Média R$1.050/cliente</div>
+        </div>
+      </div>
+
+      <div class="grid-2" style="margin-bottom:16px">
+        <div class="chart-box">
+          <div class="chart-title">Obrigações — Jun/2026</div>
+          <canvas id="chartObrig" height="180"></canvas>
+        </div>
+        <div class="table-card">
+          <div class="table-header">
+            <div class="table-title">Próximos Vencimentos</div>
+          </div>
+          <table>
+            <thead><tr><th>Obrigação</th><th>Vence</th><th>Status</th></tr></thead>
+            <tbody id="tabela-venc"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="table-card">
+        <div class="table-header">
+          <div class="table-title">Clientes — Situação Geral</div>
+          <button class="btn btn-outline btn-sm" onclick="showPage('clientes')">Ver todos</button>
+        </div>
+        <table>
+          <thead><tr><th>Cliente</th><th>Regime</th><th>Próx. Obrigação</th><th>Honorário</th><th>Status</th></tr></thead>
+          <tbody id="tabela-dash-clientes"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ===== CLIENTES ===== -->
+    <div id="page-clientes" class="page">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+        <input type="text" placeholder="🔍 Buscar cliente..." style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:9px 14px;color:var(--text);font-size:13px;width:280px;outline:none;" oninput="filtrarClientes(this.value)">
+        <button class="btn btn-gold" onclick="abrirModalCliente()">+ Novo Cliente</button>
+      </div>
+      <div class="table-card">
+        <div id="lista-clientes"></div>
+      </div>
+    </div>
+
+    <!-- ===== CALENDÁRIO ===== -->
+    <div id="page-calendario" class="page">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+        <div style="display:flex;gap:8px;align-items:center">
+          <button class="btn btn-outline btn-sm" onclick="mudarMes(-1)">‹</button>
+          <span id="cal-titulo" style="font-size:15px;font-weight:700;min-width:180px;text-align:center"></span>
+          <button class="btn btn-outline btn-sm" onclick="mudarMes(1)">›</button>
+        </div>
+        <div style="display:flex;gap:8px;font-size:11px">
+          <span style="background:#c0392b;color:#fff;padding:2px 8px;border-radius:4px">Obrigação</span>
+          <span style="background:#2980b9;color:#fff;padding:2px 8px;border-radius:4px">DAS</span>
+          <span style="background:#8e44ad;color:#fff;padding:2px 8px;border-radius:4px">SPED</span>
+          <span style="background:#27ae60;color:#fff;padding:2px 8px;border-radius:4px">IRPF</span>
+        </div>
+      </div>
+      <div class="card" style="padding:16px">
+        <div class="cal-grid" id="cal-header"></div>
+        <div class="cal-grid" id="cal-body"></div>
+      </div>
+      <div class="table-card" style="margin-top:16px">
+        <div class="table-header"><div class="table-title">Obrigações do Mês</div></div>
+        <table>
+          <thead><tr><th>Obrigação</th><th>Vencimento</th><th>Empresa</th><th>Regime</th><th>Status</th></tr></thead>
+          <tbody id="tabela-cal"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ===== IRPF ===== -->
+    <div id="page-irpf" class="page">
+      <div class="alert alert-info">Lei 15.270/2025 — Tabela IRPF 2026 com isenção ampliada até R$60.000/ano</div>
+      <div class="grid-2">
+        <div class="card">
+          <div class="form-group">
+            <label>Cliente / Contribuinte</label>
+            <select id="irpf-cliente-id" onchange="preencherClienteIRPF()">
+              <option value="">— Selecione o cliente —</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Rendimento Bruto Anual (R$)</label>
+            <input type="number" id="irpf-bruto" placeholder="Ex: 84000" oninput="calcIRPF()" step="100">
+          </div>
+          <div class="form-group">
+            <label>Contribuição Previdenciária (R$)</label>
+            <input type="number" id="irpf-prev" placeholder="Ex: 8640" oninput="calcIRPF()" step="100">
+          </div>
+          <div class="form-group">
+            <label>Dependentes</label>
+            <input type="number" id="irpf-dep" placeholder="0" min="0" max="20" oninput="calcIRPF()" value="0">
+          </div>
+          <div class="form-group">
+            <label>Despesas Médicas (R$)</label>
+            <input type="number" id="irpf-med" placeholder="0" oninput="calcIRPF()" step="100">
+          </div>
+          <div class="form-group">
+            <label>Despesas de Educação (R$) <span style="color:var(--text2);font-size:10px">limite R$3.561,50/pessoa</span></label>
+            <input type="number" id="irpf-edu" placeholder="0" oninput="calcIRPF()" step="100">
+          </div>
+          <div class="form-group">
+            <label>Contribuição PGBL (R$) <span style="color:var(--text2);font-size:10px">limite 12% renda bruta</span></label>
+            <input type="number" id="irpf-pgbl" placeholder="0" oninput="calcIRPF()" step="100">
+          </div>
+          <div class="form-group">
+            <label>Modelo de Declaração</label>
+            <select id="irpf-modelo" onchange="calcIRPF()">
+              <option value="completo">Completo (deduções reais)</option>
+              <option value="simplificado">Simplificado (20% desconto padrão)</option>
+            </select>
+          </div>
+        </div>
+        <div>
+          <div class="calc-result" id="irpf-resultado">
+            <div style="text-align:center;color:var(--text2);padding:40px 0">Preencha os dados para calcular</div>
+          </div>
+          <div id="irpf-actions" style="display:none;margin-top:12px">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+              <button class="btn btn-gold" onclick="irpfArquivar()" style="grid-column:1/-1">💾 Arquivar na Ficha do Cliente</button>
+              <button class="btn btn-pdf" onclick="irpfPDF()">📄 Baixar PDF</button>
+              <button class="btn btn-email" onclick="irpfEmail()">✉️ E-mail</button>
+              <button class="btn btn-whats" onclick="irpfWhatsApp()" style="grid-column:1/-1">💬 Enviar por WhatsApp</button>
+            </div>
+          </div>
+          <div class="card" style="margin-top:16px">
+            <div class="chart-title" style="font-size:13px;margin-bottom:12px">Tabela Progressiva 2026</div>
+            <table style="font-size:12px;width:100%;border-collapse:collapse">
+              <thead><tr style="background:var(--bg3)"><th style="padding:6px 10px;text-align:left;color:var(--text2);font-size:10px">Faixa Anual</th><th style="padding:6px 10px;color:var(--text2);font-size:10px">Alíquota</th><th style="padding:6px 10px;color:var(--text2);font-size:10px">Parcela Dedutível</th></tr></thead>
+              <tbody>
+                <tr><td style="padding:6px 10px;border-top:1px solid var(--border)">Até R$29.145,60</td><td style="padding:6px 10px;border-top:1px solid var(--border);color:var(--green)">Isento</td><td style="padding:6px 10px;border-top:1px solid var(--border)">—</td></tr>
+                <tr><td style="padding:6px 10px;border-top:1px solid var(--border)">R$29.145,61 – R$33.919,80</td><td style="padding:6px 10px;border-top:1px solid var(--border)">7,5%</td><td style="padding:6px 10px;border-top:1px solid var(--border)">R$2.185,92</td></tr>
+                <tr><td style="padding:6px 10px;border-top:1px solid var(--border)">R$33.919,81 – R$45.012,60</td><td style="padding:6px 10px;border-top:1px solid var(--border)">15%</td><td style="padding:6px 10px;border-top:1px solid var(--border)">R$4.729,91</td></tr>
+                <tr><td style="padding:6px 10px;border-top:1px solid var(--border)">R$45.012,61 – R$55.976,16</td><td style="padding:6px 10px;border-top:1px solid var(--border)">22,5%</td><td style="padding:6px 10px;border-top:1px solid var(--border)">R$8.105,86</td></tr>
+                <tr><td style="padding:6px 10px;border-top:1px solid var(--border)">Acima R$55.976,16</td><td style="padding:6px 10px;border-top:1px solid var(--border);color:var(--red)">27,5%</td><td style="padding:6px 10px;border-top:1px solid var(--border)">R$10.904,67</td></tr>
+              </tbody>
+            </table>
+            <div style="margin-top:10px;font-size:11px;color:var(--text2);line-height:1.6">
+              ✅ <b>Isenção ampliada:</b> Renda anual ≤ R$60.000 = IRPF zero (redutor aplicado)<br>
+              📉 Faixa R$60k–R$88,2k: redutor proporcional (Lei 15.270/2025)
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== DAS SIMPLES ===== -->
+    <div id="page-simples" class="page">
+      <div class="tabs">
+        <div class="tab active" onclick="switchTab(this,'tab-das')">Calcular DAS</div>
+        <div class="tab" onclick="switchTab(this,'tab-tabelas')">Tabelas Simples</div>
+        <div class="tab" onclick="switchTab(this,'tab-mei')">MEI 2026</div>
+      </div>
+
+      <div id="tab-das" class="tab-content active">
+        <div class="grid-2">
+          <div class="card">
+            <div class="form-group">
+              <label>Cliente</label>
+              <select id="das-cliente-id" onchange="preencherClienteDAS()">
+                <option value="">— Selecione o cliente —</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Receita Bruta do Mês (R$)</label>
+              <input type="number" id="das-mes" placeholder="Ex: 25000" oninput="calcDAS()" step="100">
+            </div>
+            <div class="form-group">
+              <label>Receita Bruta Acumulada 12 meses (R$)</label>
+              <input type="number" id="das-12m" placeholder="Ex: 280000" oninput="calcDAS()" step="1000">
+            </div>
+            <div class="form-group">
+              <label>Anexo Simples Nacional</label>
+              <select id="das-anexo" onchange="calcDAS()">
+                <option value="I">Anexo I — Comércio</option>
+                <option value="II">Anexo II — Indústria</option>
+                <option value="III">Anexo III — Serviços (§ 5º-A)</option>
+                <option value="IV">Anexo IV — Serviços (§ 5º-C)</option>
+                <option value="V">Anexo V — Serviços (§ 5º-I)</option>
+              </select>
+            </div>
+          </div>
+          <div>
+            <div class="calc-result" id="das-resultado">
+              <div style="text-align:center;color:var(--text2);padding:40px 0">Preencha os dados para calcular o DAS</div>
+            </div>
+            <div id="das-actions" style="display:none;margin-top:12px">
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+                <button class="btn btn-gold" onclick="dasArquivar()" style="grid-column:1/-1">💾 Arquivar na Ficha do Cliente</button>
+                <button class="btn btn-pdf" onclick="dasPDF()">📄 Baixar PDF</button>
+                <button class="btn btn-email" onclick="dasEmail()">✉️ E-mail</button>
+                <button class="btn btn-whats" onclick="dasWhatsApp()" style="grid-column:1/-1">💬 Enviar por WhatsApp</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="tab-tabelas" class="tab-content">
+        <div class="alert alert-info" style="margin-bottom:16px">Tabelas vigentes para o ano-calendário 2026 (RBT12 = Receita Bruta Total dos últimos 12 meses)</div>
+        <div class="card" style="margin-bottom:16px">
+          <div class="chart-title">Anexo I — Comércio</div>
+          <table class="anexo-table">
+            <thead><tr><th>Faixa RBT12</th><th>Alíquota Nominal</th><th>Parcela a Deduzir</th></tr></thead>
+            <tbody>
+              <tr><td>Até R$180.000</td><td>4,00%</td><td>—</td></tr>
+              <tr><td>R$180.001 – R$360.000</td><td>7,30%</td><td>R$5.940,00</td></tr>
+              <tr><td>R$360.001 – R$720.000</td><td>9,50%</td><td>R$13.860,00</td></tr>
+              <tr><td>R$720.001 – R$1.800.000</td><td>10,70%</td><td>R$22.500,00</td></tr>
+              <tr><td>R$1.800.001 – R$3.600.000</td><td>14,30%</td><td>R$87.300,00</td></tr>
+              <tr><td>R$3.600.001 – R$4.800.000</td><td>19,00%</td><td>R$378.000,00</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="card" style="margin-bottom:16px">
+          <div class="chart-title">Anexo III — Serviços (§ 5º-A)</div>
+          <table class="anexo-table">
+            <thead><tr><th>Faixa RBT12</th><th>Alíquota Nominal</th><th>Parcela a Deduzir</th></tr></thead>
+            <tbody>
+              <tr><td>Até R$180.000</td><td>6,00%</td><td>—</td></tr>
+              <tr><td>R$180.001 – R$360.000</td><td>11,20%</td><td>R$9.360,00</td></tr>
+              <tr><td>R$360.001 – R$720.000</td><td>13,50%</td><td>R$17.640,00</td></tr>
+              <tr><td>R$720.001 – R$1.800.000</td><td>16,00%</td><td>R$35.640,00</td></tr>
+              <tr><td>R$1.800.001 – R$3.600.000</td><td>21,00%</td><td>R$125.640,00</td></tr>
+              <tr><td>R$3.600.001 – R$4.800.000</td><td>33,00%</td><td>R$648.000,00</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div id="tab-mei" class="tab-content">
+        <div class="grid-3">
+          <div class="card">
+            <div class="card-icon">🏪</div>
+            <div class="card-label">MEI Comércio/Indústria</div>
+            <div class="card-value" style="font-size:22px">R$75,90</div>
+            <div class="card-sub">INSS R$70,60 + ICMS R$5,00 + Taxa R$0,30</div>
+          </div>
+          <div class="card">
+            <div class="card-icon">🔧</div>
+            <div class="card-label">MEI Serviços</div>
+            <div class="card-value" style="font-size:22px">R$80,90</div>
+            <div class="card-sub">INSS R$70,60 + ISS R$10,00 + Taxa R$0,30</div>
+          </div>
+          <div class="card">
+            <div class="card-icon">🏗️</div>
+            <div class="card-label">MEI Comércio + Serviços</div>
+            <div class="card-value" style="font-size:22px">R$85,90</div>
+            <div class="card-sub">INSS + ICMS + ISS + Taxa</div>
+          </div>
+        </div>
+        <div class="alert alert-warning" style="margin-top:16px">
+          <b>Limite MEI 2026:</b> Receita Bruta até R$81.000/ano (R$6.750/mês)<br>
+          <b>MEI Transportador Autônomo:</b> Limite especial R$251.600/ano
+        </div>
+        <div class="card" style="margin-top:16px">
+          <div class="chart-title">Obrigações do MEI</div>
+          <table style="width:100%;font-size:12px;border-collapse:collapse">
+            <thead><tr style="background:var(--bg3)"><th style="padding:8px;text-align:left;color:var(--text2);font-size:10px">Obrigação</th><th style="padding:8px;color:var(--text2);font-size:10px">Prazo</th><th style="padding:8px;color:var(--text2);font-size:10px">Onde</th></tr></thead>
+            <tbody>
+              <tr><td style="padding:8px;border-top:1px solid var(--border)">DAS-MEI Mensal</td><td style="padding:8px;border-top:1px solid var(--border)">Dia 20 de cada mês</td><td style="padding:8px;border-top:1px solid var(--border)">PGMEI</td></tr>
+              <tr><td style="padding:8px;border-top:1px solid var(--border)">DASN-SIMEI (Declaração Anual)</td><td style="padding:8px;border-top:1px solid var(--border)">31/mai do ano seguinte</td><td style="padding:8px;border-top:1px solid var(--border)">Portal MEI</td></tr>
+              <tr><td style="padding:8px;border-top:1px solid var(--border)">Relatório Mensal de Receitas</td><td style="padding:8px;border-top:1px solid var(--border)">Até dia 20</td><td style="padding:8px;border-top:1px solid var(--border)">Arquivo próprio</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== COMUNICADOS ===== -->
+    <div id="page-comunicado" class="page">
+      <div class="grid-2">
+        <div class="card">
+          <div class="form-group">
+            <label>Arquivar no Cliente</label>
+            <select id="com-cliente-id" onchange="preencherClienteCom()">
+              <option value="">— Selecione para arquivar —</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Tipo de Comunicado</label>
+            <select id="com-tipo" onchange="gerarComunicado()">
+              <option value="">Selecione...</option>
+              <option value="vencimento">Aviso de Vencimento de Obrigação</option>
+              <option value="reforma">Informativo — Reforma Tributária EC 132</option>
+              <option value="irpf">Chamada para Declaração IRPF 2026</option>
+              <option value="mei-limite">Alerta de Limite MEI</option>
+              <option value="das-atraso">Aviso de DAS em Atraso</option>
+              <option value="honorarios">Reajuste de Honorários</option>
+              <option value="boas-vindas">Boas-Vindas ao Escritório</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Nome do Cliente / Empresa</label>
+            <input type="text" id="com-cliente" placeholder="Ex: João Silva / Comércio Alfa Ltda" oninput="gerarComunicado()">
+          </div>
+          <div class="form-group">
+            <label>Nome do Contador / Responsável</label>
+            <input type="text" id="com-contador" placeholder="Ex: Dr. Pedro Salomão" oninput="gerarComunicado()" value="Dr. Pedro Salomão">
+          </div>
+          <div class="form-group">
+            <label>Nome do Escritório</label>
+            <input type="text" id="com-escritorio" placeholder="Ex: Salomão Contabilidade" oninput="gerarComunicado()" value="TRÍADE Contabilidade">
+          </div>
+          <div class="form-group">
+            <label>Dado extra (valor, data, etc.)</label>
+            <input type="text" id="com-extra" placeholder="Ex: R$1.250,00 / 20/07/2026" oninput="gerarComunicado()">
+          </div>
+          <div class="action-bar" style="flex-direction:column;gap:8px">
+            <button class="btn btn-gold" onclick="copiarComunicado()" style="width:100%">📋 Copiar Comunicado</button>
+            <div style="display:flex;gap:8px">
+              <button class="btn btn-pdf" onclick="baixarPDF('com')" style="flex:1">📄 PDF</button>
+              <button class="btn btn-email" onclick="enviarEmail('com')" style="flex:1">✉️ E-mail</button>
+              <button class="btn btn-whats" onclick="enviarWhatsApp('com')" style="flex:1">💬 WhatsApp</button>
+            </div>
+            <button class="btn" style="background:#1a3d2a;color:#5dde8d;width:100%;border:1px solid #2a6040" onclick="arquivarDocumento('com')">💾 Arquivar na Ficha do Cliente</button>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:12px;color:var(--text2);margin-bottom:8px">Pré-visualização</div>
+          <div class="preview-box" id="com-preview">Selecione o tipo de comunicado para gerar...</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== PARECERES ===== -->
+    <div id="page-parecer" class="page">
+      <div class="grid-2">
+        <div class="card">
+          <div class="form-group">
+            <label>Arquivar no Cliente</label>
+            <select id="par-cliente-id" onchange="preencherClientePar()">
+              <option value="">— Selecione para arquivar —</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Tipo de Parecer</label>
+            <select id="par-tipo" onchange="gerarParecer()">
+              <option value="">Selecione...</option>
+              <option value="regime">Recomendação de Regime Tributário</option>
+              <option value="distribuicao">Distribuição de Lucros x Pró-labore</option>
+              <option value="mei-enquadramento">Enquadramento / Desenquadramento MEI</option>
+              <option value="irpf-modelo">Modelo de Declaração IRPF</option>
+              <option value="reforma-impacto">Impacto da Reforma Tributária</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Empresa / Cliente</label>
+            <input type="text" id="par-empresa" placeholder="Razão Social ou Nome" oninput="gerarParecer()">
+          </div>
+          <div class="form-group">
+            <label>CNPJ / CPF</label>
+            <input type="text" id="par-doc" placeholder="00.000.000/0001-00" oninput="gerarParecer()">
+          </div>
+          <div class="form-group">
+            <label>Contador Responsável (CRC)</label>
+            <input type="text" id="par-crc" placeholder="Ex: CRC/GO 123456" oninput="gerarParecer()" value="CRC/GO ">
+          </div>
+          <div class="form-group">
+            <label>Dado principal (valor, regime atual, etc.)</label>
+            <input type="text" id="par-dado" placeholder="Ex: Faturamento R$480.000/ano" oninput="gerarParecer()">
+          </div>
+          <div class="action-bar" style="flex-direction:column;gap:8px">
+            <button class="btn btn-gold" onclick="copiarParecer()" style="width:100%">📋 Copiar Parecer</button>
+            <div style="display:flex;gap:8px">
+              <button class="btn btn-pdf" onclick="baixarPDF('par')" style="flex:1">📄 PDF</button>
+              <button class="btn btn-email" onclick="enviarEmail('par')" style="flex:1">✉️ E-mail</button>
+              <button class="btn btn-whats" onclick="enviarWhatsApp('par')" style="flex:1">💬 WhatsApp</button>
+            </div>
+            <button class="btn" style="background:#1a3d2a;color:#5dde8d;width:100%;border:1px solid #2a6040" onclick="arquivarDocumento('par')">💾 Arquivar na Ficha do Cliente</button>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:12px;color:var(--text2);margin-bottom:8px">Pré-visualização do Parecer</div>
+          <div class="preview-box" id="par-preview">Selecione o tipo de parecer para gerar...</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== SPED ===== -->
+    <div id="page-sped" class="page">
+      <div class="alert alert-info">Principais obrigações acessórias — EFD, DCTF, ECF, ECD e obrigações estaduais/municipais</div>
+      <div class="table-card" style="margin-bottom:16px">
+        <div class="table-header"><div class="table-title">Obrigações Federais — 2026</div></div>
+        <table>
+          <thead><tr><th>Obrigação</th><th>Periodicidade</th><th>Prazo</th><th>Regime</th><th>Multa s/ entrega</th></tr></thead>
+          <tbody>
+            <tr><td>DCTF — Declaração de Débitos e Créditos Tributários</td><td>Mensal</td><td>Dia 15 do 2º mês seguinte</td><td>Lucro Real / Presumido</td><td>2% ao mês · mín. R$500</td></tr>
+            <tr><td>EFD-Contribuições (PIS/COFINS/CPP)</td><td>Mensal</td><td>10º dia útil do 2º mês seguinte</td><td>Lucro Real / Presumido</td><td>0,25% receita · mín. R$500</td></tr>
+            <tr><td>SPED Fiscal (EFD-ICMS/IPI)</td><td>Mensal</td><td>Dia 15 do mês seguinte</td><td>LR / LP / todos com IE</td><td>R$1.500 – R$3.000</td></tr>
+            <tr><td>ECF — Escrituração Contábil Fiscal</td><td>Anual</td><td>31/jul do ano seguinte</td><td>Lucro Real / Presumido</td><td>0,25% receita · mín. R$500</td></tr>
+            <tr><td>ECD — Escrituração Contábil Digital</td><td>Anual</td><td>31/mai do ano seguinte</td><td>LR obrigatório · demais voluntário</td><td>0,25% receita · mín. R$500</td></tr>
+            <tr><td>DEFIS (Simples Nacional)</td><td>Anual</td><td>31/mar do ano seguinte</td><td>Simples Nacional</td><td>R$500/mês ou fração</td></tr>
+            <tr><td>DIRF — Declaração IR Retido na Fonte</td><td>Anual</td><td>28/fev do ano seguinte</td><td>Todos com retenção</td><td>R$200 – R$5.000</td></tr>
+            <tr><td>RAIS — Relação Anual Inf. Sociais</td><td>Anual</td><td>Fev/Mar (CAGED)</td><td>Todos com empregados</td><td>R$425,64 + R$106,40/funcionário</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="table-card">
+        <div class="table-header"><div class="table-title">Prazos EC 132 — Reforma Tributária (2026)</div></div>
+        <table>
+          <thead><tr><th>Tributo</th><th>Status 2026</th><th>Alíquota Referência</th></tr></thead>
+          <tbody>
+            <tr><td>CBS (substitui PIS + COFINS)</td><td><span class="badge badge-yellow">Fase de testes</span></td><td>~8,8%</td></tr>
+            <tr><td>IBS (substitui ICMS + ISS)</td><td><span class="badge badge-yellow">Fase de testes</span></td><td>~17-18%</td></tr>
+            <tr><td>IS — Imposto Seletivo</td><td><span class="badge badge-blue">Aprovado — LC 214</span></td><td>Varia por produto</td></tr>
+            <tr><td>PIS + COFINS (CBS em transição)</td><td><span class="badge badge-green">Vigente até 2027</span></td><td>0,65%/7,6% ou 1,65%/3%</td></tr>
+            <tr><td>ICMS (IBS em transição)</td><td><span class="badge badge-green">Vigente — redução gradual</span></td><td>Varia por estado</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ===== REFORMA ===== -->
+    <div id="page-reforma" class="page">
+      <div class="alert alert-warning">EC 132 promulgada em dez/2023 — Reforma em andamento 2026-2033</div>
+      <div class="cards">
+        <div class="card">
+          <div class="card-icon">🔵</div>
+          <div class="card-label">CBS</div>
+          <div class="card-value" style="font-size:20px">~8,8%</div>
+          <div class="card-sub">Substitui PIS + COFINS<br>Federal · 2027 completo</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">🟢</div>
+          <div class="card-label">IBS</div>
+          <div class="card-value" style="font-size:20px">~17-18%</div>
+          <div class="card-sub">Substitui ICMS + ISS<br>Est/Mun · 2029-2033</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">🔴</div>
+          <div class="card-label">IS</div>
+          <div class="card-value" style="font-size:20px">Variável</div>
+          <div class="card-sub">Imposto Seletivo<br>Produtos nocivos</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">📊</div>
+          <div class="card-label">Alíquota Total Estimada</div>
+          <div class="card-value" style="font-size:20px;color:var(--red)">~27,5%</div>
+          <div class="card-sub">CBS + IBS combinados</div>
+        </div>
+      </div>
+
+      <div class="grid-2" style="margin-bottom:16px">
+        <div class="table-card">
+          <div class="table-header"><div class="table-title">Cronograma de Transição</div></div>
+          <table>
+            <thead><tr><th>Período</th><th>O que muda</th></tr></thead>
+            <tbody>
+              <tr><td>2026</td><td>Testes CBS e IBS (alíquota simbólica 0,1%)</td></tr>
+              <tr><td>2027</td><td>CBS plena — extinção PIS/COFINS</td></tr>
+              <tr><td>2029</td><td>Início redução gradual ICMS e ISS (20%/ano)</td></tr>
+              <tr><td>2030</td><td>ICMS -40% · ISS -40%</td></tr>
+              <tr><td>2031</td><td>ICMS -60% · ISS -60%</td></tr>
+              <tr><td>2032</td><td>ICMS -80% · ISS -80%</td></tr>
+              <tr><td>2033</td><td>Extinção total ICMS e ISS · IBS pleno</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="table-card">
+          <div class="table-header"><div class="table-title">Impacto por Regime</div></div>
+          <table>
+            <thead><tr><th>Regime</th><th>Impacto principal</th><th>Atenção</th></tr></thead>
+            <tbody>
+              <tr><td>Simples Nacional</td><td>Mantido até 2033</td><td><span class="badge badge-green">Menor impacto</span></td></tr>
+              <tr><td>Lucro Presumido</td><td>Troca PIS/COFINS por CBS</td><td><span class="badge badge-yellow">Médio</span></td></tr>
+              <tr><td>Lucro Real</td><td>Créditos amplificados</td><td><span class="badge badge-blue">Oportunidade</span></td></tr>
+              <tr><td>MEI</td><td>Sem IBS/CBS diretamente</td><td><span class="badge badge-green">Protegido</span></td></tr>
+              <tr><td>Serviços em geral</td><td>ISS → IBS (aumento)</td><td><span class="badge badge-red">Alto impacto</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="chart-title">Perguntas Frequentes — Clientes</div>
+        <div style="display:grid;gap:12px;margin-top:8px">
+          <div style="background:var(--bg3);border-radius:8px;padding:14px">
+            <div style="font-weight:700;font-size:13px;margin-bottom:6px">❓ "Preciso trocar de regime por causa da reforma?"</div>
+            <div style="font-size:12px;color:var(--text2);line-height:1.6">Não imediatamente. O Simples Nacional está protegido até 2033. Para Lucro Presumido, a troca de PIS/COFINS por CBS pode impactar a carga dependendo do setor. Acompanhe as regulamentações da LC 214/2025.</div>
+          </div>
+          <div style="background:var(--bg3);border-radius:8px;padding:14px">
+            <div style="font-weight:700;font-size:13px;margin-bottom:6px">❓ "Minha NF vai mudar?"</div>
+            <div style="font-size:12px;color:var(--text2);line-height:1.6">Sim, a partir de 2027 as NF-e precisarão destacar CBS separadamente. O SPED e EFD-Contribuições serão adaptados. Seu sistema fiscal precisará de atualização.</div>
+          </div>
+          <div style="background:var(--bg3);border-radius:8px;padding:14px">
+            <div style="font-weight:700;font-size:13px;margin-bottom:6px">❓ "Setor de serviços vai pagar mais imposto?"</div>
+            <div style="font-size:12px;color:var(--text2);line-height:1.6">Provavelmente sim. O ISS atual varia de 2% a 5%. Com o IBS, a alíquota estimada é 17-18%. Serviços que hoje não têm créditos de ICMS/IPI sentirão o aumento mais fortemente.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+</div><!-- /main -->
+
+    <!-- ===== CONFIGURAÇÕES ===== -->
+    <div id="page-config" class="page">
+      <div class="grid-2">
+        <div class="card">
+          <div class="chart-title" style="margin-bottom:16px">Logo do Escritório</div>
+          <div class="logo-upload-area" onclick="document.getElementById('logo-input').click()" id="logo-drop">
+            <img id="logo-preview-img" class="logo-preview" style="display:none">
+            <div id="logo-placeholder">
+              <div style="font-size:32px;margin-bottom:8px">🖼️</div>
+              <div style="font-size:13px;color:var(--text2)">Clique para carregar a logo</div>
+              <div style="font-size:11px;color:var(--text2);margin-top:4px">PNG, JPG ou SVG — aparece nos PDFs</div>
+            </div>
+          </div>
+          <input type="file" id="logo-input" accept="image/*" style="display:none" onchange="carregarLogo(this)">
+          <button class="btn btn-outline btn-sm" onclick="removerLogo()" style="margin-top:8px;width:100%">Remover Logo</button>
+        </div>
+        <div class="card">
+          <div class="chart-title" style="margin-bottom:16px">Dados do Escritório</div>
+          <div class="form-group">
+            <label>Nome do Escritório</label>
+            <input type="text" id="cfg-escritorio" placeholder="Ex: Salomão Contabilidade">
+          </div>
+          <div class="form-group">
+            <label>CNPJ do Escritório</label>
+            <input type="text" id="cfg-cnpj" placeholder="00.000.000/0001-00">
+          </div>
+          <div class="form-group">
+            <label>Contador Responsável</label>
+            <input type="text" id="cfg-contador" placeholder="Ex: Dr. Pedro Salomão">
+          </div>
+          <div class="form-group">
+            <label>CRC</label>
+            <input type="text" id="cfg-crc" placeholder="CRC/GO 123456">
+          </div>
+          <div class="form-group">
+            <label>WhatsApp do Escritório</label>
+            <input type="text" id="cfg-whats" placeholder="5564999999999 (com DDI)">
+          </div>
+          <div class="form-group">
+            <label>E-mail do Escritório</label>
+            <input type="text" id="cfg-email" placeholder="contato@escritorio.com.br">
+          </div>
+          <button class="btn btn-gold" onclick="salvarConfig()" style="width:100%;margin-top:8px;padding:12px">💾 Salvar Configurações</button>
+          <div class="alert alert-success" id="cfg-ok" style="display:none;margin-top:8px">✅ Configurações salvas com sucesso!</div>
+        </div>
+      </div>
+      <div class="alert alert-info" style="margin-top:0">
+        Estas informações aparecem automaticamente nos PDFs de comunicados e pareceres gerados pelo sistema.
+      </div>
+    </div>
+
+    <!-- ===== KANBAN ===== -->
+    <div id="page-kanban" class="page">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+        <div>
+          <div style="font-size:13px;color:var(--text2)">Arraste os cards entre as colunas para atualizar o status</div>
+        </div>
+        <button class="btn btn-gold" onclick="abrirModalKanban(null)">+ Nova Tarefa</button>
+      </div>
+      <div class="kanban-board" id="kanban-board"></div>
+    </div>
+
+  </div><!-- /#content -->
+</div><!-- /#main -->
+
+<!-- MODAL KANBAN CARD -->
+<div class="modal-overlay" id="modal-kanban">
+  <div class="modal" style="width:460px">
+    <h3 id="kanban-modal-titulo">Nova Tarefa</h3>
+    <input type="hidden" id="kcard-id">
+    <div class="form-group">
+      <label>Título</label>
+      <input type="text" id="kcard-titulo" placeholder="Ex: Entregar DAS de junho">
+    </div>
+    <div class="grid-2">
+      <div class="form-group">
+        <label>Cliente (opcional)</label>
+        <select id="kcard-cliente">
+          <option value="">— Sem vínculo —</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Prioridade</label>
+        <select id="kcard-prioridade">
+          <option value="baixa">Baixa</option>
+          <option value="media" selected>Média</option>
+          <option value="alta">Alta</option>
+        </select>
+      </div>
+    </div>
+    <div class="grid-2">
+      <div class="form-group">
+        <label>Coluna</label>
+        <select id="kcard-col">
+          <option value="todo">A Fazer</option>
+          <option value="doing">Em Andamento</option>
+          <option value="waiting">Aguardando Cliente</option>
+          <option value="done">Concluído</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Prazo</label>
+        <input type="date" id="kcard-prazo">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="fecharModalKanban()">Cancelar</button>
+      <button class="btn btn-danger btn-sm" id="kcard-excluir-btn" onclick="excluirCardAtual()" style="display:none">Excluir</button>
+      <button class="btn btn-gold" onclick="salvarCard()">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL CLIENTE -->
+<div class="modal-overlay" id="modal-cliente">
+  <div class="modal">
+    <h3>Novo Cliente</h3>
+    <div class="grid-2">
+      <div class="form-group">
+        <label>Nome / Razão Social</label>
+        <input type="text" id="mc-nome" placeholder="Ex: João Silva">
+      </div>
+      <div class="form-group">
+        <label>CNPJ / CPF</label>
+        <input type="text" id="mc-doc" placeholder="000.000.000-00 ou 00.000.000/0001-00" oninput="mascaraDoc(this)" maxlength="18">
+      </div>
+      <div class="form-group">
+        <label>Regime Tributário</label>
+        <select id="mc-regime">
+          <option>Simples Nacional</option>
+          <option>MEI</option>
+          <option>Lucro Presumido</option>
+          <option>Lucro Real</option>
+          <option>Pessoa Física</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Honorário Mensal (R$)</label>
+        <input type="number" id="mc-honorario" placeholder="Ex: 850">
+      </div>
+      <div class="form-group">
+        <label>Telefone / WhatsApp</label>
+        <input type="text" id="mc-tel" placeholder="(64) 9xxxx-xxxx">
+      </div>
+      <div class="form-group">
+        <label>E-mail</label>
+        <input type="email" id="mc-email" placeholder="cliente@email.com">
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Atividade Principal</label>
+      <input type="text" id="mc-atividade" placeholder="Ex: Comércio varejista de alimentos">
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="fecharModal()">Cancelar</button>
+      <button class="btn btn-gold" onclick="salvarCliente()">Salvar Cliente</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL FICHA CLIENTE -->
+<div class="modal-overlay" id="modal-ficha">
+  <div class="modal" style="width:680px">
+    <!-- Cabeçalho -->
+    <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px">
+      <div class="cliente-avatar" id="ficha-avatar" style="width:52px;height:52px;font-size:22px;flex-shrink:0"></div>
+      <div style="flex:1">
+        <div style="font-size:18px;font-weight:800" id="ficha-nome"></div>
+        <div style="font-size:12px;color:var(--text2)" id="ficha-doc-regime"></div>
+      </div>
+      <div style="text-align:right">
+        <div style="font-size:18px;font-weight:800;color:var(--gold)" id="ficha-honorario"></div>
+        <div style="font-size:11px;color:var(--text2)">honorário/mês</div>
+      </div>
+    </div>
+    <!-- Tabs -->
+    <div class="tabs" style="margin-bottom:16px">
+      <div class="tab active" onclick="fichaTab(this,'ftab-dados')">📋 Dados</div>
+      <div class="tab" onclick="fichaTab(this,'ftab-obrig')">📅 Obrigações <span id="ficha-badge-ob" style="background:var(--red);color:#fff;padding:1px 6px;border-radius:8px;font-size:10px;margin-left:4px"></span></div>
+      <div class="tab" onclick="fichaTab(this,'ftab-docs')">📁 Documentos <span id="ficha-badge-docs" style="background:var(--blue);color:#fff;padding:1px 6px;border-radius:8px;font-size:10px;margin-left:4px"></span></div>
+    </div>
+    <!-- Tab Dados -->
+    <div id="ftab-dados" class="tab-content active">
+      <div class="grid-2" style="gap:10px;margin-bottom:12px">
+        <div class="card" style="padding:12px"><div class="card-label">WhatsApp</div><div style="font-size:13px;font-weight:600;margin-top:4px" id="ficha-tel"></div></div>
+        <div class="card" style="padding:12px"><div class="card-label">E-mail</div><div style="font-size:13px;font-weight:600;margin-top:4px;word-break:break-all" id="ficha-email"></div></div>
+      </div>
+      <div class="card" style="padding:12px"><div class="card-label">Atividade Principal</div><div style="font-size:13px;margin-top:4px" id="ficha-atividade"></div></div>
+    </div>
+    <!-- Tab Obrigações -->
+    <div id="ftab-obrig" class="tab-content">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+        <span style="font-size:12px;color:var(--text2)">Obrigações deste cliente</span>
+        <button class="btn btn-gold btn-sm" onclick="abrirAddObrigacao()">+ Adicionar</button>
+      </div>
+      <div id="ficha-lista-obrig"></div>
+      <!-- Form add obrigação -->
+      <div id="form-add-obrig" style="display:none;background:var(--bg3);border-radius:10px;padding:14px;margin-top:12px">
+        <div class="grid-2" style="gap:10px">
+          <div class="form-group" style="margin-bottom:8px">
+            <label>Obrigação</label>
+            <input type="text" id="new-ob-nome" placeholder="Ex: DAS Simples Nacional">
+          </div>
+          <div class="form-group" style="margin-bottom:8px">
+            <label>Dia do mês</label>
+            <input type="number" id="new-ob-dia" min="1" max="31" placeholder="20">
+          </div>
+        </div>
+        <div style="display:flex;gap:8px">
+          <button class="btn btn-gold btn-sm" onclick="salvarAddObrigacao()">Salvar</button>
+          <button class="btn btn-outline btn-sm" onclick="document.getElementById('form-add-obrig').style.display='none'">Cancelar</button>
+        </div>
+      </div>
+    </div>
+    <!-- Tab Documentos -->
+    <div id="ftab-docs" class="tab-content">
+      <div style="font-size:12px;color:var(--text2);margin-bottom:12px">Comunicados e pareceres arquivados para este cliente</div>
+      <div id="ficha-lista-docs"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-sm" style="background:#3d1212;color:#e88080" id="ficha-btn-excluir">🗑️ Excluir Cliente</button>
+      <button class="btn btn-outline" onclick="fecharFicha()">Fechar</button>
+      <button class="btn btn-gold" id="ficha-btn-editar">✏️ Editar</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast">✅ Copiado!</div>
+
+<script>
+// ===== DATA =====
+const hoje = new Date();
+document.getElementById('topbar-date').textContent = hoje.toLocaleDateString('pt-BR',{weekday:'long',day:'2-digit',month:'long',year:'numeric'});
+
+let clientes = JSON.parse(localStorage.getItem('contabos_clientes') || '[]');
+if(clientes.length === 0) {
+  clientes = [
+    {id:1, nome:'Comércio Alfa Ltda', doc:'12.345.678/0001-90', regime:'Simples Nacional', honorario:1200, tel:'(64) 9xxxx-0001', email:'alfa@email.com', atividade:'Comércio varejista', status:'Ativo', documentos:[], obrigacoes:[
+      {id:101, nome:'DAS Simples Nacional', dia:20, recorrente:true, status:'pendente'},
+      {id:102, nome:'GPS — INSS Pró-labore', dia:20, recorrente:true, status:'entregue'},
+    ]},
+    {id:2, nome:'João da Silva', doc:'123.456.789-00', regime:'Pessoa Física', honorario:600, tel:'(64) 9xxxx-0002', email:'joao@email.com', atividade:'Profissional Liberal', status:'Ativo', documentos:[], obrigacoes:[
+      {id:201, nome:'IRPF 2026 — Declaração Anual', dia:30, recorrente:false, status:'pendente'},
+    ]},
+    {id:3, nome:'Serviços Beta ME', doc:'23.456.789/0001-00', regime:'Lucro Presumido', honorario:1800, tel:'(64) 9xxxx-0003', email:'beta@email.com', atividade:'Prestação de Serviços', status:'Ativo', documentos:[], obrigacoes:[
+      {id:301, nome:'DAS Simples Nacional', dia:20, recorrente:true, status:'em_atraso'},
+      {id:302, nome:'DCTF Mensal', dia:15, recorrente:true, status:'entregue'},
+    ]},
+    {id:4, nome:'Maria Oliveira MEI', doc:'34.567.890/0001-00', regime:'MEI', honorario:350, tel:'(64) 9xxxx-0004', email:'maria@email.com', atividade:'Estética e beleza', status:'Ativo', documentos:[], obrigacoes:[
+      {id:401, nome:'DAS MEI', dia:20, recorrente:true, status:'pendente'},
+    ]},
+    {id:5, nome:'Indústria Gama Ltda', doc:'45.678.901/0001-00', regime:'Lucro Real', honorario:3500, tel:'(64) 9xxxx-0005', email:'gama@email.com', atividade:'Fabricação de móveis', status:'Ativo', documentos:[], obrigacoes:[
+      {id:501, nome:'EFD-Contribuições', dia:10, recorrente:true, status:'entregue'},
+      {id:502, nome:'SPED Fiscal', dia:15, recorrente:true, status:'pendente'},
+      {id:503, nome:'GPS — INSS Funcionários', dia:20, recorrente:true, status:'pendente'},
+    ]},
+  ];
+  salvarClientes();
+}
+// Migrar clientes antigos sem documentos/obrigacoes
+clientes = clientes.map(c => ({documentos:[], obrigacoes:[], ...c}));
+
+function salvarClientes() {
+  localStorage.setItem('contabos_clientes', JSON.stringify(clientes));
+}
+
+// ===== NAVEGAÇÃO =====
+const pages = {
+  'dashboard': {title:'Dashboard', sub:'Visão geral do escritório'},
+  'clientes': {title:'Clientes', sub:'Gestão de clientes do escritório'},
+  'calendario': {title:'Calendário Fiscal', sub:'Obrigações e vencimentos'},
+  'irpf': {title:'Calculadora IRPF 2026', sub:'Tabela Lei 15.270/2025 — Isenção ampliada R$60k'},
+  'simples': {title:'DAS / Simples Nacional', sub:'Cálculo DAS e tabelas Simples'},
+  'comunicado': {title:'Gerador de Comunicados', sub:'Comunicação profissional com clientes'},
+  'parecer': {title:'Gerador de Pareceres', sub:'Documentos técnicos contábeis'},
+  'sped': {title:'Obrigações SPED', sub:'Prazos e penalidades das obrigações acessórias'},
+  'reforma': {title:'Reforma Tributária — EC 132', sub:'IBS · CBS · IS · Cronograma 2026-2033'},
+  'config': {title:'Configurações do Escritório', sub:'Logo, dados e informações para documentos'},
+};
+
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n => {
+    if(n.getAttribute('onclick') && n.getAttribute('onclick').includes("'"+id+"'")) n.classList.add('active');
+  });
+  const info = pages[id];
+  document.getElementById('topbar-title').textContent = info.title;
+  document.getElementById('topbar-sub').textContent = info.sub;
+  if(id==='dashboard') renderDashboard();
+  if(id==='calendario') renderCalendario();
+  if(id==='clientes') renderClientes();
+  if(id==='comunicado'||id==='parecer'||id==='irpf'||id==='simples') popularSelectsClientes();
+}
+
+// ===== OBRIGAÇÕES GLOBAIS (calendário) =====
+const obrigacoesGlobais = [
+  {nome:'DAS Simples Nacional', dia:20, tipo:'das', empresa:'Comércio Alfa Ltda', regime:'Simples'},
+  {nome:'DAS Simples Nacional', dia:20, tipo:'das', empresa:'Serviços Beta ME', regime:'Simples'},
+  {nome:'DAS MEI', dia:20, tipo:'das', empresa:'Maria Oliveira MEI', regime:'MEI'},
+  {nome:'DCTF Mensal', dia:15, tipo:'obrig', empresa:'Serviços Beta ME', regime:'Lucro Presumido'},
+  {nome:'EFD-Contribuições', dia:10, tipo:'sped', empresa:'Indústria Gama Ltda', regime:'Lucro Real'},
+  {nome:'SPED Fiscal', dia:15, tipo:'sped', empresa:'Indústria Gama Ltda', regime:'Lucro Real'},
+  {nome:'GPS — INSS Pró-labore', dia:20, tipo:'obrig', empresa:'Comércio Alfa Ltda', regime:'Simples'},
+  {nome:'GPS — INSS Funcionários', dia:20, tipo:'obrig', empresa:'Indústria Gama Ltda', regime:'Lucro Real'},
+];
+
+// Todas as obrigações de todos os clientes
+function todasObrigacoes() {
+  const lista = [];
+  clientes.forEach(c => {
+    (c.obrigacoes||[]).forEach(o => lista.push({...o, clienteNome:c.nome, clienteId:c.id, regime:c.regime}));
+  });
+  return lista;
+}
+
+// ===== DASHBOARD =====
+function renderDashboard() {
+  const todas = todasObrigacoes();
+  const pendentes = todas.filter(o => o.status !== 'entregue');
+  const emAtraso = todas.filter(o => o.status === 'em_atraso');
+  const urgentes = pendentes.filter(o => {
+    const d = new Date(hoje.getFullYear(), hoje.getMonth(), o.dia);
+    const diff = (d - hoje)/(1000*60*60*24);
+    return diff >= 0 && diff <= 7;
+  });
+
+  document.getElementById('kpi-venc').textContent = urgentes.length + emAtraso.length;
+  document.getElementById('kpi-clientes').textContent = clientes.filter(c=>c.status==='Ativo').length;
+  document.getElementById('kpi-obrig').textContent = todas.length;
+
+  // Alert de risco
+  const alertDiv = document.getElementById('alert-venc');
+  const riscoTotal = urgentes.length + emAtraso.length;
+  if(riscoTotal > 0) {
+    const nomes = [...new Set([...emAtraso.map(o=>o.nome), ...urgentes.map(o=>o.nome)])].slice(0,3);
+    alertDiv.innerHTML = `⚠️ <b>${riscoTotal} obrigação(ões) em risco:</b> ${emAtraso.length} em atraso · ${urgentes.length} vencem em 7 dias — ${nomes.join(', ')}`;
+    alertDiv.style.display = 'block';
+  } else {
+    alertDiv.style.display = 'none';
+  }
+
+  // Tabela vencimentos — por cliente
+  const tb = document.getElementById('tabela-venc');
+  const sorted = [...pendentes].sort((a,b) => a.dia - b.dia);
+  tb.innerHTML = sorted.slice(0,8).map(o => {
+    const d = new Date(hoje.getFullYear(), hoje.getMonth(), o.dia);
+    const diff = Math.ceil((d - hoje)/(1000*60*60*24));
+    let badge, label;
+    if(o.status==='em_atraso') { badge='badge-red'; label='Em atraso'; }
+    else if(diff<=0) { badge='badge-red'; label='Hoje'; }
+    else if(diff<=3) { badge='badge-yellow'; label=`${diff}d`; }
+    else { badge='badge-blue'; label=`${diff}d`; }
+    return `<tr>
+      <td>${o.nome}<div style="font-size:11px;color:var(--text2)">${o.clienteNome}</div></td>
+      <td>Dia ${o.dia}</td>
+      <td><span class="badge ${badge}">${label}</span></td>
+    </tr>`;
+  }).join('') || '<tr><td colspan="3" style="text-align:center;color:var(--text2);padding:16px">Nenhuma pendência</td></tr>';
+
+  // Tabela clientes dash
+  const tc = document.getElementById('tabela-dash-clientes');
+  tc.innerHTML = clientes.slice(0,5).map(c => {
+    const obs = (c.obrigacoes||[]);
+    const atrasadas = obs.filter(o=>o.status==='em_atraso').length;
+    const pendentes2 = obs.filter(o=>o.status==='pendente').length;
+    const statusBadge = atrasadas > 0 ? `<span class="badge badge-red">⚠️ ${atrasadas} em atraso</span>` :
+                        pendentes2 > 0 ? `<span class="badge badge-yellow">${pendentes2} pendente(s)</span>` :
+                        `<span class="badge badge-green">Em dia</span>`;
+    const proxOb = obs.find(o=>o.status!=='entregue');
+    return `<tr style="cursor:pointer" onclick="abrirFichaCliente(${c.id})">
+      <td>${c.nome}</td>
+      <td><span class="badge badge-blue">${c.regime}</span></td>
+      <td>${proxOb ? proxOb.nome+' — dia '+proxOb.dia : '—'}</td>
+      <td style="color:var(--gold)">R$${c.honorario.toLocaleString('pt-BR')}</td>
+      <td>${statusBadge}</td>
+    </tr>`;
+  }).join('');
+
+  // Gráfico por status
+  const entregues = todas.filter(o=>o.status==='entregue').length;
+  const pend = todas.filter(o=>o.status==='pendente').length;
+  const atras = emAtraso.length;
+  const ctx = document.getElementById('chartObrig').getContext('2d');
+  if(window._chartObrig) window._chartObrig.destroy();
+  window._chartObrig = new Chart(ctx, {
+    type:'doughnut',
+    data:{
+      labels:['Entregues','Pendentes','Em atraso'],
+      datasets:[{data:[entregues, pend, atras], backgroundColor:['#27ae60','#C8A84B','#e74c3c'], borderWidth:0}]
+    },
+    options:{plugins:{legend:{labels:{color:'#8fa896',font:{size:12}}}},cutout:'65%'}
+  });
+}
+
+// ===== CALENDÁRIO =====
+let calMes = hoje.getMonth();
+let calAno = hoje.getFullYear();
+
+function mudarMes(d) { calMes += d; if(calMes>11){calMes=0;calAno++;}if(calMes<0){calMes=11;calAno--;} renderCalendario(); }
+
+function renderCalendario() {
+  const meses = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+  document.getElementById('cal-titulo').textContent = `${meses[calMes]} ${calAno}`;
+  const semana = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+  document.getElementById('cal-header').innerHTML = semana.map(s=>`<div class="cal-day-name">${s}</div>`).join('');
+
+  const primeiro = new Date(calAno, calMes, 1);
+  const ultimo = new Date(calAno, calMes+1, 0);
+  const inicioSemana = primeiro.getDay();
+
+  let dias = [];
+  for(let i=0;i<inicioSemana;i++) {
+    const d = new Date(calAno, calMes, -inicioSemana+1+i);
+    dias.push({d, outro:true});
+  }
+  for(let i=1;i<=ultimo.getDate();i++) dias.push({d:new Date(calAno,calMes,i), outro:false});
+  while(dias.length%7!==0) { const d=new Date(calAno,calMes+1,dias.length-ultimo.getDate()-inicioSemana+1); dias.push({d,outro:true}); }
+
+  const body = document.getElementById('cal-body');
+  body.innerHTML = dias.map(({d,outro}) => {
+    const isToday = d.getDate()===hoje.getDate() && d.getMonth()===hoje.getMonth() && d.getFullYear()===hoje.getFullYear() && !outro;
+    const events = obrigacoesGlobais.filter(o => o.dia === d.getDate() && !outro);
+    const evHtml = events.slice(0,2).map(e=>`<div class="cal-event ${e.tipo}">${e.nome}</div>`).join('');
+    return `<div class="cal-day ${isToday?'today':''} ${outro?'other-month':''}">
+      <div class="day-num">${d.getDate()}</div>
+      ${evHtml}
+      ${events.length>2?`<div style="font-size:9px;color:var(--text2)">+${events.length-2}</div>`:''}
+    </div>`;
+  }).join('');
+
+  const tb = document.getElementById('tabela-cal');
+  const obMes = obrigacoesGlobais.sort((a,b)=>a.dia-b.dia);
+  tb.innerHTML = obMes.map(o => {
+    const d = new Date(calAno, calMes, o.dia);
+    const diff = Math.ceil((d - hoje)/(1000*60*60*24));
+    const badge = d.getMonth()!==calMes ? 'badge-gray' : diff < 0 ? 'badge-red' : diff<=3 ? 'badge-yellow' : 'badge-green';
+    const status = d.getMonth()!==calMes ? 'Outro mês' : diff<0 ? 'Vencido' : diff===0 ? 'Hoje' : 'Pendente';
+    return `<tr><td>${o.nome}</td><td>${o.dia.toString().padStart(2,'0')}/${(calMes+1).toString().padStart(2,'0')}/${calAno}</td><td>${o.empresa}</td><td>${o.regime}</td><td><span class="badge ${badge}">${status}</span></td></tr>`;
+  }).join('');
+}
+
+// ===== CLIENTES =====
+function renderClientes(filtro='') {
+  const lista = document.getElementById('lista-clientes');
+  const filtered = clientes.filter(c => c.nome.toLowerCase().includes(filtro.toLowerCase()) || c.doc.includes(filtro));
+  if(filtered.length===0) { lista.innerHTML = '<div style="padding:32px;text-align:center;color:var(--text2)">Nenhum cliente encontrado</div>'; return; }
+  lista.innerHTML = filtered.map(c => `
+    <div class="cliente-row" onclick="abrirFichaCliente(${c.id})" style="cursor:pointer">
+      <div class="cliente-avatar">${c.nome.charAt(0)}</div>
+      <div class="cliente-info" style="flex:1">
+        <div class="cliente-nome">${c.nome}</div>
+        <div class="cliente-detail">${c.doc} · ${c.atividade||'—'}</div>
+      </div>
+      <span class="badge badge-blue" style="min-width:130px;text-align:center">${c.regime}</span>
+      <div style="min-width:120px;text-align:right;color:var(--gold);font-weight:700">R$${c.honorario.toLocaleString('pt-BR')}/mês</div>
+      <span class="badge badge-green">Ativo</span>
+      <div style="display:flex;gap:6px" onclick="event.stopPropagation()">
+        <button class="btn btn-outline btn-sm" onclick="editarCliente(${c.id})">✏️</button>
+        <button class="btn btn-sm" style="background:#3d1212;color:#e88080" onclick="excluirCliente(${c.id})">🗑️</button>
+      </div>
+    </div>`).join('');
+  document.getElementById('badge-clientes').textContent = filtered.length;
+}
+
+function filtrarClientes(v) { renderClientes(v); }
+
+// Máscara CPF / CNPJ automática
+function mascaraDoc(input) {
+  let v = input.value.replace(/\D/g,'');
+  if(v.length <= 11) {
+    v = v.replace(/(\d{3})(\d)/,'$1.$2')
+         .replace(/(\d{3})(\d)/,'$1.$2')
+         .replace(/(\d{3})(\d{1,2})$/,'$1-$2');
+  } else {
+    v = v.replace(/(\d{2})(\d)/,'$1.$2')
+         .replace(/(\d{3})(\d)/,'$1.$2')
+         .replace(/(\d{3})(\d)/,'$1/$2')
+         .replace(/(\d{4})(\d{1,2})$/,'$1-$2');
+  }
+  input.value = v;
+}
+
+// Ficha do cliente
+let fichaClienteId = null;
+
+function fichaTab(el, tabId) {
+  el.closest('.modal').querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  el.closest('.modal').querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById(tabId).classList.add('active');
+}
+
+function abrirFichaCliente(id) {
+  const c = clientes.find(x=>x.id===id); if(!c) return;
+  fichaClienteId = id;
+  document.getElementById('ficha-avatar').textContent = c.nome.charAt(0);
+  document.getElementById('ficha-nome').textContent = c.nome;
+  document.getElementById('ficha-doc-regime').textContent = `${c.doc} · ${c.regime}`;
+  document.getElementById('ficha-honorario').textContent = `R$${c.honorario.toLocaleString('pt-BR')}`;
+  document.getElementById('ficha-tel').textContent = c.tel || '—';
+  document.getElementById('ficha-email').textContent = c.email || '—';
+  document.getElementById('ficha-atividade').textContent = c.atividade || '—';
+  // reset tabs
+  document.querySelectorAll('#modal-ficha .tab').forEach((t,i)=>t.classList.toggle('active',i===0));
+  document.querySelectorAll('#modal-ficha .tab-content').forEach((t,i)=>t.classList.toggle('active',i===0));
+  document.getElementById('form-add-obrig').style.display='none';
+  renderFichaObrigacoes(c);
+  renderFichaDocumentos(c);
+  document.getElementById('ficha-btn-editar').onclick = ()=>{ fecharFicha(); editarCliente(id); };
+  document.getElementById('ficha-btn-excluir').onclick = ()=>excluirCliente(id);
+  document.getElementById('modal-ficha').classList.add('open');
+}
+
+function renderFichaObrigacoes(c) {
+  const obs = c.obrigacoes || [];
+  const atrasadas = obs.filter(o=>o.status==='em_atraso').length + obs.filter(o=>o.status==='pendente').length;
+  document.getElementById('ficha-badge-ob').textContent = atrasadas || '';
+  document.getElementById('ficha-lista-obrig').innerHTML = obs.length
+    ? obs.map(o => {
+        const badgeCls = o.status==='entregue' ? 'badge-green' : o.status==='em_atraso' ? 'badge-red' : 'badge-yellow';
+        const badgeTxt = o.status==='entregue' ? '✅ Entregue' : o.status==='em_atraso' ? '⚠️ Em atraso' : '🕐 Pendente';
+        return `<div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)">
+          <div style="flex:1">
+            <div style="font-size:13px;font-weight:600">${o.nome}</div>
+            <div style="font-size:11px;color:var(--text2)">Vence dia ${o.dia} · ${o.recorrente?'Mensal':'Único'}</div>
+          </div>
+          <span class="badge ${badgeCls}" style="cursor:pointer" onclick="ciclarStatus(${c.id},${o.id})">${badgeTxt}</span>
+          <button class="btn btn-sm" style="background:#3d1212;color:#e88080;padding:3px 8px" onclick="excluirObrigacao(${c.id},${o.id})">🗑️</button>
+        </div>`;
+      }).join('')
+    : '<div style="padding:20px;text-align:center;color:var(--text2);font-size:13px">Nenhuma obrigação cadastrada</div>';
+}
+
+function renderFichaDocumentos(c) {
+  const docs = c.documentos || [];
+  document.getElementById('ficha-badge-docs').textContent = docs.length || '';
+  document.getElementById('ficha-lista-docs').innerHTML = docs.length
+    ? [...docs].reverse().map(d => `
+        <div style="border:1px solid var(--border);border-radius:8px;padding:12px;margin-bottom:8px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+            <div>
+              <span class="badge ${d.tipo==='comunicado'?'badge-blue':d.tipo==='calculo'?'badge-green':'badge-yellow'}" style="font-size:10px">${d.tipo==='comunicado'?'Comunicado':d.tipo==='calculo'?'Cálculo':'Parecer'}</span>
+              <span style="font-size:13px;font-weight:600;margin-left:8px">${d.titulo}</span>
+            </div>
+            <span style="font-size:11px;color:var(--text2)">${d.data}</span>
+          </div>
+          <div style="font-size:11px;color:var(--text2);line-height:1.5;max-height:48px;overflow:hidden">${d.texto.substring(0,180)}...</div>
+          <div style="margin-top:8px;display:flex;gap:6px">
+            <button class="btn btn-outline btn-sm" onclick="verDocumento(${d.id},${c.id})">👁 Ver</button>
+            <button class="btn btn-sm" style="background:#3d1212;color:#e88080" onclick="excluirDocumento(${c.id},${d.id})">🗑️</button>
+          </div>
+        </div>`).join('')
+    : '<div style="padding:20px;text-align:center;color:var(--text2);font-size:13px">Nenhum documento arquivado ainda</div>';
+}
+
+function ciclarStatus(clienteId, obId) {
+  const c = clientes.find(x=>x.id===clienteId); if(!c) return;
+  const o = c.obrigacoes.find(x=>x.id===obId); if(!o) return;
+  const ciclo = {pendente:'entregue', entregue:'em_atraso', em_atraso:'pendente'};
+  o.status = ciclo[o.status] || 'pendente';
+  salvarClientes(); renderFichaObrigacoes(c); renderDashboard();
+}
+
+function excluirObrigacao(clienteId, obId) {
+  const c = clientes.find(x=>x.id===clienteId); if(!c) return;
+  c.obrigacoes = c.obrigacoes.filter(x=>x.id!==obId);
+  salvarClientes(); renderFichaObrigacoes(c); renderDashboard();
+  toast('Obrigação removida');
+}
+
+function abrirAddObrigacao() { document.getElementById('form-add-obrig').style.display='block'; }
+function salvarAddObrigacao() {
+  const c = clientes.find(x=>x.id===fichaClienteId); if(!c) return;
+  const nome = document.getElementById('new-ob-nome').value.trim();
+  const dia = parseInt(document.getElementById('new-ob-dia').value)||20;
+  if(!nome) { alert('Informe o nome da obrigação'); return; }
+  c.obrigacoes.push({id:Date.now(), nome, dia, recorrente:true, status:'pendente'});
+  salvarClientes(); renderFichaObrigacoes(c); renderDashboard();
+  document.getElementById('new-ob-nome').value='';
+  document.getElementById('form-add-obrig').style.display='none';
+  toast('Obrigação adicionada!');
+}
+
+function excluirDocumento(clienteId, docId) {
+  const c = clientes.find(x=>x.id===clienteId); if(!c) return;
+  c.documentos = c.documentos.filter(x=>x.id!==docId);
+  salvarClientes(); renderFichaDocumentos(c);
+  toast('Documento removido');
+}
+
+function verDocumento(docId, clienteId) {
+  const c = clientes.find(x=>x.id===clienteId); if(!c) return;
+  const d = c.documentos.find(x=>x.id===docId); if(!d) return;
+  const cfg = getCfg(); const logo = getLogo();
+  const linhas = d.texto.split('\n').map(l=>`<p style="margin:4px 0;white-space:pre-wrap">${l||'&nbsp;'}</p>`).join('');
+  const html = `<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><title>${d.titulo}</title>
+  <style>body{font-family:'Segoe UI',Arial,sans-serif;color:#1a1a1a;background:#fff;margin:0;padding:0}.page{max-width:760px;margin:0 auto;padding:40px 48px}.header{display:flex;align-items:center;justify-content:space-between;padding-bottom:20px;border-bottom:2px solid #07100A;margin-bottom:28px}.logo-img{max-height:64px;max-width:180px}.escritorio-info{text-align:right;font-size:12px;color:#555;line-height:1.6}.escritorio-nome{font-size:16px;font-weight:700;color:#07100A}.doc-body{font-size:13px;line-height:1.9}.footer{margin-top:40px;padding-top:16px;border-top:1px solid #ccc;font-size:11px;color:#888;text-align:center}@media print{.no-print{display:none}}</style></head>
+  <body><div class="page"><div class="header">${logo?`<img src="${logo}" class="logo-img">`:`<div style="font-size:20px;font-weight:900;color:#07100A">${cfg.escritorio||'Escritório Contábil'}</div>`}
+  <div class="escritorio-info"><div class="escritorio-nome">${cfg.escritorio||''}</div>${cfg.cnpj?`<div>CNPJ: ${cfg.cnpj}</div>`:''}</div></div>
+  <div class="doc-body">${linhas}</div>
+  <div class="footer">Arquivado em ${d.data} · ContabOS Sistema · TRÍADE IA</div>
+  <div class="no-print" style="text-align:center;margin-top:20px"><button onclick="window.print()" style="padding:10px 24px;background:#07100A;color:#C8A84B;border:none;border-radius:8px;cursor:pointer;font-size:14px;font-weight:700">🖨️ Imprimir / PDF</button></div>
+  </div></body></html>`;
+  const w = window.open('','_blank');
+  w.document.write(html); w.document.close();
+}
+
+function fecharFicha() { document.getElementById('modal-ficha').classList.remove('open'); }
+
+function editarCliente(id) {
+  const c = clientes.find(x=>x.id===id); if(!c) return;
+  document.getElementById('mc-nome').value = c.nome;
+  document.getElementById('mc-doc').value = c.doc;
+  document.getElementById('mc-regime').value = c.regime;
+  document.getElementById('mc-honorario').value = c.honorario;
+  document.getElementById('mc-tel').value = c.tel||'';
+  document.getElementById('mc-email').value = c.email||'';
+  document.getElementById('mc-atividade').value = c.atividade||'';
+  // marca como edição
+  document.getElementById('modal-cliente')._editId = id;
+  document.getElementById('modal-cliente').classList.add('open');
+}
+
+function excluirCliente(id) {
+  if(!confirm('Excluir este cliente?')) return;
+  clientes = clientes.filter(x=>x.id!==id);
+  salvarClientes();
+  fecharFicha();
+  renderClientes();
+  toast('Cliente removido');
+}
+
+function abrirModalCliente() {
+  document.getElementById('mc-nome').value='';
+  document.getElementById('mc-doc').value='';
+  document.getElementById('mc-regime').value='Simples Nacional';
+  document.getElementById('mc-honorario').value='';
+  document.getElementById('mc-tel').value='';
+  document.getElementById('mc-email').value='';
+  document.getElementById('mc-atividade').value='';
+  document.getElementById('modal-cliente')._editId = null;
+  document.getElementById('modal-cliente').classList.add('open');
+}
+function fecharModal() { document.getElementById('modal-cliente').classList.remove('open'); }
+
+function salvarCliente() {
+  const nome = document.getElementById('mc-nome').value.trim();
+  if(!nome) { alert('Informe o nome do cliente'); return; }
+  const dados = {
+    nome, doc:document.getElementById('mc-doc').value,
+    regime:document.getElementById('mc-regime').value,
+    honorario:parseFloat(document.getElementById('mc-honorario').value)||0,
+    tel:document.getElementById('mc-tel').value,
+    email:document.getElementById('mc-email').value,
+    atividade:document.getElementById('mc-atividade').value,
+    status:'Ativo'
+  };
+  const editId = document.getElementById('modal-cliente')._editId;
+  if(editId) {
+    const idx = clientes.findIndex(x=>x.id===editId);
+    if(idx>-1) clientes[idx] = {...clientes[idx], ...dados};
+    toast('Cliente atualizado!');
+  } else {
+    clientes.push({id:Date.now(), ...dados});
+    toast('Cliente salvo!');
+  }
+  salvarClientes();
+  fecharModal();
+  renderClientes();
+}
+
+// ===== IRPF =====
+function calcIRPF() {
+  const bruto = parseFloat(document.getElementById('irpf-bruto').value)||0;
+  const prev = parseFloat(document.getElementById('irpf-prev').value)||0;
+  const dep = parseInt(document.getElementById('irpf-dep').value)||0;
+  const med = parseFloat(document.getElementById('irpf-med').value)||0;
+  const edu = parseFloat(document.getElementById('irpf-edu').value)||0;
+  const pgbl = parseFloat(document.getElementById('irpf-pgbl').value)||0;
+  const modelo = document.getElementById('irpf-modelo').value;
+
+  if(!bruto) { document.getElementById('irpf-resultado').innerHTML='<div style="text-align:center;color:var(--text2);padding:40px 0">Preencha o rendimento bruto</div>'; return; }
+
+  const limEdu = 3561.50 * (dep+1);
+  const eduDed = Math.min(edu, limEdu);
+  const limPGBL = bruto * 0.12;
+  const pgblDed = Math.min(pgbl, limPGBL);
+  const depDed = dep * 2275.08;
+
+  let baseCalculo, descPadrao=0;
+  if(modelo==='simplificado') {
+    descPadrao = Math.min(bruto*0.20, 16754.34);
+    baseCalculo = bruto - descPadrao;
+  } else {
+    baseCalculo = bruto - prev - depDed - eduDed - med - pgblDed;
+  }
+  baseCalculo = Math.max(0, baseCalculo);
+
+  // Isenção ampliada Lei 15.270/2025
+  let irpfDevido = 0;
+  let aliquotaEfetiva = 0;
+  let faixa = '';
+  let redutorImp = 0;
+
+  // Verificar faixa de isenção ampliada
+  if(bruto <= 60000) {
+    irpfDevido = 0;
+    faixa = 'Isento (rendimento ≤ R$60.000)';
+  } else if(bruto <= 88200) {
+    // Cálculo normal com redutor proporcional
+    irpfDevido = calcTabela(baseCalculo);
+    const redutor = irpfDevido * ((88200 - bruto) / (88200 - 60000));
+    redutorImp = redutor;
+    irpfDevido = Math.max(0, irpfDevido - redutor);
+    faixa = 'Isenção parcial (Lei 15.270/2025)';
+  } else {
+    irpfDevido = calcTabela(baseCalculo);
+    faixa = getFaixa(baseCalculo);
+  }
+
+  aliquotaEfetiva = bruto > 0 ? (irpfDevido / bruto * 100) : 0;
+
+  const r = document.getElementById('irpf-resultado');
+  r.innerHTML = `
+    <div style="text-align:center;margin-bottom:16px">
+      <div style="font-size:12px;color:var(--text2)">IRPF a pagar</div>
+      <div style="font-size:36px;font-weight:900;color:${irpfDevido===0?'#27ae60':'#C8A84B'}">${irpfDevido===0?'ISENTO':'R$'+irpfDevido.toLocaleString('pt-BR',{minimumFractionDigits:2})}</div>
+      <div style="font-size:12px;color:var(--text2)">${faixa}</div>
+    </div>
+    <div class="calc-row"><span class="calc-label">Rendimento Bruto Anual</span><span class="calc-value">R$${bruto.toLocaleString('pt-BR',{minimumFractionDigits:2})}</span></div>
+    ${modelo==='simplificado'?`<div class="calc-row"><span class="calc-label">Desconto Simplificado (20%)</span><span class="calc-value">(R$${descPadrao.toLocaleString('pt-BR',{minimumFractionDigits:2})})</span></div>`:''}
+    ${modelo==='completo'?`<div class="calc-row"><span class="calc-label">Previdência</span><span class="calc-value">(R$${prev.toLocaleString('pt-BR',{minimumFractionDigits:2})})</span></div>`:''}
+    ${modelo==='completo'&&dep>0?`<div class="calc-row"><span class="calc-label">Dependentes (${dep}x R$2.275,08)</span><span class="calc-value">(R$${depDed.toLocaleString('pt-BR',{minimumFractionDigits:2})})</span></div>`:''}
+    ${modelo==='completo'&&med>0?`<div class="calc-row"><span class="calc-label">Despesas Médicas</span><span class="calc-value">(R$${med.toLocaleString('pt-BR',{minimumFractionDigits:2})})</span></div>`:''}
+    ${modelo==='completo'&&edu>0?`<div class="calc-row"><span class="calc-label">Educação (ded. R$${eduDed.toLocaleString('pt-BR',{minimumFractionDigits:2})})</span><span class="calc-value">(R$${eduDed.toLocaleString('pt-BR',{minimumFractionDigits:2})})</span></div>`:''}
+    ${modelo==='completo'&&pgbl>0?`<div class="calc-row"><span class="calc-label">PGBL (ded. R$${pgblDed.toLocaleString('pt-BR',{minimumFractionDigits:2})})</span><span class="calc-value">(R$${pgblDed.toLocaleString('pt-BR',{minimumFractionDigits:2})})</span></div>`:''}
+    <div class="calc-row"><span class="calc-label">Base de Cálculo</span><span class="calc-value">R$${baseCalculo.toLocaleString('pt-BR',{minimumFractionDigits:2})}</span></div>
+    ${redutorImp>0?`<div class="calc-row"><span class="calc-label">Redutor (Lei 15.270/2025)</span><span class="calc-value" style="color:var(--green)">(R$${redutorImp.toLocaleString('pt-BR',{minimumFractionDigits:2})})</span></div>`:''}
+    <div class="calc-row total"><span>IRPF a Pagar</span><span>R$${irpfDevido.toLocaleString('pt-BR',{minimumFractionDigits:2})}</span></div>
+    <div class="calc-row"><span class="calc-label">Alíquota Efetiva</span><span class="calc-value">${aliquotaEfetiva.toFixed(2)}%</span></div>
+    <div class="calc-row"><span class="calc-label">Imposto Mensal (÷12)</span><span class="calc-value">R$${(irpfDevido/12).toLocaleString('pt-BR',{minimumFractionDigits:2})}</span></div>
+  `;
+  // Armazena para ações
+  const clienteId = parseInt(document.getElementById('irpf-cliente-id')?.value)||0;
+  const clienteNome = clienteId ? (clientes.find(x=>x.id===clienteId)?.nome||'') : '';
+  window._irpfCalc = {
+    clienteId, clienteNome,
+    bruto, irpfDevido, aliquotaEfetiva, faixa, modelo,
+    prev, dep, depDed, med, eduDed, pgblDed, descPadrao, baseCalculo, redutorImp,
+    data: new Date().toLocaleDateString('pt-BR')
+  };
+  document.getElementById('irpf-actions').style.display = 'block';
+}
+
+function calcTabela(base) {
+  if(base<=29145.60) return 0;
+  if(base<=33919.80) return base*0.075 - 2185.92;
+  if(base<=45012.60) return base*0.15 - 4729.91;
+  if(base<=55976.16) return base*0.225 - 8105.86;
+  return base*0.275 - 10904.67;
+}
+
+function getFaixa(base) {
+  if(base<=29145.60) return 'Isento';
+  if(base<=33919.80) return '7,5%';
+  if(base<=45012.60) return '15%';
+  if(base<=55976.16) return '22,5%';
+  return '27,5%';
+}
+
+// ===== DAS SIMPLES =====
+const tabelasSimples = {
+  I:  [[180000,0.04,0],[360000,0.073,5940],[720000,0.095,13860],[1800000,0.107,22500],[3600000,0.143,87300],[4800000,0.19,378000]],
+  II: [[180000,0.045,0],[360000,0.078,5940],[720000,0.10,13860],[1800000,0.112,22500],[3600000,0.147,85500],[4800000,0.30,720000]],
+  III:[[180000,0.06,0],[360000,0.112,9360],[720000,0.135,17640],[1800000,0.16,35640],[3600000,0.21,125640],[4800000,0.33,648000]],
+  IV: [[180000,0.045,0],[360000,0.09,8100],[720000,0.102,12420],[1800000,0.14,39780],[3600000,0.22,183780],[4800000,0.33,828000]],
+  V:  [[180000,0.15,0],[360000,0.18,4500],[720000,0.195,9900],[1800000,0.205,17100],[3600000,0.23,62100],[4800000,0.305,540000]],
+};
+
+function calcDAS() {
+  const mes = parseFloat(document.getElementById('das-mes').value)||0;
+  const rbt12 = parseFloat(document.getElementById('das-12m').value)||0;
+  const anexo = document.getElementById('das-anexo').value;
+  const r = document.getElementById('das-resultado');
+
+  if(!mes || !rbt12) { r.innerHTML='<div style="text-align:center;color:var(--text2);padding:40px 0">Preencha os dados para calcular</div>'; return; }
+
+  const tabela = tabelasSimples[anexo];
+  let aliq=0, ded=0, faixa='';
+  for(const [lim,a,d] of tabela) {
+    if(rbt12<=lim) { aliq=a; ded=d; faixa=`Faixa até R$${lim.toLocaleString('pt-BR')}`; break; }
+  }
+  if(!faixa) { r.innerHTML='<div style="text-align:center;color:var(--red);padding:20px">RBT12 acima do limite do Simples Nacional (R$4.800.000)</div>'; return; }
+
+  const aliqEfetiva = (rbt12*aliq - ded)/rbt12;
+  const das = mes * aliqEfetiva;
+
+  r.innerHTML = `
+    <div style="text-align:center;margin-bottom:16px">
+      <div style="font-size:12px;color:var(--text2)">DAS a recolher</div>
+      <div style="font-size:36px;font-weight:900;color:var(--gold)">R$${das.toLocaleString('pt-BR',{minimumFractionDigits:2})}</div>
+      <div style="font-size:12px;color:var(--text2)">Vencimento: dia 20</div>
+    </div>
+    <div class="calc-row"><span class="calc-label">Receita do Mês</span><span class="calc-value">R$${mes.toLocaleString('pt-BR',{minimumFractionDigits:2})}</span></div>
+    <div class="calc-row"><span class="calc-label">RBT12</span><span class="calc-value">R$${rbt12.toLocaleString('pt-BR',{minimumFractionDigits:2})}</span></div>
+    <div class="calc-row"><span class="calc-label">Anexo</span><span class="calc-value">${anexo}</span></div>
+    <div class="calc-row"><span class="calc-label">Faixa</span><span class="calc-value">${faixa}</span></div>
+    <div class="calc-row"><span class="calc-label">Alíquota Nominal</span><span class="calc-value">${(aliq*100).toFixed(2)}%</span></div>
+    <div class="calc-row"><span class="calc-label">Dedução</span><span class="calc-value">R$${ded.toLocaleString('pt-BR',{minimumFractionDigits:2})}</span></div>
+    <div class="calc-row total"><span>Alíquota Efetiva</span><span>${(aliqEfetiva*100).toFixed(4)}%</span></div>
+    <div class="calc-row total"><span>DAS a Recolher</span><span>R$${das.toLocaleString('pt-BR',{minimumFractionDigits:2})}</span></div>
+  `;
+  const clienteId = parseInt(document.getElementById('das-cliente-id')?.value)||0;
+  const clienteNome = clienteId ? (clientes.find(x=>x.id===clienteId)?.nome||'') : '';
+  window._dasCalc = { clienteId, clienteNome, mes, rbt12, anexo, faixa, aliq, aliqEfetiva, das, data: new Date().toLocaleDateString('pt-BR') };
+  document.getElementById('das-actions').style.display = 'block';
+}
+
+// ===== POPULAR SELECTS DE CLIENTE =====
+function popularSelectsClientes() {
+  const opts = clientes.map(c=>`<option value="${c.id}">${c.nome}</option>`).join('');
+  ['com-cliente-id','par-cliente-id','irpf-cliente-id','das-cliente-id'].forEach(id=>{
+    const el = document.getElementById(id); if(!el) return;
+    const placeholder = id==='irpf-cliente-id'||id==='das-cliente-id' ? '— Selecione o cliente —' : '— Selecione para arquivar —';
+    el.innerHTML = `<option value="">${placeholder}</option>${opts}`;
+  });
+}
+
+function preencherClienteIRPF() {
+  // apenas registra — o cálculo usa campos manuais
+}
+function preencherClienteDAS() {
+  const id = parseInt(document.getElementById('das-cliente-id').value);
+  if(!id) return;
+  const c = clientes.find(x=>x.id===id);
+  if(c && c.regime) {
+    // auto-seleciona anexo conforme regime
+    const anexoMap = {'Simples Nacional':'I','MEI':'I','Lucro Presumido':'III','Lucro Real':'III','Pessoa Física':'III'};
+    const sel = document.getElementById('das-anexo');
+    if(sel && anexoMap[c.regime]) sel.value = anexoMap[c.regime];
+    calcDAS();
+  }
+}
+
+function preencherClienteCom() {
+  const id = parseInt(document.getElementById('com-cliente-id').value);
+  if(!id) return;
+  const c = clientes.find(x=>x.id===id);
+  if(c) { document.getElementById('com-cliente').value = c.nome; gerarComunicado(); }
+}
+
+function preencherClientePar() {
+  const id = parseInt(document.getElementById('par-cliente-id').value);
+  if(!id) return;
+  const c = clientes.find(x=>x.id===id);
+  if(c) { document.getElementById('par-empresa').value = c.nome; document.getElementById('par-doc').value = c.doc; gerarParecer(); }
+}
+
+// ===== ARQUIVAR DOCUMENTO =====
+function arquivarDocumento(tipo) {
+  const selId = tipo==='com' ? 'com-cliente-id' : 'par-cliente-id';
+  const prevId = tipo==='com' ? 'com-preview' : 'par-preview';
+  const tipoLabel = tipo==='com' ? 'comunicado' : 'parecer';
+  const clienteId = parseInt(document.getElementById(selId).value);
+  if(!clienteId) { alert('Selecione um cliente no campo "Arquivar no Cliente" acima'); return; }
+  const texto = document.getElementById(prevId).textContent;
+  if(!texto || texto.includes('Selecione')) { alert('Gere o documento antes de arquivar'); return; }
+  const c = clientes.find(x=>x.id===clienteId); if(!c) return;
+  const tipoSelect = document.getElementById(tipo==='com'?'com-tipo':'par-tipo');
+  const titulo = tipoSelect.options[tipoSelect.selectedIndex]?.text || tipoLabel;
+  c.documentos.push({
+    id: Date.now(),
+    tipo: tipoLabel,
+    titulo,
+    data: new Date().toLocaleDateString('pt-BR'),
+    texto
+  });
+  salvarClientes();
+  toast(`Arquivado na ficha de ${c.nome}!`);
+}
+
+// ===== COMUNICADOS =====
+const templates_com = {
+  vencimento: (c,e,extra) => `Prezado(a) ${c},\n\nEsperamos que esteja bem.\n\nVimos através desta mensagem informar que existe uma obrigação fiscal com vencimento próximo:\n\n📅 Obrigação: ${extra || 'DAS / Guia de pagamento'}\n📆 Vencimento: ${extra || 'dia 20 do mês corrente'}\n\nSolicita-se que providencie o pagamento até a data limite para evitar multas e juros.\n\nCaso tenha dúvidas ou necessite do documento, entre em contato conosco com antecedência mínima de 2 dias úteis.\n\nAtenciosamente,\n${e}`,
+  reforma: (c,e,extra) => `Prezado(a) ${c},\n\nInformamos sobre a Reforma Tributária (EC 132/2023) que está em andamento e impactará as empresas a partir de 2026.\n\n📌 Principais mudanças:\n• CBS substituirá PIS e COFINS (a partir de 2027)\n• IBS substituirá ICMS e ISS (entre 2029 e 2033)\n• Alíquota unificada estimada em 27,5% ao final da transição\n\n✅ Para o seu negócio, as mudanças começam a ser sentidas em 2027. Em 2026, haverá apenas testes com alíquota simbólica.\n\nEstamos acompanhando todas as regulamentações e a manteremos informado(a) sobre eventuais impactos.\n\nQualquer dúvida, estamos à disposição.\n\nAtenciosamente,\n${e}`,
+  irpf: (c,e,extra) => `Prezado(a) ${c},\n\nChegou o período de Declaração do Imposto de Renda Pessoa Física 2026 (ano-base 2025).\n\n📋 Documentos necessários:\n• Informe de Rendimentos do empregador (todos os empregos)\n• Extratos bancários e saldo em 31/12/2025\n• Comprovantes de despesas médicas e educação\n• Informes de rendimentos de investimentos\n• Dados de dependentes (CPF, data de nascimento)\n• Comprovante de previdência privada (PGBL)\n\n⚠️ Novidade 2026: Isenção ampliada para quem recebe até R$5.000/mês.\n\n📅 Prazo: Consulte o site da Receita Federal (normalmente até 30 de abril).\n\nOrganize esses documentos e nos envie assim que possível para evitar contratempos.\n\nAtenciosamente,\n${e}`,
+  'mei-limite': (c,e,extra) => `Prezado(a) ${c},\n\nAo analisar seu faturamento, identificamos que você está se aproximando do limite anual do MEI.\n\n📊 Situação atual:\n• Faturamento acumulado: ${extra || 'a confirmar'}\n• Limite MEI 2026: R$81.000/ano (R$6.750/mês)\n\n⚠️ Atenção: Caso ultrapasse o limite em até 20%, seu MEI será enquadrado como Microempresa (ME) retroativamente ao início do ano. Se ultrapassar em mais de 20%, o enquadramento ocorre no mês do excesso.\n\nSugerimos planejar os próximos faturamentos com atenção e, se necessário, agendar uma reunião para avaliar a transição para o Simples Nacional.\n\nEstamos à disposição para orientações.\n\nAtenciosamente,\n${e}`,
+  'das-atraso': (c,e,extra) => `Prezado(a) ${c},\n\nIdentificamos que o DAS (Documento de Arrecadação do Simples Nacional) referente a ${extra || 'competência recente'} encontra-se em aberto.\n\n⚠️ Atenção: O atraso no pagamento do DAS gera:\n• Multa de 2% sobre o valor, acrescida de 0,33% por dia de atraso\n• Juros pela taxa SELIC\n• Possível exclusão do Simples Nacional em caso de inadimplência recorrente\n\nSolicita-se que regularize a situação o quanto antes através do Portal do Simples Nacional (simples.receita.fazenda.gov.br).\n\nCaso necessite de auxílio, entre em contato conosco.\n\nAtenciosamente,\n${e}`,
+  honorarios: (c,e,extra) => `Prezado(a) ${c},\n\nPrimeiramente, agradecemos pela confiança depositada em nosso escritório.\n\nInformamos que, em função do aumento dos custos operacionais e do índice de reajuste do setor, os honorários contábeis serão reajustados conforme segue:\n\n💰 Novo valor: ${extra || 'a informar'}\n📅 Vigência: a partir do próximo mês\n\nReforçamos nosso compromisso com a qualidade dos serviços prestados, mantendo você sempre em conformidade fiscal e tributária.\n\nAgradecemos a compreensão e permanecemos à disposição para esclarecimentos.\n\nAtenciosamente,\n${e}`,
+  'boas-vindas': (c,e,extra) => `Prezado(a) ${c},\n\nSeja muito bem-vindo(a) ao nosso escritório!\n\nÉ com grande satisfação que recebemos você como nosso cliente. Nosso compromisso é garantir a regularidade fiscal e contábil do seu negócio com excelência e agilidade.\n\n✅ O que você pode esperar de nós:\n• Cumprimento de todos os prazos fiscais\n• Comunicação proativa sobre mudanças tributárias\n• Atendimento ágil às suas dúvidas\n• Análise periódica para otimização da sua carga tributária\n\n📱 Nossos canais de atendimento:\n• WhatsApp: disponível em horário comercial\n• E-mail: resposta em até 1 dia útil\n\nPara começarmos, precisaremos que você nos envie os documentos iniciais. Nossa equipe entrará em contato em breve.\n\nBem-vindo(a) à família!\n\n${e}`,
+};
+
+function gerarComunicado() {
+  const tipo = document.getElementById('com-tipo').value;
+  const cliente = document.getElementById('com-cliente').value || '[NOME DO CLIENTE]';
+  const contador = document.getElementById('com-contador').value || '[CONTADOR]';
+  const escritorio = document.getElementById('com-escritorio').value || '[ESCRITÓRIO]';
+  const extra = document.getElementById('com-extra').value;
+  const assinatura = `${contador}\n${escritorio}`;
+  const preview = document.getElementById('com-preview');
+  if(!tipo) { preview.textContent='Selecione o tipo de comunicado para gerar...'; return; }
+  preview.textContent = templates_com[tipo](cliente, assinatura, extra);
+}
+
+function copiarComunicado() {
+  const txt = document.getElementById('com-preview').textContent;
+  if(!txt||txt.includes('Selecione')) { alert('Gere um comunicado primeiro'); return; }
+  navigator.clipboard.writeText(txt);
+  toast('Comunicado copiado!');
+}
+
+// ===== PARECERES =====
+const templates_par = {
+  regime: (e,doc,crc,dado) => `PARECER CONTÁBIL — RECOMENDAÇÃO DE REGIME TRIBUTÁRIO\n${'─'.repeat(50)}\nEmpresa/Cliente: ${e||'[EMPRESA]'}\nCNPJ/CPF: ${doc||'[DOCUMENTO]'}\nData: ${hoje.toLocaleDateString('pt-BR')}\n${'─'.repeat(50)}\n\n1. OBJETO\nO presente parecer tem por objetivo analisar e recomendar o regime tributário mais adequado para a empresa/contribuinte acima identificado, com base nos dados fornecidos e na legislação vigente.\n\n2. DADOS ANALISADOS\nFaturamento/Renda: ${dado||'a informar'}\nRede Tributária Atual: a identificar\n\n3. ANÁLISE\nConsiderando o faturamento informado e a atividade exercida, procedemos à simulação comparativa entre os regimes disponíveis:\n\na) Simples Nacional — indicado para faturamento até R$4.800.000/ano. Oferece simplificação do recolhimento em guia única (DAS).\n\nb) Lucro Presumido — indicado quando a margem de lucro real é superior ao percentual de presunção. Permite distribuição de lucros isenta de IR.\n\nc) Lucro Real — obrigatório acima de R$78M/ano. Vantajoso quando há prejuízos a compensar ou elevados créditos de PIS/COFINS.\n\n4. RECOMENDAÇÃO\nCom base na análise realizada, recomenda-se a manutenção/migração para o regime mais vantajoso conforme simulação realizada em nosso escritório.\n\n5. RESSALVA\nEste parecer é emitido com base nas informações disponibilizadas. Alterações no faturamento, atividade ou legislação podem demandar revisão.\n\n${'─'.repeat(50)}\n${crc||'[CRC]'}\nContador Responsável`,
+
+  distribuicao: (e,doc,crc,dado) => `PARECER CONTÁBIL — DISTRIBUIÇÃO DE LUCROS x PRÓ-LABORE\n${'─'.repeat(50)}\nEmpresa: ${e||'[EMPRESA]'}\nCNPJ: ${doc||'[CNPJ]'}\nData: ${hoje.toLocaleDateString('pt-BR')}\n${'─'.repeat(50)}\n\n1. OBJETO\nAnálise da melhor estratégia de remuneração dos sócios: pró-labore versus distribuição de lucros.\n\n2. ANÁLISE COMPARATIVA\n\nPRÓ-LABORE:\n• Sujeito ao INSS (sócio: 11% sobre o valor)\n• Sujeito ao IRRF conforme tabela progressiva\n• Dedutível da base de cálculo do IR da empresa (Lucro Real)\n• Gera benefícios previdenciários ao sócio\n\nDISTRIBUIÇÃO DE LUCROS:\n• Isenta de IR para o sócio (art. 10, Lei 9.249/95)\n• Não sujeita ao INSS\n• Deve ser lastreada em balanço/balancete atualizado\n• Limitada ao lucro apurado\n\n3. SITUAÇÃO ANALISADA\nDados: ${dado||'a informar'}\n\n4. RECOMENDAÇÃO\nRecomenda-se fixar pró-labore no valor mínimo equivalente a 1 salário mínimo para fins previdenciários, complementando a remuneração do sócio via distribuição de lucros, que é isenta de IR. Esta estratégia é legalmente permitida e reduz a carga tributária total.\n\n⚠️ ATENÇÃO: A distribuição de lucros acima dos lucros contabilmente apurados pode ser considerada antecipação de lucros futuros e deve ser devidamente documentada.\n\n${'─'.repeat(50)}\n${crc||'[CRC]'}\nContador Responsável`,
+
+  'mei-enquadramento': (e,doc,crc,dado) => `PARECER CONTÁBIL — ANÁLISE DE ENQUADRAMENTO MEI\n${'─'.repeat(50)}\nCliente: ${e||'[CLIENTE]'}\nCPF/CNPJ: ${doc||'[DOCUMENTO]'}\nData: ${hoje.toLocaleDateString('pt-BR')}\n${'─'.repeat(50)}\n\n1. OBJETO\nAnálise das condições para enquadramento, manutenção ou desenquadramento como Microempreendedor Individual — MEI.\n\n2. REQUISITOS DO MEI (2026)\n✅ Faturamento bruto anual: até R$81.000\n✅ Um empregado contratado no máximo\n✅ Atividade permitida pela Resolução CGSN\n✅ Não pode ser sócio/titular de outra empresa\n✅ Não pode ser servidor público federal ativo\n\n3. ANÁLISE\nFaturamento informado: ${dado||'a informar'}\n\n4. CONCLUSÃO\nCom base nos dados analisados, emite-se o presente parecer com a recomendação técnica sobre a situação do cliente em relação ao MEI. Recomenda-se acompanhamento mensal do faturamento para evitar desenquadramento involuntário.\n\n${'─'.repeat(50)}\n${crc||'[CRC]'}\nContador Responsável`,
+
+  'irpf-modelo': (e,doc,crc,dado) => `PARECER CONTÁBIL — RECOMENDAÇÃO DE MODELO IRPF 2026\n${'─'.repeat(50)}\nContribuinte: ${e||'[CONTRIBUINTE]'}\nCPF: ${doc||'[CPF]'}\nData: ${hoje.toLocaleDateString('pt-BR')}\n${'─'.repeat(50)}\n\n1. OBJETO\nAnálise do modelo mais vantajoso para a Declaração de Ajuste Anual IRPF 2026.\n\n2. MODELOS DISPONÍVEIS\n\nMODELO COMPLETO:\n• Permite deduções reais (médicas ilimitadas, educação até R$3.561,50/pessoa, dependentes R$2.275,08 cada, PGBL 12% renda bruta)\n• Indicado quando as deduções reais superam 20% da renda bruta\n\nMODELO SIMPLIFICADO:\n• Desconto padrão de 20% da renda bruta (limite R$16.754,34)\n• Não requer comprovantes de despesas\n• Indicado para quem tem poucas despesas dedutíveis\n\n3. ANÁLISE DO CASO\nDados: ${dado||'a informar'}\n\n4. RECOMENDAÇÃO\nRecomenda-se realizar simulação nos dois modelos antes do envio da declaração. O sistema da Receita Federal (programa IRPF) realiza automaticamente a comparação.\n\n${'─'.repeat(50)}\n${crc||'[CRC]'}\nContador Responsável`,
+
+  'reforma-impacto': (e,doc,crc,dado) => `PARECER CONTÁBIL — IMPACTO DA REFORMA TRIBUTÁRIA (EC 132)\n${'─'.repeat(50)}\nEmpresa: ${e||'[EMPRESA]'}\nCNPJ: ${doc||'[CNPJ]'}\nData: ${hoje.toLocaleDateString('pt-BR')}\n${'─'.repeat(50)}\n\n1. OBJETO\nAnálise do impacto da Reforma Tributária (EC 132/2023 e LC 214/2025) nas operações da empresa.\n\n2. CONTEXTO\nA Emenda Constitucional 132/2023 institui a reforma do sistema tributário brasileiro, com transição prevista entre 2026 e 2033.\n\nPrincipais mudanças:\n• CBS (substituirá PIS/COFINS) — vigência plena em 2027\n• IBS (substituirá ICMS/ISS) — vigência plena em 2033\n• IS (Imposto Seletivo) — para produtos nocivos à saúde e meio ambiente\n\n3. IMPACTO ESTIMADO PARA A EMPRESA\nDados analisados: ${dado||'a informar'}\n\n4. RECOMENDAÇÕES\na) Manter-se atualizado sobre as regulamentações da CBS e IBS\nb) Avaliar se o atual regime tributário permanece vantajoso após 2027\nc) Monitorar a atualização dos sistemas de emissão de NF-e\nd) Acompanhar possíveis créditos de IBS/CBS sobre entradas\n\n5. CRONOGRAMA DE AÇÃO SUGERIDO\n• 2026: Monitoramento e planejamento\n• 2027: Adaptação CBS — verificar impacto no fluxo de caixa\n• 2029: Início da transição IBS — revisar precificação\n• 2033: Sistema completamente novo\n\n${'─'.repeat(50)}\n${crc||'[CRC]'}\nContador Responsável`,
+};
+
+function gerarParecer() {
+  const tipo = document.getElementById('par-tipo').value;
+  const empresa = document.getElementById('par-empresa').value || '[EMPRESA]';
+  const doc = document.getElementById('par-doc').value;
+  const crc = document.getElementById('par-crc').value;
+  const dado = document.getElementById('par-dado').value;
+  const preview = document.getElementById('par-preview');
+  if(!tipo) { preview.textContent='Selecione o tipo de parecer para gerar...'; return; }
+  preview.textContent = templates_par[tipo](empresa, doc, crc, dado);
+}
+
+function copiarParecer() {
+  const txt = document.getElementById('par-preview').textContent;
+  if(!txt||txt.includes('Selecione')) { alert('Gere um parecer primeiro'); return; }
+  navigator.clipboard.writeText(txt);
+  toast('Parecer copiado!');
+}
+
+// ===== TABS =====
+function switchTab(el, contentId) {
+  el.closest('.page').querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  el.closest('.page').querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById(contentId).classList.add('active');
+}
+
+// ===== TOAST =====
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = '✅ '+msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 2500);
+}
+
+// ===== CONFIGURAÇÕES =====
+function salvarConfig() {
+  const cfg = {
+    escritorio: document.getElementById('cfg-escritorio').value,
+    cnpj: document.getElementById('cfg-cnpj').value,
+    contador: document.getElementById('cfg-contador').value,
+    crc: document.getElementById('cfg-crc').value,
+    whats: document.getElementById('cfg-whats').value,
+    email: document.getElementById('cfg-email').value,
+  };
+  localStorage.setItem('contabos_config', JSON.stringify(cfg));
+  const ok = document.getElementById('cfg-ok');
+  ok.style.display = 'block';
+  setTimeout(() => ok.style.display = 'none', 3000);
+  toast('Configurações salvas!');
+}
+
+function carregarConfig() {
+  const cfg = JSON.parse(localStorage.getItem('contabos_config')||'{}');
+  if(cfg.escritorio) document.getElementById('cfg-escritorio').value = cfg.escritorio;
+  if(cfg.cnpj) document.getElementById('cfg-cnpj').value = cfg.cnpj;
+  if(cfg.contador) document.getElementById('cfg-contador').value = cfg.contador;
+  if(cfg.crc) document.getElementById('cfg-crc').value = cfg.crc;
+  if(cfg.whats) document.getElementById('cfg-whats').value = cfg.whats;
+  if(cfg.email) document.getElementById('cfg-email').value = cfg.email;
+  // pré-preenche campos de comunicado/parecer
+  if(cfg.contador) { const el=document.getElementById('com-contador'); if(el&&!el.value) el.value=cfg.contador; }
+  if(cfg.escritorio) { const el=document.getElementById('com-escritorio'); if(el&&!el.value) el.value=cfg.escritorio; }
+  if(cfg.crc) { const el=document.getElementById('par-crc'); if(el&&!el.value) el.value=cfg.crc; }
+  // logo
+  const logo = localStorage.getItem('contabos_logo');
+  if(logo) mostrarLogoPreview(logo);
+}
+
+function carregarLogo(input) {
+  const file = input.files[0]; if(!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    localStorage.setItem('contabos_logo', e.target.result);
+    mostrarLogoPreview(e.target.result);
+    toast('Logo carregada!');
+  };
+  reader.readAsDataURL(file);
+}
+
+function mostrarLogoPreview(src) {
+  const img = document.getElementById('logo-preview-img');
+  const ph = document.getElementById('logo-placeholder');
+  img.src = src; img.style.display='block'; ph.style.display='none';
+}
+
+function removerLogo() {
+  localStorage.removeItem('contabos_logo');
+  const img = document.getElementById('logo-preview-img');
+  const ph = document.getElementById('logo-placeholder');
+  img.style.display='none'; ph.style.display='block';
+  toast('Logo removida');
+}
+
+function getCfg() { return JSON.parse(localStorage.getItem('contabos_config')||'{}'); }
+function getLogo() { return localStorage.getItem('contabos_logo')||''; }
+
+// ===== PDF / EMAIL / WHATSAPP =====
+function getDocTexto(tipo) {
+  return document.getElementById(tipo==='com' ? 'com-preview' : 'par-preview').textContent;
+}
+
+function baixarPDF(tipo) {
+  const txt = getDocTexto(tipo);
+  if(!txt || txt.includes('Selecione')) { alert('Gere o documento antes de baixar'); return; }
+  const cfg = getCfg();
+  const logo = getLogo();
+  const titulo = tipo==='com' ? 'Comunicado' : 'Parecer Contábil';
+  const linhas = txt.split('\n').map(l => `<p style="margin:4px 0;white-space:pre-wrap">${l||'&nbsp;'}</p>`).join('');
+
+  const html = `<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8">
+  <title>${titulo} — ${cfg.escritorio||'ContabOS'}</title>
+  <style>
+    body{font-family:'Segoe UI',Arial,sans-serif;color:#1a1a1a;background:#fff;margin:0;padding:0}
+    .page{max-width:760px;margin:0 auto;padding:40px 48px;min-height:100vh}
+    .header{display:flex;align-items:center;justify-content:space-between;padding-bottom:20px;border-bottom:2px solid #07100A;margin-bottom:28px}
+    .logo-img{max-height:64px;max-width:180px}
+    .escritorio-info{text-align:right;font-size:12px;color:#555;line-height:1.6}
+    .escritorio-nome{font-size:16px;font-weight:700;color:#07100A}
+    .doc-body{font-size:13px;line-height:1.9;color:#222}
+    .footer{margin-top:40px;padding-top:16px;border-top:1px solid #ccc;font-size:11px;color:#888;text-align:center}
+    @media print{body{-webkit-print-color-adjust:exact;print-color-adjust:exact}.page{padding:20px 32px}}
+  </style></head><body>
+  <div class="page">
+    <div class="header">
+      ${logo ? `<img src="${logo}" class="logo-img" alt="Logo">` : `<div style="font-size:20px;font-weight:900;color:#07100A">${cfg.escritorio||'Escritório Contábil'}</div>`}
+      <div class="escritorio-info">
+        <div class="escritorio-nome">${cfg.escritorio||''}</div>
+        ${cfg.cnpj?`<div>CNPJ: ${cfg.cnpj}</div>`:''}
+        ${cfg.contador?`<div>${cfg.contador}</div>`:''}
+        ${cfg.crc?`<div>${cfg.crc}</div>`:''}
+        ${cfg.email?`<div>${cfg.email}</div>`:''}
+      </div>
+    </div>
+    <div class="doc-body">${linhas}</div>
+    <div class="footer">Documento gerado pelo ContabOS Sistema · TRÍADE IA · ${new Date().toLocaleDateString('pt-BR')}</div>
+  </div>
+  <script>window.onload=()=>{window.print();}<\/script>
+  </body></html>`;
+
+  const blob = new Blob([html], {type:'text/html'});
+  const url = URL.createObjectURL(blob);
+  const w = window.open(url, '_blank');
+  if(!w) alert('Permita pop-ups para gerar o PDF');
+}
+
+function enviarEmail(tipo) {
+  const txt = getDocTexto(tipo);
+  if(!txt || txt.includes('Selecione')) { alert('Gere o documento antes de enviar'); return; }
+  const cfg = getCfg();
+  const assunto = tipo==='com' ? `Comunicado — ${cfg.escritorio||'Escritório Contábil'}` : `Parecer Contábil — ${cfg.escritorio||'Escritório Contábil'}`;
+  const destinatario = cfg.email || '';
+  const link = `mailto:${destinatario}?subject=${encodeURIComponent(assunto)}&body=${encodeURIComponent(txt)}`;
+  window.open(link);
+}
+
+function enviarWhatsApp(tipo) {
+  const txt = getDocTexto(tipo);
+  if(!txt || txt.includes('Selecione')) { alert('Gere o documento antes de enviar'); return; }
+  const cfg = getCfg();
+  const numero = cfg.whats || '';
+  const link = `https://wa.me/${numero}?text=${encodeURIComponent(txt)}`;
+  window.open(link, '_blank');
+}
+
+// ===== AÇÕES IRPF =====
+function irpfTextoResumo() {
+  const d = window._irpfCalc; if(!d) return null;
+  const cfg = getCfg();
+  return `SIMULAÇÃO IRPF 2026 — Lei 15.270/2025
+${'─'.repeat(44)}
+${d.clienteNome ? 'Cliente: '+d.clienteNome+'\n' : ''}Data: ${d.data}
+Escritório: ${cfg.escritorio||'—'}
+${'─'.repeat(44)}
+
+Rendimento Bruto Anual:  R$${d.bruto.toLocaleString('pt-BR',{minimumFractionDigits:2})}
+Modelo de Declaração:    ${d.modelo==='completo'?'Completo (deduções reais)':'Simplificado (20%)'}
+Base de Cálculo:         R$${d.baseCalculo.toLocaleString('pt-BR',{minimumFractionDigits:2})}
+Faixa:                   ${d.faixa}
+
+IRPF A PAGAR:            R$${d.irpfDevido.toLocaleString('pt-BR',{minimumFractionDigits:2})}
+Alíquota Efetiva:        ${d.aliquotaEfetiva.toFixed(2)}%
+Imposto Mensal (÷12):    R$${(d.irpfDevido/12).toLocaleString('pt-BR',{minimumFractionDigits:2})}
+${'─'.repeat(44)}
+Documento gerado pelo ContabOS Sistema · TRÍADE IA`;
+}
+
+function irpfGerarHTML(titulo) {
+  const d = window._irpfCalc; const cfg = getCfg(); const logo = getLogo();
+  const linhas = irpfTextoResumo().split('\n').map(l=>`<p style="margin:3px 0;white-space:pre">${l||'&nbsp;'}</p>`).join('');
+  return `<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><title>${titulo}</title>
+  <style>body{font-family:'Courier New',monospace;color:#1a1a1a;background:#fff;margin:0;padding:0}.page{max-width:680px;margin:0 auto;padding:40px 48px}.header{display:flex;align-items:center;justify-content:space-between;padding-bottom:20px;border-bottom:3px solid #07100A;margin-bottom:28px}.logo-img{max-height:60px;max-width:160px}.esc{text-align:right;font-size:12px;color:#555;line-height:1.5}.esc-nome{font-size:15px;font-weight:700;color:#07100A}.destaque{background:#f5f0e0;border:2px solid #07100A;border-radius:8px;padding:16px;text-align:center;margin:20px 0}.destaque-val{font-size:32px;font-weight:900;color:#07100A}.doc-body{font-size:12px;line-height:1.8}.footer{margin-top:32px;padding-top:12px;border-top:1px solid #ccc;font-size:10px;color:#999;text-align:center}@media print{.no-print{display:none}}</style></head>
+  <body><div class="page">
+  <div class="header">${logo?`<img src="${logo}" class="logo-img">`:`<div style="font-size:18px;font-weight:900;color:#07100A">${cfg.escritorio||'ContabOS'}</div>`}
+  <div class="esc"><div class="esc-nome">${cfg.escritorio||''}</div>${cfg.contador?`<div>${cfg.contador}</div>`:''} ${cfg.crc?`<div>${cfg.crc}</div>`:''}</div></div>
+  <div class="destaque">
+    <div style="font-size:13px;color:#666;margin-bottom:6px">IRPF 2026 — ${d.clienteNome||'Simulação'} · ${d.data}</div>
+    <div style="font-size:13px">IRPF a Pagar</div>
+    <div class="destaque-val">${d.irpfDevido===0?'ISENTO':'R$'+d.irpfDevido.toLocaleString('pt-BR',{minimumFractionDigits:2})}</div>
+    <div style="font-size:13px;color:#666">Alíquota Efetiva ${d.aliquotaEfetiva.toFixed(2)}% · Mensal R$${(d.irpfDevido/12).toLocaleString('pt-BR',{minimumFractionDigits:2})}</div>
+  </div>
+  <div class="doc-body">${linhas}</div>
+  <div class="footer">Simulação gerada pelo ContabOS Sistema · TRÍADE IA · ${d.data} · Não substitui declaração oficial</div>
+  <div class="no-print" style="text-align:center;margin-top:20px"><button onclick="window.print()" style="padding:10px 24px;background:#07100A;color:#C8A84B;border:none;border-radius:8px;cursor:pointer;font-weight:700">🖨️ Imprimir / PDF</button></div>
+  </div></body></html>`;
+}
+
+function irpfPDF() {
+  if(!window._irpfCalc) { alert('Faça o cálculo primeiro'); return; }
+  const w = window.open('','_blank');
+  w.document.write(irpfGerarHTML('IRPF 2026')); w.document.close();
+}
+function irpfEmail() {
+  if(!window._irpfCalc) { alert('Faça o cálculo primeiro'); return; }
+  const cfg = getCfg(); const d = window._irpfCalc;
+  const assunto = `Simulação IRPF 2026${d.clienteNome?' — '+d.clienteNome:''}`;
+  window.open(`mailto:?subject=${encodeURIComponent(assunto)}&body=${encodeURIComponent(irpfTextoResumo())}`);
+}
+function irpfWhatsApp() {
+  if(!window._irpfCalc) { alert('Faça o cálculo primeiro'); return; }
+  window.open(`https://wa.me/?text=${encodeURIComponent(irpfTextoResumo())}`, '_blank');
+}
+function irpfArquivar() {
+  if(!window._irpfCalc) { alert('Faça o cálculo primeiro'); return; }
+  const d = window._irpfCalc;
+  const clienteId = d.clienteId || parseInt(document.getElementById('irpf-cliente-id')?.value)||0;
+  if(!clienteId) { alert('Selecione o cliente para arquivar'); return; }
+  const c = clientes.find(x=>x.id===clienteId); if(!c) return;
+  c.documentos.push({ id:Date.now(), tipo:'calculo', titulo:`IRPF 2026 — ${d.data}`, data:d.data, texto:irpfTextoResumo() });
+  salvarClientes();
+  toast(`Cálculo arquivado na ficha de ${c.nome}!`);
+}
+
+// ===== AÇÕES DAS =====
+function dasTextoResumo() {
+  const d = window._dasCalc; if(!d) return null;
+  const cfg = getCfg();
+  return `CÁLCULO DAS — SIMPLES NACIONAL
+${'─'.repeat(44)}
+${d.clienteNome ? 'Cliente: '+d.clienteNome+'\n' : ''}Data: ${d.data}
+Escritório: ${cfg.escritorio||'—'}
+${'─'.repeat(44)}
+
+Receita do Mês:          R$${d.mes.toLocaleString('pt-BR',{minimumFractionDigits:2})}
+RBT12 (últimos 12m):     R$${d.rbt12.toLocaleString('pt-BR',{minimumFractionDigits:2})}
+Anexo:                   ${d.anexo}
+Faixa:                   ${d.faixa}
+Alíquota Nominal:        ${(d.aliq*100).toFixed(2)}%
+Alíquota Efetiva:        ${(d.aliqEfetiva*100).toFixed(4)}%
+
+DAS A RECOLHER:          R$${d.das.toLocaleString('pt-BR',{minimumFractionDigits:2})}
+Vencimento:              Dia 20 do mês seguinte
+${'─'.repeat(44)}
+Gerado pelo ContabOS Sistema · TRÍADE IA`;
+}
+
+function dasPDF() {
+  if(!window._dasCalc) { alert('Faça o cálculo primeiro'); return; }
+  const d = window._dasCalc; const cfg = getCfg(); const logo = getLogo();
+  const html = `<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><title>DAS Simples</title>
+  <style>body{font-family:'Courier New',monospace;color:#1a1a1a;background:#fff;margin:0;padding:0}.page{max-width:680px;margin:0 auto;padding:40px 48px}.header{display:flex;align-items:center;justify-content:space-between;padding-bottom:16px;border-bottom:3px solid #07100A;margin-bottom:24px}.logo-img{max-height:56px}.destaque{background:#e8f4fd;border:2px solid #2980b9;border-radius:8px;padding:16px;text-align:center;margin:20px 0}.pre{font-size:12px;line-height:1.8;white-space:pre}.footer{margin-top:32px;padding-top:12px;border-top:1px solid #ccc;font-size:10px;color:#999;text-align:center}@media print{.no-print{display:none}}</style></head>
+  <body><div class="page">
+  <div class="header">${logo?`<img src="${logo}" class="logo-img">`:`<div style="font-size:18px;font-weight:900;color:#07100A">${cfg.escritorio||'ContabOS'}</div>`}<div style="text-align:right;font-size:12px">${cfg.contador||''}<br>${cfg.crc||''}</div></div>
+  <div class="destaque"><div style="font-size:13px;color:#555">${d.clienteNome||'Simples Nacional'} · ${d.data}</div><div style="font-size:13px">DAS a Recolher</div><div style="font-size:32px;font-weight:900;color:#07100A">R$${d.das.toLocaleString('pt-BR',{minimumFractionDigits:2})}</div><div style="font-size:12px;color:#555">Vence dia 20 · Anexo ${d.anexo} · Efetiva ${(d.aliqEfetiva*100).toFixed(4)}%</div></div>
+  <div class="pre">${dasTextoResumo()}</div>
+  <div class="footer">Gerado pelo ContabOS Sistema · TRÍADE IA · Não substitui guia oficial do Simples</div>
+  <div class="no-print" style="text-align:center;margin-top:16px"><button onclick="window.print()" style="padding:10px 24px;background:#07100A;color:#C8A84B;border:none;border-radius:8px;cursor:pointer;font-weight:700">🖨️ Imprimir / PDF</button></div>
+  </div></body></html>`;
+  const w = window.open('','_blank'); w.document.write(html); w.document.close();
+}
+function dasEmail() {
+  if(!window._dasCalc) { alert('Faça o cálculo primeiro'); return; }
+  const d = window._dasCalc;
+  window.open(`mailto:?subject=${encodeURIComponent('DAS Simples Nacional — '+d.data)}&body=${encodeURIComponent(dasTextoResumo())}`);
+}
+function dasWhatsApp() {
+  if(!window._dasCalc) { alert('Faça o cálculo primeiro'); return; }
+  window.open(`https://wa.me/?text=${encodeURIComponent(dasTextoResumo())}`, '_blank');
+}
+function dasArquivar() {
+  if(!window._dasCalc) { alert('Faça o cálculo primeiro'); return; }
+  const d = window._dasCalc;
+  const clienteId = d.clienteId || parseInt(document.getElementById('das-cliente-id')?.value)||0;
+  if(!clienteId) { alert('Selecione o cliente para arquivar'); return; }
+  const c = clientes.find(x=>x.id===clienteId); if(!c) return;
+  c.documentos.push({ id:Date.now(), tipo:'calculo', titulo:`DAS ${d.data} — R$${d.das.toLocaleString('pt-BR',{minimumFractionDigits:2})}`, data:d.data, texto:dasTextoResumo() });
+  salvarClientes();
+  toast(`DAS arquivado na ficha de ${c.nome}!`);
+}
+
+// ===== LOGIN =====
+function initLogin() {
+  const stored = localStorage.getItem('contabos_pwd');
+  const ls = document.getElementById('login-screen');
+  if (!stored) {
+    document.getElementById('login-sub-text').textContent = 'Primeiro acesso — crie uma senha para proteger seus dados';
+    document.getElementById('login-btn-label').textContent = 'Criar senha e entrar';
+    document.getElementById('login-reset-link').style.display = 'none';
+  } else {
+    document.getElementById('login-sub-text').textContent = 'Sistema Operacional Contábil · TRÍADE IA';
+    document.getElementById('login-btn-label').textContent = 'Entrar';
+    document.getElementById('login-reset-link').style.display = 'block';
+  }
+  ls.style.display = 'flex';
+  setTimeout(() => document.getElementById('login-pwd').focus(), 100);
+}
+
+function fazerLogin() {
+  const pwd = document.getElementById('login-pwd').value.trim();
+  const err = document.getElementById('login-error');
+  err.textContent = '';
+  if (!pwd || pwd.length < 4) { err.textContent = 'A senha deve ter ao menos 4 caracteres.'; return; }
+  const stored = localStorage.getItem('contabos_pwd');
+  if (!stored) {
+    localStorage.setItem('contabos_pwd', btoa(encodeURIComponent(pwd)));
+    document.getElementById('login-screen').style.display = 'none';
+    toast('Senha criada! Bem-vindo ao ContabOS.');
+  } else {
+    if (btoa(encodeURIComponent(pwd)) === stored) {
+      document.getElementById('login-screen').style.display = 'none';
+    } else {
+      err.textContent = 'Senha incorreta. Tente novamente.';
+      document.getElementById('login-pwd').value = '';
+      document.getElementById('login-pwd').focus();
+    }
+  }
+}
+
+function logout() {
+  document.getElementById('login-pwd').value = '';
+  document.getElementById('login-error').textContent = '';
+  initLogin();
+}
+
+function resetarSenha() {
+  if(!confirm('Isso vai apagar a senha atual. Você precisará criar uma nova ao entrar. Continuar?')) return;
+  localStorage.removeItem('contabos_pwd');
+  document.getElementById('login-pwd').value = '';
+  initLogin();
+  toast('Senha removida. Crie uma nova senha ao entrar.');
+}
+
+// ===== BACKUP EXPORT / IMPORT =====
+function exportarDados() {
+  const cfg = getCfg();
+  const escritorio = cfg.escritorio || 'contabos';
+  const data = { _versao: '1.0', _exportado_em: new Date().toISOString() };
+  ['contabos_clientes','contabos_config','contabos_kanban'].forEach(k => {
+    const v = localStorage.getItem(k);
+    if (v) try { data[k] = JSON.parse(v); } catch(e) {}
+  });
+  const logo = localStorage.getItem('contabos_logo');
+  if (logo) data.contabos_logo_raw = logo;
+  const blob = new Blob([JSON.stringify(data, null, 2)], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `contabos_backup_${new Date().toISOString().slice(0,10)}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+  toast('Backup exportado com sucesso!');
+}
+
+function importarDados(input) {
+  const file = input.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const data = JSON.parse(e.target.result);
+      if (!data._versao) throw new Error('Arquivo inválido');
+      if (data.contabos_clientes) localStorage.setItem('contabos_clientes', JSON.stringify(data.contabos_clientes));
+      if (data.contabos_config)   localStorage.setItem('contabos_config', JSON.stringify(data.contabos_config));
+      if (data.contabos_kanban)   localStorage.setItem('contabos_kanban', JSON.stringify(data.contabos_kanban));
+      if (data.contabos_logo_raw) localStorage.setItem('contabos_logo', data.contabos_logo_raw);
+      toast('Dados restaurados! Recarregando...');
+      setTimeout(() => location.reload(), 1500);
+    } catch(err) {
+      alert('Arquivo inválido. Use apenas backups gerados pelo ContabOS.');
+    }
+  };
+  reader.readAsText(file);
+  input.value = '';
+}
+
+// ===== KANBAN =====
+const KB_COLS = [
+  { id:'todo',    label:'A Fazer',           color:'var(--text2)' },
+  { id:'doing',   label:'Em Andamento',      color:'var(--blue)' },
+  { id:'waiting', label:'Aguardando Cliente',color:'var(--gold)' },
+  { id:'done',    label:'Concluído',         color:'var(--green)' },
+];
+let kanbanCards = JSON.parse(localStorage.getItem('contabos_kanban') || '[]');
+let _dragId = null;
+
+function salvarKanban() { localStorage.setItem('contabos_kanban', JSON.stringify(kanbanCards)); }
+
+function renderKanban() {
+  const board = document.getElementById('kanban-board');
+  if (!board) return;
+  board.innerHTML = KB_COLS.map(col => {
+    const cards = kanbanCards.filter(c => c.col === col.id);
+    return `<div class="kanban-col" id="kcol-${col.id}"
+        ondragover="event.preventDefault();kDragOver(this)"
+        ondrop="kDrop(this,'${col.id}')"
+        ondragleave="this.classList.remove('drag-over')">
+      <div class="kanban-col-header">
+        <div class="kanban-col-title" style="color:${col.color}">${col.label}</div>
+        <div class="kanban-count">${cards.length}</div>
+      </div>
+      ${cards.map(card => {
+        const prazoFmt = card.prazo ? new Date(card.prazo+'T12:00').toLocaleDateString('pt-BR',{day:'2-digit',month:'short'}) : '';
+        return `<div class="kanban-card" draggable="true" id="kcard-${card.id}"
+            ondragstart="kDragStart(event,'${card.id}')"
+            ondragend="kDragEnd(event)"
+            ondblclick="abrirModalKanban('${card.id}')">
+          <div class="kanban-card-title">${card.titulo}</div>
+          <div class="kanban-card-meta">
+            ${card.cliente ? `<span>👤 ${card.cliente}</span>` : ''}
+            ${prazoFmt ? `<span>📅 ${prazoFmt}</span>` : ''}
+            ${card.prioridade ? `<span class="p-${card.prioridade}">● ${card.prioridade}</span>` : ''}
+          </div>
+        </div>`;
+      }).join('')}
+      <button class="kanban-add" onclick="abrirModalKanban(null,'${col.id}')">+ Adicionar</button>
+    </div>`;
+  }).join('');
+}
+
+function kDragStart(e, id) {
+  _dragId = id;
+  setTimeout(() => document.getElementById('kcard-'+id)?.classList.add('dragging'), 0);
+  e.dataTransfer.effectAllowed = 'move';
+}
+function kDragEnd() {
+  document.querySelectorAll('.kanban-card').forEach(c => c.classList.remove('dragging'));
+  document.querySelectorAll('.kanban-col').forEach(c => c.classList.remove('drag-over'));
+  _dragId = null;
+}
+function kDragOver(col) {
+  document.querySelectorAll('.kanban-col').forEach(c => c.classList.remove('drag-over'));
+  col.classList.add('drag-over');
+}
+function kDrop(col, colId) {
+  col.classList.remove('drag-over');
+  if (!_dragId) return;
+  const card = kanbanCards.find(c => c.id === _dragId);
+  if (card) { card.col = colId; salvarKanban(); renderKanban(); }
+}
+
+function abrirModalKanban(id, defaultCol) {
+  const mo = document.getElementById('modal-kanban');
+  const sel = document.getElementById('kcard-cliente');
+  sel.innerHTML = '<option value="">— Sem vínculo —</option>' +
+    clientes.map(c => `<option value="${c.nome}">${c.nome}</option>`).join('');
+  if (id) {
+    const card = kanbanCards.find(c => c.id === id);
+    if (!card) return;
+    document.getElementById('kanban-modal-titulo').textContent = 'Editar Tarefa';
+    document.getElementById('kcard-id').value = id;
+    document.getElementById('kcard-titulo').value = card.titulo;
+    document.getElementById('kcard-cliente').value = card.cliente || '';
+    document.getElementById('kcard-prioridade').value = card.prioridade || 'media';
+    document.getElementById('kcard-col').value = card.col;
+    document.getElementById('kcard-prazo').value = card.prazo || '';
+    document.getElementById('kcard-excluir-btn').style.display = 'inline-block';
+  } else {
+    document.getElementById('kanban-modal-titulo').textContent = 'Nova Tarefa';
+    document.getElementById('kcard-id').value = '';
+    document.getElementById('kcard-titulo').value = '';
+    document.getElementById('kcard-cliente').value = '';
+    document.getElementById('kcard-prioridade').value = 'media';
+    document.getElementById('kcard-col').value = defaultCol || 'todo';
+    document.getElementById('kcard-prazo').value = '';
+    document.getElementById('kcard-excluir-btn').style.display = 'none';
+  }
+  mo.classList.add('open');
+}
+function fecharModalKanban() { document.getElementById('modal-kanban').classList.remove('open'); }
+
+function salvarCard() {
+  const titulo = document.getElementById('kcard-titulo').value.trim();
+  if (!titulo) { alert('Informe o título da tarefa'); return; }
+  const id = document.getElementById('kcard-id').value;
+  const payload = {
+    id: id || Date.now().toString(),
+    col: document.getElementById('kcard-col').value,
+    titulo,
+    cliente: document.getElementById('kcard-cliente').value,
+    prioridade: document.getElementById('kcard-prioridade').value,
+    prazo: document.getElementById('kcard-prazo').value,
+  };
+  if (id) {
+    const idx = kanbanCards.findIndex(c => c.id === id);
+    if (idx >= 0) kanbanCards[idx] = payload;
+  } else {
+    kanbanCards.push(payload);
+  }
+  salvarKanban();
+  fecharModalKanban();
+  renderKanban();
+  toast(id ? 'Tarefa atualizada!' : 'Tarefa criada!');
+}
+
+function excluirCardAtual() {
+  const id = document.getElementById('kcard-id').value;
+  if (!id) return;
+  if (!confirm('Excluir esta tarefa?')) return;
+  kanbanCards = kanbanCards.filter(c => c.id !== id);
+  salvarKanban();
+  fecharModalKanban();
+  renderKanban();
+}
+
+// ===== INIT =====
+carregarConfig();
+popularSelectsClientes();
+renderDashboard();
+renderCalendario();
+renderClientes();
+document.getElementById('badge-cal').textContent = obrigacoesGlobais.filter(o => {
+  const d = new Date(hoje.getFullYear(), hoje.getMonth(), o.dia);
+  return Math.ceil((d-hoje)/(1000*60*60*24)) <= 7 && Math.ceil((d-hoje)/(1000*60*60*24)) >= 0;
+}).length;
+initLogin();
+</script>
+</body>
+</html>
