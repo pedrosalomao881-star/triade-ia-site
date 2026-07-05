@@ -1,33 +1,15 @@
 {
   buildCommand: next build,
   outputDirectory: .next,
-  rewrites: [
-    {
-      source: /contabos.html,
-      destination: /contabos.html
-    },
-    {
-      source: /fui-taxado.html,
-      destination: /fui-taxado.html
-    },
-    {
-      source: /soaf-privado-empresario.html,
-      destination: /soaf-privado-empresario.html
-    },
-    {
-      source: /soaf-privado-contador.html,
-      destination: /soaf-privado-contador.html
-    }
+  domains: [
+    triadeiaos.com,
+    www.triadeiaos.com,
+    app.triadeiaos.com,
+    contabos.triadeiaos.com,
+    soaf-empresa.triadeiaos.com,
+    soaf-contador.triadeiaos.com
   ],
-  headers: [
-    {
-      source: /public/(.*),
-      headers: [
-        {
-          key: Cache-Control,
-          value: public, max-age=31536000
-        }
-      ]
-    }
-  ]
+  env: {
+    INTERNO_PASSWORD: triade2026
+  }
 }
