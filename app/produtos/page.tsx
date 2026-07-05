@@ -34,19 +34,19 @@ export default function ProdutosPage() {
   ];
 
   return (
-    <main className=min-h-screen bg-gradient-to-b from-slate-900 to-slate-800>
-      <div className=container mx-auto px-4 py-16>
-        <h1 className=text-4xl font-bold text-white mb-4>Nossos Produtos</h1>
-        <p className=text-gray-300 mb-12>
+    <main className="min-h-screen bg-gradient-to-b from-slate-900 to-slate-800">
+      <div className="container mx-auto px-4 py-16">
+        <h1 className="text-4xl font-bold text-white mb-4">Nossos Produtos</h1>
+        <p className="text-gray-300 mb-12">
           Soluções de inteligência artificial para negócios e gestão pública
         </p>
 
-        <div className=grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {produtos.map((produto) => (
             <Link key={produto.id} href={produto.href}>
-              <div className=bg-slate-800 rounded-lg p-6 hover:bg-slate-700 transition cursor-pointer border border-slate-700 h-full>
-                <h3 className=text-lg font-semibold text-white mb-2>{produto.nome}</h3>
-                <p className=text-gray-300 text-sm>{produto.descricao}</p>
+              <div className="bg-slate-800 rounded-lg p-6 hover:bg-slate-700 transition cursor-pointer border border-slate-700 h-full">
+                <h3 className="text-lg font-semibold text-white mb-2">{produto.nome}</h3>
+                <p className="text-gray-300 text-sm">{produto.descricao}</p>
               </div>
             </Link>
           ))}
