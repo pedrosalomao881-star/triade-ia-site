@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard Administrativo - CreditOS</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+:root{
+  --bg:#07101e;--bg2:#0c1830;--bg3:#112040;
+  --brand:#6366f1;--brand2:#818cf8;--brand-glow:rgba(99,102,241,0.12);
+  --green:#10b981;--green2:#34d399;--amber:#f59e0b;--red:#ef4444;
+  --ice:#f0f4ff;--muted:rgba(240,244,255,0.5);--dim:rgba(240,244,255,0.25);
+  --border:rgba(240,244,255,0.07);
+}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--ice);line-height:1.6;font-size:14px}
+
+/* ── LAYOUT ──────────────────────────────── */
+#admin-login{position:fixed;inset:0;z-index:9999;background:var(--bg);display:flex;align-items:center;justify-content:center}
+#admin-app{display:none;min-height:100vh;display:flex;flex-direction:column}
+#admin-header{background:var(--bg2);border-bottom:1px solid var(--border);padding:20px 24px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100}
+#admin-content{flex:1;padding:24px;overflow-auto}
+
+/* ── LOGIN ──────────────────────────────── */
+.login-card{background:var(--bg2);border:1px solid rgba(99,102,241,0.2);border-radius:20px;padding:48px;width:380px;text-align:center;box-shadow:0 32px 80px rgba(0,0,0,0.6)}
+.login-card h1{font-size:24px;font-weight:800;margin-bottom:8px}
+.login-card h1 span{color:var(--brand)}
+.login-card p{font-size:13px;color:var(--muted);margin-bottom:24px}
+.login-input{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:12px 16px;color:var(--ice);margin-bottom:12px;outline:none}
+.login-input:focus{border-color:var(--brand);box-shadow:0 0 0 3px rgba(99,102,241,0.15)}
+.login-btn{width:100%;background:var(--brand);color:#fff;border:none;border-radius:10px;padding:12px;font-weight:700;cursor:pointer;transition:.15s}
+.login-btn:hover{background:var(--brand2);box-shadow:0 8px 24px rgba(99,102,241,0.3)}
+
+/* ── GRID ────────────────────────────────── */
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px;margin-bottom:24px}
+.stat-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:20px}
+.stat-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px}
+.stat-value{font-size:28px;font-weight:800;color:var(--brand2);line-height:1}
+.stat-sub{font-size:12px;color:var(--muted);margin-top:8px}
+
+/* ── TABLE ──────────────────────────────── */
+.table-container{background:var(--bg2);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.table-header{background:var(--bg3);padding:16px 20px;border-bottom:1px solid var(--border);display:grid;grid-template-columns:1fr 2fr 1fr 1fr 1fr 1fr;gap:12px;font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);letter-spacing:.06em}
+.table-row{display:grid;grid-template-columns:1fr 2fr 1fr 1fr 1fr 1fr;gap:12px;padding:14px 20px;border-bottom:1px solid var(--border);align-items:center;font-size:13px}
+.table-row:last-child{border-bottom:none}
+.table-row:hover{background:var(--bg3)}
+.status-badge{display:inline-block;padding:4px 10px;border-radius:6px;font-size:11px;font-weight:700;text-align:center}
+.status-active{background:rgba(16,185,129,0.15);color:var(--green2)}
+.status-expired{background:rgba(239,68,68,0.15);color:#f87171}
+.status-expiring{background:rgba(245,158,11,0.15);color:var(--amber)}
+
+/* ── BUTTONS ────────────────────────────── */
+.btn-group{display:flex;gap:8px}
+.btn-sm{padding:6px 12px;font-size:11px;border:none;border-radius:6px;cursor:pointer;transition:.15s;font-weight:600}
+.btn-extend{background:rgba(99,102,241,0.2);color:var(--brand2);border:1px solid var(--brand)}
+.btn-revoke{background:rgba(239,68,68,0.2);color:#f87171;border:1px solid rgba(239,68,68,0.3)}
+.btn-extend:hover{background:var(--brand);color:#fff}
+.btn-revoke:hover{background:#ef4444;color:#fff}
+
+/* ── HEADER ─────────────────────────────── */
+.header-title{font-size:20px;font-weight:800}
+.header-info{font-size:12px;color:var(--muted)}
+.logout-btn{background:transparent;border:1px solid var(--red);color:var(--red);padding:8px 16px;border-radius:8px;cursor:pointer;font-size:12px;font-weight:600}
+.logout-btn:hover{background:var(--red);color:#fff}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="admin-login">
+  <div class="login-card">
+    <h1>Admin<span>OS</span></h1>
+    <p>Painel de Controle CreditOS</p>
+    <input type="password" id="admin-pwd" placeholder="Senha de administrador" class="login-input">
+    <button class="login-btn" onclick="loginAdmin()">Acessar</button>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="admin-app">
+  <!-- HEADER -->
+  <div id="admin-header">
+    <div>
+      <div class="header-title">CreditOS Admin Panel</div>
+      <div class="header-info">Gerenciamento de usuários e assinaturas</div>
+    </div>
+    <button class="logout-btn" onclick="logoutAdmin()">Sair</button>
+  </div>
+
+  <!-- CONTENT -->
+  <div id="admin-content">
+    <!-- STATS -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-label">Usuários Ativos</div>
+        <div class="stat-value" id="stat-usuarios">0</div>
+        <div class="stat-sub">Conectados agora</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Pareceres Gerados</div>
+        <div class="stat-value" id="stat-pareceres">0</div>
+        <div class="stat-sub">Total do sistema</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Receita Mensal</div>
+        <div class="stat-value" id="stat-receita">R$ 0</div>
+        <div class="stat-sub">MRR (Monthly Recurring)</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Assinaturas Ativas</div>
+        <div class="stat-value" id="stat-subs">0</div>
+        <div class="stat-sub">Planos ativos</div>
+      </div>
+    </div>
+
+    <!-- TABELA DE USUÁRIOS -->
+    <h2 style="margin-bottom:16px;font-size:18px">Usuários e Assinaturas</h2>
+    <div class="table-container">
+      <div class="table-header">
+        <div>ID</div>
+        <div>Email / Nome</div>
+        <div>Plano</div>
+        <div>Tempo Restante</div>
+        <div>Status</div>
+        <div>Ações</div>
+      </div>
+      <div id="users-list"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const ADMIN_PWD = 'admin2026';
+
+// ══════════════════════════════════════════════
+// LOGIN
+// ══════════════════════════════════════════════
+function loginAdmin() {
+  const pwd = document.getElementById('admin-pwd').value;
+  if (pwd === ADMIN_PWD) {
+    document.getElementById('admin-login').style.display = 'none';
+    document.getElementById('admin-app').style.display = 'flex';
+    carregarDados();
+  } else {
+    alert('Senha incorreta!');
+  }
+}
+
+function logoutAdmin() {
+  document.getElementById('admin-app').style.display = 'none';
+  document.getElementById('admin-login').style.display = 'flex';
+  document.getElementById('admin-pwd').value = '';
+}
+
+// ══════════════════════════════════════════════
+// DADOS (Simulados - depois conectar a Supabase)
+// ══════════════════════════════════════════════
+let usuarios = [
+  { id: 'USR-001', email: 'empresa1@example.com', nome: 'Empresa ABC', plano: '1 Mês', dias: 18, status: 'ativo', pareceres: 5 },
+  { id: 'USR-002', email: 'empresa2@example.com', nome: 'Empresa XYZ', plano: '7 Dias', dias: 2, status: 'expirando', pareceres: 12 },
+  { id: 'USR-003', email: 'empresa3@example.com', nome: 'Empresa 123', plano: '3 Dias', dias: -1, status: 'expirado', pareceres: 3 },
+  { id: 'USR-004', email: 'empresa4@example.com', nome: 'Empresa DEF', plano: '1 Ano', dias: 365, status: 'ativo', pareceres: 28 },
+];
+
+function carregarDados() {
+  // STATS
+  document.getElementById('stat-usuarios').textContent = usuarios.filter(u => u.status === 'ativo').length;
+  document.getElementById('stat-pareceres').textContent = usuarios.reduce((a,b) => a + b.pareceres, 0);
+  document.getElementById('stat-receita').textContent = 'R$ ' + (usuarios.length * 500).toLocaleString('pt-BR');
+  document.getElementById('stat-subs').textContent = usuarios.filter(u => u.status !== 'expirado').length;
+
+  // TABELA
+  const lista = document.getElementById('users-list');
+  lista.innerHTML = usuarios.map(u => `
+    <div class="table-row">
+      <div style="font-family:monospace;font-size:11px">${u.id}</div>
+      <div>
+        <div style="font-weight:600">${u.nome}</div>
+        <div style="font-size:12px;color:var(--muted)">${u.email}</div>
+      </div>
+      <div>${u.plano}</div>
+      <div>
+        <div style="font-weight:600">${u.dias > 0 ? u.dias + ' dias' : 'Expirado'}</div>
+        <div style="font-size:11px;color:var(--muted)">${u.pareceres} pareceres</div>
+      </div>
+      <div>
+        <span class="status-badge status-${u.status}">
+          ${u.status === 'ativo' ? '✓ Ativo' : u.status === 'expirando' ? '⚠ Expirando' : '✕ Expirado'}
+        </span>
+      </div>
+      <div class="btn-group">
+        <button class="btn-sm btn-extend" onclick="estenderAcesso('${u.id}')">+7 dias</button>
+        <button class="btn-sm btn-revoke" onclick="revogarAcesso('${u.id}')">Revogar</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function estenderAcesso(id) {
+  const user = usuarios.find(u => u.id === id);
+  if (user) {
+    user.dias += 7;
+    if (user.status === 'expirado') user.status = 'ativo';
+    if (user.status === 'expirando' && user.dias > 5) user.status = 'ativo';
+    alert(`Acesso estendido! Novo prazo: ${user.dias} dias`);
+    carregarDados();
+  }
+}
+
+function revogarAcesso(id) {
+  if (confirm('Tem certeza que quer revogar o acesso?')) {
+    const user = usuarios.find(u => u.id === id);
+    if (user) {
+      user.status = 'expirado';
+      user.dias = 0;
+      alert('Acesso revogado!');
+      carregarDados();
+    }
+  }
+}
+
+// CARREGAR AO ABRIR
+window.addEventListener('load', () => {
+  // Verificar se já tem senha de admin salva
+});
+</script>
+
+</body>
+</html>

@@ -32,8 +32,8 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--i
 #login{position:fixed;inset:0;z-index:9999;background:var(--bg);display:flex;align-items:center;justify-content:center;
   background-image:radial-gradient(ellipse 60% 50% at 50% 0%,rgba(99,102,241,0.08) 0%,transparent 70%)}
 .login-card{background:var(--bg2);border:1px solid var(--border2);border-radius:20px;padding:48px 44px;width:380px;text-align:center;box-shadow:0 32px 80px rgba(0,0,0,0.6)}
-.login-logo{width:60px;height:60px;background:transparent;border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;box-shadow:0 0 32px rgba(99,102,241,0.3)}
-.login-logo-img{width:100%;height:100%;object-fit:contain;border-radius:12px}
+.login-logo{width:140px;height:140px;background:transparent;border-radius:0;display:flex;align-items:center;justify-content:center;margin:0 auto 32px;box-shadow:none}
+.login-logo-img{width:100%;height:100%;object-fit:contain;border-radius:0}
 .login-title{font-size:24px;font-weight:800;letter-spacing:-0.03em;margin-bottom:4px}
 .login-title span{color:var(--brand)}
 .login-sub{font-size:13px;color:var(--muted);margin-bottom:28px;line-height:1.5}
@@ -52,7 +52,7 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--i
 
 /* ── SIDEBAR ────────────────────────────────── */
 .s-logo{padding:20px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
-.s-logo-icon{width:36px;height:36px;background:transparent;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.s-logo-icon{width:48px;height:48px;background:transparent;border-radius:0;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .s-logo-icon-img{width:100%;height:100%;object-fit:contain;border-radius:8px}
 .s-logo-text{font-size:15px;font-weight:800;letter-spacing:-0.02em}
 .s-logo-text span{color:var(--brand)}
@@ -275,7 +275,7 @@ textarea.efd-input:focus{border-color:var(--brand)}
 <!-- ══ LOGIN ══════════════════════════════════════════ -->
 <div id="login">
   <div class="login-card">
-    <div class="login-logo"><img src="/creditOS/sistema/triade-logo.png" class="login-logo-img" /></div>
+    <div class="login-logo"><img src="../triade-logo-novo.png" class="login-logo-img" /></div>
     <div class="login-title">Credit<span>OS</span></div>
     <div class="login-sub">Sistema Operacional de Créditos Tributários<br>TRÍADE IA · Powered by Sonnet 4.6</div>
     <div class="login-badge">⚡ EC 132/2023 · Janela fecha em 2027</div>
@@ -292,7 +292,7 @@ textarea.efd-input:focus{border-color:var(--brand)}
   <!-- SIDEBAR -->
   <div id="sidebar">
     <div class="s-logo">
-      <div class="s-logo-icon"><img src="/creditOS/sistema/triade-logo.png" class="s-logo-icon-img" /></div>
+      <div class="s-logo-icon"><img src="../triade-logo-novo.png" class="s-logo-icon-img" /></div>
       <div>
         <div class="s-logo-text">Credit<span>OS</span></div>
         <div class="s-logo-sub">Motor de Créditos Tributários</div>
@@ -308,7 +308,7 @@ textarea.efd-input:focus{border-color:var(--brand)}
 
     <div class="s-section">
       <div class="s-label">Documentos</div>
-      <div class="s-item" onclick="showPage('pareceres')"><span class="ico">📋</span>Pareceres Gerados<span class="badge ok" id="badge-pareceres">0</span></div>
+      <div class="s-item" onclick="showPage('pareceres')"><span class="ico">📋</span>Histórico<span class="badge ok" id="badge-pareceres">0</span></div>
     </div>
 
     <div class="s-section">
@@ -316,8 +316,18 @@ textarea.efd-input:focus{border-color:var(--brand)}
       <div class="s-item" onclick="showPage('reforma')"><span class="ico">🏛️</span>EC 132 / IBS / CBS</div>
     </div>
 
+    <!-- CTA BUTTONS -->
+    <div style="padding:12px 16px;margin:12px 8px;background:transparent;border:1px solid var(--brand);border-radius:10px;cursor:pointer;transition:.2s" onclick="showPage('atualizar')" onmouseover="this.style.background='var(--brand-glow)';this.style.borderColor='var(--brand2)'" onmouseout="this.style.background='transparent';this.style.borderColor='var(--brand)'">
+      <div style="font-size:11px;font-weight:700;color:var(--brand2);text-transform:uppercase;letter-spacing:.08em;text-align:center;line-height:1.5">🚀 Atualizar<br>Minha Empresa</div>
+    </div>
+
+    <div style="padding:12px 16px;margin:12px 8px;background:transparent;border:1px solid rgba(16,185,129,0.5);border-radius:10px;cursor:pointer;transition:.2s" onclick="showPage('homologar')" onmouseover="this.style.background='rgba(16,185,129,0.05)';this.style.borderColor='var(--green2)'" onmouseout="this.style.background='transparent';this.style.borderColor='rgba(16,185,129,0.5)'">
+      <div style="font-size:11px;font-weight:700;color:var(--green2);text-transform:uppercase;letter-spacing:.08em;text-align:center;line-height:1.5">✅ Quero<br>Homologar</div>
+    </div>
+
     <div class="s-section">
       <div class="s-label">Sistema</div>
+      <div class="s-item" onclick="showPage('sobre')"><span class="ico">ℹ️</span>Sobre</div>
       <div class="s-item" onclick="showPage('config')"><span class="ico">⚙️</span>Configurações</div>
     </div>
 
@@ -575,6 +585,7 @@ Exemplo:
           <div class="action-bar">
             <button class="btn btn-green btn-lg" onclick="imprimirParecer()">🖨️ Imprimir Parecer</button>
             <button class="btn btn-brand btn-lg" onclick="baixarParecer()">⬇ Download HTML</button>
+            <button class="btn btn-ghost btn-lg" onclick="enviarWhatsApp()" style="background:rgba(37,211,102,0.1);border:1px solid rgba(37,211,102,0.3);color:#25d366">💬 Enviar WhatsApp</button>
             <button class="btn btn-ghost" onclick="resetAnalise()">← Nova Análise</button>
           </div>
         </div><!-- /step-resultado -->
@@ -613,6 +624,214 @@ Exemplo:
         </div>
       </div>
 
+      <!-- ── HOMOLOGAR ──────────────────────── -->
+      <div id="page-homologar" class="page">
+        <div style="padding:32px 20px;max-width:900px;margin:0 auto">
+          <div class="section-card" style="background:linear-gradient(135deg,rgba(16,185,129,0.08),rgba(99,102,241,0.05));border:1px solid rgba(16,185,129,0.3);margin-bottom:24px">
+            <div class="section-body">
+              <h2 style="color:var(--green2);margin-bottom:16px;font-size:24px">✅ Próximo Passo: Homologar Seu Crédito</h2>
+              <p style="font-size:14px;color:var(--muted);line-height:1.8;margin-bottom:12px">
+                <strong style="color:var(--ice)">Parabéns!</strong> Você identificou créditos tributários legítimos e defensáveis. Agora vem a parte mais importante: <strong>homologar e resgatar esse saldo para o caixa da sua empresa.</strong>
+              </p>
+              <p style="font-size:14px;color:var(--muted);line-height:1.8">
+                A homologação é o processo administrativo junto à Receita Federal que transforma seu crédito identificado em um direito líquido e certo, permitindo que você resgate o valor.
+              </p>
+            </div>
+          </div>
+
+          <div class="section-card" style="margin-bottom:24px">
+            <div class="section-header">
+              <div class="section-title">📋 O Que é Homologação?</div>
+            </div>
+            <div class="section-body">
+              <div style="font-size:13px;color:var(--muted);line-height:1.8">
+                <p style="margin-bottom:12px">
+                  Homologação é o reconhecimento oficial pela Receita Federal de que seu crédito tributário é legítimo e pode ser aproveitado. Sem homologação, o crédito fica exposto a questionamentos e rejeições em futuras auditorias.
+                </p>
+                <p style="margin-bottom:12px">
+                  <strong style="color:var(--ice)">Por que é crítico?</strong>
+                </p>
+                <ul style="margin-left:20px;margin-bottom:12px">
+                  <li>📌 <strong>Prescrição:</strong> Você tem 5 anos para solicitar homologação. Após isso, o direito se extingue.</li>
+                  <li>🚨 <strong>CBS 2027:</strong> A partir de 30 de junho de 2027, créditos de PIS/COFINS NÃO serão mais aproveitáveis.</li>
+                  <li>⚖️ <strong>Defesa em Auditoria:</strong> Créditos homologados não podem ser questionados retroativamente.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="section-card" style="margin-bottom:24px">
+            <div class="section-header">
+              <div class="section-title">🎯 Procedimentos para Homologar</div>
+            </div>
+            <div class="section-body">
+              <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px">
+
+                <div style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:16px">
+                  <div style="font-size:32px;margin-bottom:8px">1️⃣</div>
+                  <div style="font-weight:700;color:var(--ice);margin-bottom:8px">PER/DCOMP</div>
+                  <div style="font-size:12px;color:var(--muted);line-height:1.6">
+                    <strong>Pedido Eletrônico de Ressarcimento</strong> ou <strong>Declaração de Compensação</strong> no e-CAC da Receita Federal. É o caminho para federal (PIS/COFINS).
+                  </div>
+                </div>
+
+                <div style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:16px">
+                  <div style="font-size:32px;margin-bottom:8px">2️⃣</div>
+                  <div style="font-weight:700;color:var(--ice);margin-bottom:8px">DARE Estadual</div>
+                  <div style="font-size:12px;color:var(--muted);line-height:1.6">
+                    Para créditos de <strong>ICMS</strong>, via <strong>Declaração de Ajuste de ICMS</strong> junto à Secretaria de Fazenda do seu estado.
+                  </div>
+                </div>
+
+                <div style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:16px">
+                  <div style="font-size:32px;margin-bottom:8px">3️⃣</div>
+                  <div style="font-weight:700;color:var(--ice);margin-bottom:8px">Transferência para Terceiros</div>
+                  <div style="font-size:12px;color:var(--muted);line-height:1.6">
+                    Você pode transferir o crédito a outro contribuinte vinculado (controlada/coligada) ou terceiros autorizados.
+                  </div>
+                </div>
+
+              </div>
+
+              <div style="background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.2);border-radius:10px;padding:14px;margin-top:16px">
+                <div style="font-size:12px;color:var(--muted);line-height:1.6">
+                  <strong style="color:var(--amber)">⚠️ Atenção ao Prazo CBS:</strong> Se o crédito não for homologado ATÉ 30 de junho de 2027, será perdido para sempre. Comece AGORA.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="section-card" style="background:linear-gradient(135deg,rgba(99,102,241,0.1),rgba(16,185,129,0.05));border:2px solid var(--border2);margin-bottom:24px">
+            <div class="section-body" style="padding:24px">
+              <h3 style="color:var(--brand2);margin-bottom:12px;font-size:18px">🤝 Consultoria Especializada</h3>
+              <p style="font-size:13px;color:var(--muted);line-height:1.8;margin-bottom:16px">
+                TRÍADE IA oferece <strong>consultoria e homologação</strong> de créditos tributários. Nossa equipe especializada cuida de todo o processo:
+              </p>
+              <ul style="font-size:13px;color:var(--muted);line-height:1.8;margin-left:20px;margin-bottom:16px">
+                <li>✓ Análise completa do seu parecer</li>
+                <li>✓ Preparação da documentação fiscal</li>
+                <li>✓ Protocolo do PER/DCOMP junto à Receita Federal</li>
+                <li>✓ Acompanhamento e defesa em auditoria</li>
+                <li>✓ Suporte em todas as fases</li>
+              </ul>
+              <p style="font-size:13px;color:var(--muted);line-height:1.8">
+                <strong style="color:var(--ice)">Tempo de Resposta:</strong> Receita Federal responde em 30-90 dias. Nós acompanhamos todo o processo.
+              </p>
+            </div>
+          </div>
+
+          <div class="section-card" style="background:linear-gradient(135deg,rgba(16,185,129,0.1),rgba(99,102,241,0.05));border:2px solid rgba(16,185,129,0.3)">
+            <div class="section-body" style="text-align:center;padding:32px 24px">
+              <h3 style="color:var(--green2);margin-bottom:12px;font-size:20px">Comece Agora Mesmo</h3>
+              <p style="font-size:13px;color:var(--muted);margin-bottom:20px;line-height:1.8">
+                Nossa agente Sofia está pronta para orientá-lo em cada passo. Converse com ela sobre sua homologação.
+              </p>
+              <button class="btn btn-green btn-lg" onclick="abrirSofiaHomologacao()" style="margin-right:12px">
+                💬 Falar com Sofia
+              </button>
+              <button class="btn btn-ghost btn-lg" onclick="mostrarResultado(state.ultimaAnalise)">
+                📄 Ver Parecer Novamente
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── ATUALIZAR EMPRESA ──────────────── -->
+      <div id="page-atualizar" class="page">
+        <div style="padding:32px 20px;max-width:900px;margin:0 auto">
+          <div class="section-card" style="background:linear-gradient(135deg,var(--brand-glow),rgba(16,185,129,0.05));border:1px solid var(--border2);margin-bottom:24px">
+            <div class="section-body">
+              <h2 style="color:var(--brand2);margin-bottom:16px;font-size:24px">🚀 Sua Empresa Está Pronta para o AI-First?</h2>
+              <p style="font-size:14px;color:var(--muted);line-height:1.8;margin-bottom:12px">
+                <strong style="color:var(--ice)">O mundo mudou.</strong> Empresas que não adotarem Inteligência Artificial como núcleo operacional nos próximos 24 meses correm o risco de se tornarem obsoletas.
+              </p>
+              <p style="font-size:14px;color:var(--muted);line-height:1.8;margin-bottom:12px">
+                Enquanto seus concorrentes:
+              </p>
+              <ul style="font-size:13px;color:var(--muted);line-height:1.8;margin-left:20px;margin-bottom:12px">
+                <li>⚡ Automatizam 80% de seus processos com IA</li>
+                <li>📊 Tomam decisões em tempo real com dados precisos</li>
+                <li>💰 Reduzem custos operacionais em até 60%</li>
+                <li>🎯 Melhoram a experiência do cliente exponencialmente</li>
+              </ul>
+              <p style="font-size:14px;color:var(--amber);font-weight:700;line-height:1.8;border-top:1px solid var(--border);padding-top:12px;margin-top:12px">
+                ⚠️ Sua empresa pode estar ficando para trás.
+              </p>
+              <p style="font-size:14px;color:var(--muted);line-height:1.8;margin-top:12px">
+                <strong style="color:var(--ice)">TRÍADE IA</strong> transformou CreditOS para recuperar milhões em créditos tributários dormindo. Agora podemos transformar seu negócio inteiro.
+              </p>
+            </div>
+          </div>
+
+          <div class="section-card" style="margin-bottom:24px">
+            <div class="section-header">
+              <div class="section-title">Como TRÍADE IA Pode Ajudar</div>
+            </div>
+            <div class="section-body">
+              <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px">
+                <div style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:16px">
+                  <div style="font-size:20px;margin-bottom:8px">🧠</div>
+                  <div style="font-weight:700;color:var(--ice);margin-bottom:6px">Automação Inteligente</div>
+                  <div style="font-size:12px;color:var(--muted)">Processos que levavam horas, agora em minutos com IA.</div>
+                </div>
+                <div style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:16px">
+                  <div style="font-size:20px;margin-bottom:8px">💡</div>
+                  <div style="font-weight:700;color:var(--ice);margin-bottom:6px">Análise Preditiva</div>
+                  <div style="font-size:12px;color:var(--muted)">Antecipe problemas antes que aconteçam.</div>
+                </div>
+                <div style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:16px">
+                  <div style="font-size:20px;margin-bottom:8px">📈</div>
+                  <div style="font-weight:700;color:var(--ice);margin-bottom:6px">Crescimento Acelerado</div>
+                  <div style="font-size:12px;color:var(--muted)">Multiplique seu impacto sem multiplicar custos.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="section-card" style="background:linear-gradient(135deg,rgba(245,158,11,0.1),rgba(16,185,129,0.05));border:2px solid var(--border2)">
+            <div class="section-body" style="text-align:center;padding:32px 24px">
+              <h3 style="color:var(--brand2);margin-bottom:12px;font-size:20px">Diagnóstico Estratégico Sem Compromisso</h3>
+              <p style="font-size:13px;color:var(--muted);margin-bottom:20px;line-height:1.8">
+                Descubra onde sua empresa deixa de ganhar com IA. Análise gratuita, sem risco, sem pressão.
+              </p>
+              <button class="btn btn-brand btn-lg" onclick="window.open('https://triadeiaos.com/diagnostico','_blank')" style="margin-right:12px">
+                📋 Solicitar Diagnóstico
+              </button>
+              <button class="btn btn-ghost btn-lg" onclick="window.open('https://triadeiaos.com','_blank')">
+                🌐 Saiba Mais
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── SOBRE ──────────────────────────── -->
+      <div id="page-sobre" class="page">
+        <div style="text-align:center;padding:32px 20px">
+          <img src="../logo-triade-sobre.png" style="width:100%;max-width:600px;margin-bottom:32px;border-radius:12px">
+          <div class="section-card" style="margin-top:24px">
+            <div class="section-body">
+              <h3 style="margin-bottom:20px;color:var(--brand2)">Sobre o CreditOS</h3>
+              <div style="font-size:13px;color:var(--muted);line-height:1.9;text-align:left">
+                <p><strong style="color:var(--ice)">CreditOS v1.0-beta</strong> · TRÍADE IA · Itumbiara, GO</p>
+                <p>Motor de recuperação de créditos tributários com IA — PIS/COFINS e ICMS.</p>
+                <p>Base normativa: EC 132/2023 · Lei 10.637/2002 · Lei 10.833/2003 · STJ REsp 1.221.170/PR (Tema 779) · IN RFB 1.911/2019</p>
+                <p style="margin-top:16px;font-size:12px;color:var(--ice)"><strong>Desenvolvido por</strong> André Rocha Salomão | Tr[IA]de AI-First | Ano 2026</p>
+                <p style="margin-top:12px;font-size:12px;border-top:1px solid var(--border);padding-top:12px">
+                  <strong style="color:var(--ice)">Contato & Informações</strong><br>
+                  Site: <a href="https://triadeiaos.com" target="_blank" style="color:var(--brand2);text-decoration:underline;cursor:pointer">triadeiaos.com</a><br>
+                  Email: <a href="mailto:contato@triadeiaos.com" style="color:var(--brand2);text-decoration:underline;cursor:pointer">contato@triadeiaos.com</a>
+                </p>
+                <p style="margin-top:12px;font-size:10px;color:var(--dim);border-top:1px solid var(--border);padding-top:12px">
+                  © 2026 TRÍADE IA. Todos os direitos reservados. Proibida a cópia, reprodução ou venda sem autorização expressa.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- ── CONFIG ─────────────────────────── -->
       <div id="page-config" class="page">
         <div class="config-section">
@@ -634,15 +853,6 @@ Exemplo:
             <div class="form-group"><label>Nova senha</label><input type="password" id="cfg-pwd-new" placeholder="••••••••"></div>
           </div>
           <button class="btn btn-brand" onclick="alterarSenha()">Salvar nova senha</button>
-        </div>
-        <div class="config-section">
-          <h3>Sobre o CreditOS</h3>
-          <div style="font-size:13px;color:var(--muted);line-height:1.9">
-            <p><strong style="color:var(--ice)">CreditOS v1.0-beta</strong> · TRÍADE IA · Itumbiara, GO</p>
-            <p>Motor de recuperação de créditos tributários com IA — PIS/COFINS e ICMS.</p>
-            <p>Base normativa: EC 132/2023 · Lei 10.637/2002 · Lei 10.833/2003 · STJ REsp 1.221.170/PR (Tema 779) · IN RFB 1.911/2019</p>
-            <p style="margin-top:8px;font-size:11px">Desenvolvido por Claude Windows + Claude Parrot · TRÍADE IA Squad · 2026</p>
-          </div>
         </div>
       </div>
 
@@ -706,8 +916,10 @@ function login() {
   if (v === state.pwd) {
     document.getElementById('login').style.display = 'none';
     document.getElementById('app').style.display = 'flex';
+    carregarStorage();
     atualizarDashboard();
     atualizarBadgeParecer();
+    renderPareceresPage();
   } else {
     const el = document.getElementById('login-err');
     el.textContent = 'Senha incorreta. Tente novamente.';
@@ -738,8 +950,11 @@ function alterarSenha() {
 const pageConfig = {
   dashboard:  { title: 'Dashboard', sub: 'Visão geral dos seus créditos tributários' },
   analise:    { title: 'Nova Análise', sub: 'Processamento de EFD-Contribuições com motor de IA' },
-  pareceres:  { title: 'Pareceres Gerados', sub: 'Histórico de análises e pareceres técnicos' },
+  pareceres:  { title: 'Histórico', sub: 'Todas as suas análises e pareceres' },
   reforma:    { title: 'EC 132/2023', sub: 'Observatório da Reforma Tributária — IBS / CBS / IS' },
+  atualizar:  { title: 'Atualizar Empresa', sub: 'Transforme seu negócio com AI-First' },
+  homologar:  { title: 'Quero Homologar', sub: 'Procedimentos e consultoria de homologação' },
+  sobre:      { title: 'Sobre', sub: 'Informações sobre CreditOS e TRÍADE IA' },
   config:     { title: 'Configurações', sub: 'Dados do escritório e preferências do sistema' },
 };
 function showPage(id) {
@@ -940,6 +1155,11 @@ function addLog(skillId, html) {
 // RESULTADO
 // ══════════════════════════════════════════════
 function mostrarResultado(r) {
+  state.ultimaAnalise = r;
+  if (!state.pareceres.find(p => p.parecerId === r.parecerId)) {
+    state.pareceres.push(r);
+    salvarStorage();
+  }
   mostrarStep('resultado');
   document.getElementById('res-parecer-id').textContent = r.parecerId;
   document.getElementById('res-empresa').textContent = r.empresa;
@@ -993,6 +1213,36 @@ ${buildParecerHTML(r, true)}</body></html>`;
 }
 function fecharParecer() {
   document.getElementById('print-area').classList.remove('open');
+}
+function enviarWhatsApp() {
+  const r = state.ultimaAnalise;
+  if (!r) return;
+  const msg = `*CreditOS - Parecer Técnico*%0A%0A` +
+    `📋 *${r.parecerId}*%0A` +
+    `🏢 ${r.empresa}%0A` +
+    `📅 Período: ${r.periodo}%0A%0A` +
+    `💰 *Créditos Identificados:*%0A` +
+    `PIS: R$ ${fmt(r.pis)}%0A` +
+    `COFINS: R$ ${fmt(r.cofins)}%0A` +
+    `*Total: R$ ${fmt(r.totalGeral)}*%0A%0A` +
+    `✅ Parecer: ${r.amarelos === 0 ? 'FAVORÁVEL' : 'FAVORÁVEL COM RESSALVAS'}%0A` +
+    `📊 Confiança: ${r.confianca}%%0A%0A` +
+    `🔗 Acesse CreditOS: https://triadeiaos.com/creditOS/sistema%0A` +
+    `📞 Contato: contato@triadeiaos.com`;
+  window.open(`https://wa.me/?text=${msg}`, '_blank');
+  toast('Abrindo WhatsApp...');
+}
+
+function abrirSofiaHomologacao() {
+  const r = state.ultimaAnalise;
+  if (!r) {
+    alert('Realize uma análise primeiro para homologar');
+    return;
+  }
+  const msg = `Olá Sofia! Sou cliente CreditOS. Realizei análise e identifiquei créditos. Parecer: *${r.parecerId}* - *${r.empresa}* - Valor: *R$ ${fmt(r.totalGeral)}*. Gostaria de iniciar o processo de HOMOLOGAÇÃO. Pode me ajudar?`;
+  const encoded = encodeURIComponent(msg);
+  window.open(`https://wa.me/556496123145?text=${encoded}`, '_blank');
+  toast('Conectando com Sofia...');
 }
 function baixarParecer() {
   const r = state.ultimaAnalise;
