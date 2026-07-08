@@ -707,12 +707,12 @@ Exemplo:
               <p style="font-size:13px;color:var(--muted);line-height:1.8;margin-bottom:16px">
                 TRÍADE IA oferece <strong>consultoria e homologação</strong> de créditos tributários. Nossa equipe especializada cuida de todo o processo:
               </p>
-              <ul style="font-size:13px;color:var(--muted);line-height:1.8;margin-left:20px;margin-bottom:16px">
-                <li>✓ Análise completa do seu parecer</li>
-                <li>✓ Preparação da documentação fiscal</li>
-                <li>✓ Protocolo do PER/DCOMP junto à Receita Federal</li>
-                <li>✓ Acompanhamento e defesa em auditoria</li>
-                <li>✓ Suporte em todas as fases</li>
+              <ul style="font-size:13px;color:var(--muted);line-height:1.8;margin-left:0;margin-bottom:16px;list-style:none">
+                <li style="margin-bottom:6px"><span style="color:var(--green2);font-weight:700">✓</span> Análise completa do seu parecer</li>
+                <li style="margin-bottom:6px"><span style="color:var(--green2);font-weight:700">✓</span> Preparação da documentação fiscal</li>
+                <li style="margin-bottom:6px"><span style="color:var(--green2);font-weight:700">✓</span> Protocolo do PER/DCOMP junto à Receita Federal</li>
+                <li style="margin-bottom:6px"><span style="color:var(--green2);font-weight:700">✓</span> Acompanhamento e defesa em auditoria</li>
+                <li><span style="color:var(--green2);font-weight:700">✓</span> Suporte em todas as fases</li>
               </ul>
               <p style="font-size:13px;color:var(--muted);line-height:1.8">
                 <strong style="color:var(--ice)">Tempo de Resposta:</strong> Receita Federal responde em 30-90 dias. Nós acompanhamos todo o processo.
@@ -729,7 +729,7 @@ Exemplo:
               <button class="btn btn-green btn-lg" onclick="abrirSofiaHomologacao()" style="margin-right:12px">
                 💬 Falar com Sofia
               </button>
-              <button class="btn btn-ghost btn-lg" onclick="mostrarResultado(state.ultimaAnalise)">
+              <button class="btn btn-ghost btn-lg" onclick="verParecer()">
                 📄 Ver Parecer Novamente
               </button>
             </div>
@@ -1243,6 +1243,15 @@ function abrirSofiaHomologacao() {
   const encoded = encodeURIComponent(msg);
   window.open(`https://wa.me/556496123145?text=${encoded}`, '_blank');
   toast('Conectando com Sofia...');
+}
+
+function verParecer() {
+  if (!state.ultimaAnalise) {
+    alert('Nenhum parecer disponível. Realize uma análise primeiro.');
+    return;
+  }
+  showPage('analise');
+  mostrarResultado(state.ultimaAnalise);
 }
 function baixarParecer() {
   const r = state.ultimaAnalise;
