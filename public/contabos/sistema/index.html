@@ -335,19 +335,13 @@
     <div class="login-logo">C</div>
     <div class="login-title">ContabOS</div>
     <div class="login-sub" id="login-sub-text">Sistema Operacional Contábil<br>TRÍADE IA</div>
+    <input type="email" id="login-email" class="login-input" placeholder="seu@email.com"
+           onkeydown="if(event.key==='Enter')document.getElementById('login-pwd').focus()">
     <input type="password" id="login-pwd" class="login-input" placeholder="••••••••"
            onkeydown="if(event.key==='Enter')fazerLogin()">
     <button class="login-btn" id="login-btn-label" onclick="fazerLogin()">Entrar</button>
     <div class="login-error" id="login-error"></div>
     <div class="login-reset" id="login-reset-link" onclick="resetarSenha()" style="display:none">Esqueci minha senha (apagar dados de acesso)</div>
-
-    <!-- CREDENTIALS DISPLAY -->
-    <div style="background:#f0f4ff;border:1px solid #d0d9ff;border-radius:8px;padding:12px;margin:16px 0;font-size:12px;color:#333;">
-      <div style="font-weight:600;margin-bottom:6px;color:#0052cc;">📧 Credenciais de Teste:</div>
-      <div style="font-family:monospace;">Email: <strong>thunder@7</strong></div>
-      <div style="font-family:monospace;">Senha: <strong>contabos2026</strong></div>
-    </div>
-
     <div class="login-version">ContabOS v1.0 · © 2026 TRÍADE IA</div>
   </div>
 </div>
@@ -2200,24 +2194,31 @@ function initLogin() {
     document.getElementById('login-reset-link').style.display = 'block';
   }
   ls.style.display = 'flex';
-  setTimeout(() => document.getElementById('login-pwd').focus(), 100);
+  setTimeout(() => document.getElementById('login-email').focus(), 100);
 }
 
 function fazerLogin() {
+  const email = document.getElementById('login-email').value.trim();
   const pwd = document.getElementById('login-pwd').value.trim();
   const err = document.getElementById('login-error');
   err.textContent = '';
+
+  if (!email) { err.textContent = 'Por favor, insira seu email.'; return; }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { err.textContent = 'Email inválido.'; return; }
   if (!pwd || pwd.length < 4) { err.textContent = 'A senha deve ter ao menos 4 caracteres.'; return; }
+
   const stored = localStorage.getItem('contabos_pwd');
   if (!stored) {
+    localStorage.setItem('contabos_email', btoa(encodeURIComponent(email)));
     localStorage.setItem('contabos_pwd', btoa(encodeURIComponent(pwd)));
     document.getElementById('login-screen').style.display = 'none';
-    toast('Senha criada! Bem-vindo ao ContabOS.');
+    toast('Bem-vindo ao ContabOS!');
   } else {
-    if (btoa(encodeURIComponent(pwd)) === stored) {
+    const storedEmail = localStorage.getItem('contabos_email');
+    if (btoa(encodeURIComponent(email)) === storedEmail && btoa(encodeURIComponent(pwd)) === stored) {
       document.getElementById('login-screen').style.display = 'none';
     } else {
-      err.textContent = 'Senha incorreta. Tente novamente.';
+      err.textContent = 'Email ou senha incorretos. Tente novamente.';
       document.getElementById('login-pwd').value = '';
       document.getElementById('login-pwd').focus();
     }
@@ -2225,17 +2226,20 @@ function fazerLogin() {
 }
 
 function logout() {
+  document.getElementById('login-email').value = '';
   document.getElementById('login-pwd').value = '';
   document.getElementById('login-error').textContent = '';
   initLogin();
 }
 
 function resetarSenha() {
-  if(!confirm('Isso vai apagar a senha atual. Você precisará criar uma nova ao entrar. Continuar?')) return;
+  if(!confirm('Isso vai apagar suas credenciais de acesso. Você precisará criar novas ao entrar. Continuar?')) return;
+  localStorage.removeItem('contabos_email');
   localStorage.removeItem('contabos_pwd');
+  document.getElementById('login-email').value = '';
   document.getElementById('login-pwd').value = '';
   initLogin();
-  toast('Senha removida. Crie uma nova senha ao entrar.');
+  toast('Credenciais removidas. Crie novas ao entrar.');
 }
 
 // ===== BACKUP EXPORT / IMPORT =====
