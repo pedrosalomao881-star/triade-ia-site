@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="refresh" content="0; url=https://frontend-three-iota-19.vercel.app/login">
+    <title>CreditorX — Validação de Crédito Tributário PIS/COFINS</title>
+    <link rel="canonical" href="https://triadeiaos.com/creditorX/sistema">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .container {
+            text-align: center;
+            color: white;
+        }
+        .logo {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 20px;
+            animation: pulse 2s infinite;
+        }
+        h1 {
+            font-size: 28px;
+            margin: 0 0 10px 0;
+            font-weight: 600;
+        }
+        p {
+            font-size: 16px;
+            margin: 0 0 30px 0;
+            opacity: 0.9;
+        }
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.2);
+            border-top-color: white;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        a {
+            color: white;
+            text-decoration: underline;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <svg class="logo" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="45" fill="none" stroke="white" stroke-width="2"/>
+            <path d="M50 20 L65 65 L35 65 Z" fill="white" opacity="0.8"/>
+            <text x="50" y="75" font-size="8" fill="white" text-anchor="middle">TRÍADE</text>
+        </svg>
+        <div class="spinner"></div>
+        <h1>CreditorX</h1>
+        <p>Validação de Crédito Tributário PIS/COFINS</p>
+        <p>Carregando sistema...</p>
+        <p style="font-size: 14px; margin-top: 20px;">
+            Se não for redirecionado automaticamente,<br>
+            <a href="https://frontend-three-iota-19.vercel.app/login">clique aqui</a>
+        </p>
+    </div>
+</body>
+</html>
