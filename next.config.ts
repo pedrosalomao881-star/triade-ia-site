@@ -40,6 +40,11 @@ const nextConfig: NextConfig = {
             },
           ],
         },
+        // Serve CreditorX (triadeiaos.com/creditorX)
+        {
+          source: "/creditorX/:path*",
+          destination: "https://frontend-three-iota-19.vercel.app/:path*",
+        },
       ],
     };
   },
