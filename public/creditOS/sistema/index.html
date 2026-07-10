@@ -47,14 +47,27 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--i
 
 /* ── APP SHELL ──────────────────────────────── */
 #app{display:none;min-height:100vh}
-#sidebar{width:var(--sidebar);background:var(--bg2);border-right:1px solid var(--border);position:fixed;height:100vh;display:flex;flex-direction:column;z-index:100;overflow-y:auto}
-#main{margin-left:var(--sidebar);min-height:100vh;display:flex;flex-direction:column}
+#sidebar{width:var(--sidebar);background:var(--bg2);border-right:1px solid var(--border);position:fixed;height:100vh;display:flex;flex-direction:column;z-index:100;overflow-y:auto;transition:width 0.3s ease}
+#sidebar.collapsed{width:70px}
+#sidebar.collapsed .s-logo-text,#sidebar.collapsed .s-logo-sub,#sidebar.collapsed .s-label,#sidebar.collapsed .s-footer{display:none !important}
+#sidebar.collapsed .s-item{padding:0 !important;justify-content:center !important;align-items:center !important;width:70px !important;height:46px !important;overflow:hidden !important;font-size:0 !important;gap:0 !important}
+#sidebar.collapsed .s-item .ico{display:flex !important;align-items:center !important;justify-content:center !important;width:24px !important;height:24px !important;margin:0 !important;font-size:16px !important;flex-shrink:0 !important}
+#sidebar.collapsed .s-item .ico svg{width:22px !important;height:22px !important}
+#sidebar.collapsed .s-item .badge{display:none !important}
+#sidebar.collapsed > div[style*="padding:12px"]{display:none !important}
+#sidebar.collapsed .s-logo{flex-direction:column;justify-content:center}
+#sidebar.collapsed .s-logo-icon{width:40px;height:40px;margin-bottom:8px}
+#sidebar.collapsed .sidebar-toggle{width:28px;height:28px}
+#main{margin-left:var(--sidebar);min-height:100vh;display:flex;flex-direction:column;transition:margin-left 0.3s ease}
+#main.collapsed{margin-left:70px}
 
 /* ── SIDEBAR ────────────────────────────────── */
-.s-logo{padding:20px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+.s-logo{padding:20px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;justify-content:space-between}
 .s-logo-icon{width:48px;height:48px;background:transparent;border-radius:0;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .s-logo-icon-img{width:100%;height:100%;object-fit:contain;border-radius:8px}
 .s-logo-text{font-size:15px;font-weight:800;letter-spacing:-0.02em}
+.sidebar-toggle{width:32px;height:32px;background:transparent;border:1px solid var(--border);border-radius:6px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.2s;color:var(--muted);flex-shrink:0}
+.sidebar-toggle:hover{background:rgba(99,102,241,0.12);color:var(--brand2);border-color:var(--brand)}
 .s-logo-text span{color:var(--brand)}
 .s-logo-sub{font-size:10px;color:var(--muted);margin-top:1px}
 .s-badge{font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;background:rgba(245,158,11,0.12);color:var(--amber);border:1px solid rgba(245,158,11,0.2);padding:2px 7px;border-radius:10px;margin-left:auto;flex-shrink:0}
@@ -64,7 +77,7 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--i
 .s-item{display:flex;align-items:center;gap:10px;padding:9px 16px;cursor:pointer;border-left:3px solid transparent;color:var(--muted);font-size:13px;transition:.15s;user-select:none}
 .s-item:hover{background:var(--bg3);color:var(--ice)}
 .s-item.active{background:var(--brand-glow);color:var(--brand2);border-left-color:var(--brand)}
-.s-item .ico{font-size:16px;width:20px;text-align:center;flex-shrink:0}
+.s-item .ico{font-size:16px;width:20px;height:20px;text-align:center;flex-shrink:0;display:flex;align-items:center;justify-content:center}
 .s-item .badge{margin-left:auto;background:var(--red);color:#fff;font-size:10px;padding:1px 6px;border-radius:10px;font-weight:700}
 .s-item .badge.ok{background:var(--green)}
 
@@ -275,10 +288,31 @@ textarea.efd-input:focus{border-color:var(--brand)}
 <!-- ══ LOGIN ══════════════════════════════════════════ -->
 <div id="login">
   <div class="login-card">
-    <div class="login-logo"><img src="../triade-logo-novo.png" class="login-logo-img" /></div>
+    <div class="login-logo">
+      <svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg" class="login-logo-img" style="width:100%;height:100%">
+        <defs>
+          <linearGradient id="grad-login" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:#2DD4BF;stop-opacity:1"/><stop offset="100%" style="stop-color:#0EA5E9;stop-opacity:1"/></linearGradient>
+        </defs>
+        <circle cx="128" cy="115" r="50" fill="none" stroke="#C9A961" stroke-width="0.6" opacity="0.08"/>
+        <circle cx="128" cy="115" r="42" fill="none" stroke="#C9A961" stroke-width="0.5" opacity="0.12"/>
+        <circle cx="128" cy="42" r="3" fill="#C9A961" opacity="0.4"/><circle cx="128" cy="42" r="9.5" fill="none" stroke="#C9A961" stroke-width="1.5"/><circle cx="128" cy="42" r="5.5" fill="#C9A961"/>
+        <circle cx="58" cy="165" r="3" fill="#2DD4BF" opacity="0.4"/><circle cx="58" cy="165" r="9.5" fill="none" stroke="#2DD4BF" stroke-width="1.5"/><circle cx="58" cy="165" r="5.5" fill="#2DD4BF"/>
+        <circle cx="198" cy="165" r="3" fill="#0EA5E9" opacity="0.4"/><circle cx="198" cy="165" r="9.5" fill="none" stroke="#0EA5E9" stroke-width="1.5"/><circle cx="198" cy="165" r="5.5" fill="#0EA5E9"/>
+        <line x1="128" y1="42" x2="58" y2="165" stroke="#2DD4BF" stroke-width="1.5" stroke-linecap="round" opacity="0.85"/>
+        <line x1="128" y1="42" x2="198" y2="165" stroke="#0EA5E9" stroke-width="1.5" stroke-linecap="round" opacity="0.85"/>
+        <line x1="58" y1="165" x2="198" y2="165" stroke="url(#grad-login)" stroke-width="1.5" stroke-linecap="round" opacity="0.85"/>
+        <circle cx="128" cy="115" r="26" fill="none" stroke="#1a1a1a" stroke-width="1.3" opacity="0.12"/>
+        <circle cx="128" cy="115" r="22" fill="none" stroke="#C9A961" stroke-width="0.8" opacity="0.35"/>
+        <circle cx="128" cy="115" r="1.5" fill="#C9A961"/>
+        <text x="120" y="122" style="font-family: 'Inter', sans-serif; font-size: 18px; font-weight: 500; fill: #2DD4BF;">i</text>
+        <text x="130" y="122" style="font-family: 'Inter', sans-serif; font-size: 18px; font-weight: 600; fill: #0EA5E9;">A</text>
+        <circle cx="128" cy="102" r="1.2" fill="#C9A961"/>
+      </svg>
+    </div>
     <div class="login-title">Credit<span>OS</span></div>
     <div class="login-sub">Sistema Operacional de Créditos Tributários<br>TRÍADE IA · Powered by Sonnet 4.6</div>
-    <div class="login-badge">⚡ EC 132/2023 · Janela fecha em 2027</div>
+    <div class="login-badge"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="display:inline;margin-right:6px;vertical-align:text-bottom"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>Reforma Tributária · Janela Fecha: 2027</div>
+    <input type="email" id="email" class="login-input" style="text-align:left;letter-spacing:normal" placeholder="seu@email.com" onkeydown="if(event.key==='Enter')login()">
     <input type="password" id="pwd" class="login-input" placeholder="••••••••" onkeydown="if(event.key==='Enter')login()">
     <button class="login-btn" onclick="login()">Acessar Sistema</button>
     <div class="login-error" id="login-err"></div>
@@ -292,48 +326,68 @@ textarea.efd-input:focus{border-color:var(--brand)}
   <!-- SIDEBAR -->
   <div id="sidebar">
     <div class="s-logo">
-      <div class="s-logo-icon"><img src="../triade-logo-novo.png" class="s-logo-icon-img" /></div>
-      <div>
+      <div class="s-logo-icon">
+        <svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg" class="s-logo-icon-img" style="width:100%;height:100%">
+          <defs><linearGradient id="grad-sidebar" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:#2DD4BF;stop-opacity:1"/><stop offset="100%" style="stop-color:#0EA5E9;stop-opacity:1"/></linearGradient></defs>
+          <circle cx="128" cy="115" r="50" fill="none" stroke="#C9A961" stroke-width="0.6" opacity="0.08"/><circle cx="128" cy="115" r="42" fill="none" stroke="#C9A961" stroke-width="0.5" opacity="0.12"/>
+          <circle cx="128" cy="42" r="3" fill="#C9A961" opacity="0.4"/><circle cx="128" cy="42" r="9.5" fill="none" stroke="#C9A961" stroke-width="1.5"/><circle cx="128" cy="42" r="5.5" fill="#C9A961"/>
+          <circle cx="58" cy="165" r="3" fill="#2DD4BF" opacity="0.4"/><circle cx="58" cy="165" r="9.5" fill="none" stroke="#2DD4BF" stroke-width="1.5"/><circle cx="58" cy="165" r="5.5" fill="#2DD4BF"/>
+          <circle cx="198" cy="165" r="3" fill="#0EA5E9" opacity="0.4"/><circle cx="198" cy="165" r="9.5" fill="none" stroke="#0EA5E9" stroke-width="1.5"/><circle cx="198" cy="165" r="5.5" fill="#0EA5E9"/>
+          <line x1="128" y1="42" x2="58" y2="165" stroke="#2DD4BF" stroke-width="1.5" stroke-linecap="round" opacity="0.85"/><line x1="128" y1="42" x2="198" y2="165" stroke="#0EA5E9" stroke-width="1.5" stroke-linecap="round" opacity="0.85"/>
+          <line x1="58" y1="165" x2="198" y2="165" stroke="url(#grad-sidebar)" stroke-width="1.5" stroke-linecap="round" opacity="0.85"/>
+          <circle cx="128" cy="115" r="26" fill="none" stroke="#1a1a1a" stroke-width="1.3" opacity="0.12"/><circle cx="128" cy="115" r="22" fill="none" stroke="#C9A961" stroke-width="0.8" opacity="0.35"/><circle cx="128" cy="115" r="1.5" fill="#C9A961"/>
+          <text x="120" y="122" style="font-family: 'Inter', sans-serif; font-size: 18px; font-weight: 500; fill: #2DD4BF;">i</text><text x="130" y="122" style="font-family: 'Inter', sans-serif; font-size: 18px; font-weight: 600; fill: #0EA5E9;">A</text>
+          <circle cx="128" cy="102" r="1.2" fill="#C9A961"/>
+        </svg>
+      </div>
+      <div style="flex:1">
         <div class="s-logo-text">Credit<span>OS</span></div>
         <div class="s-logo-sub">Motor de Créditos Tributários</div>
       </div>
-      <div class="s-badge">Beta</div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:6px">
+        <div class="s-badge">Beta</div>
+        <button class="sidebar-toggle" onclick="toggleSidebar()" title="Recolher/expandir">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
+        </button>
+      </div>
     </div>
 
     <div class="s-section">
       <div class="s-label">Principal</div>
-      <div class="s-item active" onclick="showPage('dashboard')"><span class="ico">📊</span>Dashboard</div>
-      <div class="s-item" onclick="showPage('analise');resetAnalise()"><span class="ico">🔍</span>Nova Análise<span class="badge" id="badge-analise" style="display:none">!</span></div>
+      <div class="s-item active" onclick="showPage('dashboard')"><span class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></span>Dashboard</div>
+      <div class="s-item" onclick="showPage('analise');resetAnalise()"><span class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></span>Nova Análise<span class="badge" id="badge-analise" style="display:none">!</span></div>
     </div>
 
     <div class="s-section">
       <div class="s-label">Documentos</div>
-      <div class="s-item" onclick="showPage('pareceres')"><span class="ico">📋</span>Histórico<span class="badge ok" id="badge-pareceres">0</span></div>
+      <div class="s-item" onclick="showPage('pareceres')"><span class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="11" x2="12" y2="17"/><line x1="9" y1="14" x2="15" y2="14"/></svg></span>Histórico<span class="badge ok" id="badge-pareceres">0</span></div>
     </div>
 
     <div class="s-section">
       <div class="s-label">Tributário</div>
-      <div class="s-item" onclick="showPage('reforma')"><span class="ico">🏛️</span>EC 132 / IBS / CBS</div>
+      <div class="s-item" onclick="showPage('reforma')"><span class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span>EC 132 / IBS / CBS</div>
     </div>
 
     <!-- CTA BUTTONS -->
     <div style="padding:12px 16px;margin:12px 8px;background:transparent;border:1px solid var(--brand);border-radius:10px;cursor:pointer;transition:.2s" onclick="showPage('atualizar')" onmouseover="this.style.background='var(--brand-glow)';this.style.borderColor='var(--brand2)'" onmouseout="this.style.background='transparent';this.style.borderColor='var(--brand)'">
-      <div style="font-size:11px;font-weight:700;color:var(--brand2);text-transform:uppercase;letter-spacing:.08em;text-align:center;line-height:1.5">🚀 Atualizar<br>Minha Empresa</div>
+      <div style="font-size:11px;font-weight:700;color:var(--brand2);text-transform:uppercase;letter-spacing:.08em;text-align:center;line-height:1.5"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-bottom:4px;display:block;margin-left:auto;margin-right:auto"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>Atualizar<br>Minha Empresa</div>
     </div>
 
     <div style="padding:12px 16px;margin:12px 8px;background:transparent;border:1px solid rgba(16,185,129,0.5);border-radius:10px;cursor:pointer;transition:.2s" onclick="showPage('homologar')" onmouseover="this.style.background='rgba(16,185,129,0.05)';this.style.borderColor='var(--green2)'" onmouseout="this.style.background='transparent';this.style.borderColor='rgba(16,185,129,0.5)'">
-      <div style="font-size:11px;font-weight:700;color:var(--green2);text-transform:uppercase;letter-spacing:.08em;text-align:center;line-height:1.5">✅ Quero<br>Homologar</div>
+      <div style="font-size:11px;font-weight:700;color:var(--green2);text-transform:uppercase;letter-spacing:.08em;text-align:center;line-height:1.5"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-bottom:4px;display:block;margin-left:auto;margin-right:auto"><polyline points="20 6 9 17 4 12"/></svg>Quero<br>Homologar</div>
     </div>
 
     <div class="s-section">
       <div class="s-label">Sistema</div>
-      <div class="s-item" onclick="showPage('sobre')"><span class="ico">ℹ️</span>Sobre</div>
-      <div class="s-item" onclick="showPage('config')"><span class="ico">⚙️</span>Configurações</div>
+      <div class="s-item" onclick="showPage('sobre')"><span class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></span>Sobre</div>
+      <div class="s-item" onclick="showPage('config')"><span class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v6m0 6v6M4.22 4.22l4.24 4.24m5.08 5.08l4.24 4.24M1 12h6m6 0h6M4.22 19.78l4.24-4.24m5.08-5.08l4.24-4.24"/></svg></span>Configurações</div>
     </div>
 
     <div class="s-footer">
       <div class="s-escritorio"><div class="s-dot"></div><span id="s-nome">Escritório Contábil</span></div>
-      <button class="s-logout" onclick="logout()">⏏ Sair do sistema</button>
+      <button class="s-logout" onclick="logout()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 3l4 4m0 0l-4 4m4-4v12a2 2 0 0 1-2 2h-4"/></svg>Sair</button>
     </div>
   </div>
 
@@ -618,7 +672,29 @@ Exemplo:
               <p>• Créditos de PIS/COFINS acumulados até 2027 devem ser <strong style="color:var(--ice)">homologados e utilizados antes da transição</strong> — a Receita Federal não garante aproveitamento posterior no sistema CBS.</p>
               <p>• O período de transição (2027–2033) prevê dois sistemas simultâneos com alíquotas duais — o contador que não mapear os créditos atuais terá dificuldade em identificar a base de cálculo retroativa.</p>
               <p>• A <strong style="color:var(--ice)">tese do STJ (Tema 779)</strong> sobre essencialidade dos insumos continua válida para os créditos históricos de PIS/COFINS, mas a janela de protocolo se fecha com a CBS.</p>
-              <p style="margin-top:16px;color:var(--amber)"><strong>⚡ Recomendação CreditOS:</strong> Toda empresa com regime não-cumulativo (Lucro Real) deve protocolar PER/DCOMP antes de jan/2027 para garantir o aproveitamento dos créditos históricos.</p>
+              <p style="margin-top:16px;color:var(--amber)"><strong><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="display:inline;margin-right:6px;vertical-align:text-bottom"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>Recomendação CreditOS:</strong> Toda empresa com regime não-cumulativo (Lucro Real) deve protocolar PER/DCOMP antes de jan/2027 para garantir o aproveitamento dos créditos históricos.</p>
+            </div>
+          </div>
+
+          <!-- CTA - SAIBA MAIS -->
+          <div class="section-card" style="background:linear-gradient(135deg,rgba(99,102,241,0.12),rgba(16,185,129,0.08));border:2px solid rgba(99,102,241,0.3);margin-top:32px">
+            <div class="section-body" style="text-align:center;padding:32px 24px">
+              <h2 style="color:var(--brand2);margin-bottom:12px;font-size:20px">🌐 Reforma Tributária Completa?</h2>
+              <p style="font-size:14px;color:var(--muted);line-height:1.8;margin-bottom:20px;max-width:600px;margin-left:auto;margin-right:auto">
+                A EC 132/2023 muda <strong>toda a estrutura fiscal brasileira</strong>. Para sua empresa se preparar adequadamente, é essencial entender não apenas os créditos atuais, mas também como os novos sistemas (CBS, IBS) vão impactar sua operação.
+              </p>
+              <p style="font-size:13px;color:var(--muted);margin-bottom:24px;max-width:600px;margin-left:auto;margin-right:auto">
+                <strong style="color:var(--ice)">TRÍADE IA oferece um observatório completo</strong> sobre a reforma tributária e soluções integradas para planejamento fiscal AI-First. Explore nossos outros sistemas SaaS especializados:
+              </p>
+              <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+                <a href="https://triadeiaos.com/" target="_blank" style="display:inline-block;background:var(--brand);color:#fff;padding:12px 24px;border-radius:10px;text-decoration:none;font-weight:700;font-size:13px;transition:.2s;border:2px solid var(--brand)" onmouseover="this.style.background='var(--brand2)'" onmouseout="this.style.background='var(--brand)'">
+                  📚 Saiba Mais sobre a Reforma
+                </a>
+                <a href="https://triadeiaos.com/solucoes" target="_blank" style="display:inline-block;background:transparent;color:var(--brand2);padding:10px 22px;border-radius:10px;text-decoration:none;font-weight:700;font-size:13px;border:2px solid var(--brand);transition:.2s" onmouseover="this.style.background='rgba(99,102,241,0.15)'" onmouseout="this.style.background='transparent'">
+                  🚀 Ver Todos os SaaS
+                </a>
+              </div>
+              <p style="font-size:11px;color:var(--dim);margin-top:16px">Acesse triadeiaos.com para conhecer nossa estratégia fiscal AI-First completa</p>
             </div>
           </div>
         </div>
@@ -654,7 +730,7 @@ Exemplo:
                 <ul style="margin-left:20px;margin-bottom:12px">
                   <li>📌 <strong>Prescrição:</strong> Você tem 5 anos para solicitar homologação. Após isso, o direito se extingue.</li>
                   <li>🚨 <strong>CBS 2027:</strong> A partir de 30 de junho de 2027, créditos de PIS/COFINS NÃO serão mais aproveitáveis.</li>
-                  <li>⚖️ <strong>Defesa em Auditoria:</strong> Créditos homologados não podem ser questionados retroativamente.</li>
+                  <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline;margin-right:6px;vertical-align:text-bottom"><path d="M12 2L2 6v2h20V6l-10-4z"/><line x1="2" y1="8" x2="22" y2="8"/><line x1="6" y1="8" x2="6" y2="22"/><line x1="18" y1="8" x2="18" y2="22"/><line x1="6" y1="22" x2="18" y2="22"/></svg><strong>Defesa em Auditoria:</strong> Créditos homologados não podem ser questionados retroativamente.</li>
                 </ul>
               </div>
             </div>
@@ -668,7 +744,7 @@ Exemplo:
               <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px">
 
                 <div style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:16px">
-                  <div style="font-size:32px;margin-bottom:8px">1️⃣</div>
+                  <div style="font-size:28px;margin-bottom:8px;display:flex;align-items:center;justify-content:center;width:40px;height:40px;background:rgba(99,102,241,0.15);border-radius:8px;margin-left:auto;margin-right:auto"><span style="font-weight:800;color:var(--brand2)">1</span></div>
                   <div style="font-weight:700;color:var(--ice);margin-bottom:8px">PER/DCOMP</div>
                   <div style="font-size:12px;color:var(--muted);line-height:1.6">
                     <strong>Pedido Eletrônico de Ressarcimento</strong> ou <strong>Declaração de Compensação</strong> no e-CAC da Receita Federal. É o caminho para federal (PIS/COFINS).
@@ -676,7 +752,7 @@ Exemplo:
                 </div>
 
                 <div style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:16px">
-                  <div style="font-size:32px;margin-bottom:8px">2️⃣</div>
+                  <div style="font-size:28px;margin-bottom:8px;display:flex;align-items:center;justify-content:center;width:40px;height:40px;background:rgba(245,158,11,0.15);border-radius:8px;margin-left:auto;margin-right:auto"><span style="font-weight:800;color:var(--amber)">2</span></div>
                   <div style="font-weight:700;color:var(--ice);margin-bottom:8px">DARE Estadual</div>
                   <div style="font-size:12px;color:var(--muted);line-height:1.6">
                     Para créditos de <strong>ICMS</strong>, via <strong>Declaração de Ajuste de ICMS</strong> junto à Secretaria de Fazenda do seu estado.
@@ -684,7 +760,7 @@ Exemplo:
                 </div>
 
                 <div style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:16px">
-                  <div style="font-size:32px;margin-bottom:8px">3️⃣</div>
+                  <div style="font-size:28px;margin-bottom:8px;display:flex;align-items:center;justify-content:center;width:40px;height:40px;background:rgba(239,68,68,0.15);border-radius:8px;margin-left:auto;margin-right:auto"><span style="font-weight:800;color:#f87171">3</span></div>
                   <div style="font-weight:700;color:var(--ice);margin-bottom:8px">Transferência para Terceiros</div>
                   <div style="font-size:12px;color:var(--muted);line-height:1.6">
                     Você pode transferir o crédito a outro contribuinte vinculado (controlada/coligada) ou terceiros autorizados.
@@ -895,7 +971,12 @@ const DEMO_META = { empresa: 'TECH INSUMOS INDUSTRIA LTDA', cnpj: '12.345.678/00
 // BOOT
 // ══════════════════════════════════════════════
 document.addEventListener('DOMContentLoaded', () => {
-  carregarStorage();
+  verificarSessao();
+  // Restaurar estado do sidebar
+  if (localStorage.getItem('creditOS_sidebarCollapsed') === 'true') {
+    document.getElementById('sidebar').classList.add('collapsed');
+    document.getElementById('main').classList.add('collapsed');
+  }
   atualizarUrgency();
   setInterval(atualizarUrgency, 1000);
   document.getElementById('upload-zone').addEventListener('dragover', e => { e.preventDefault(); e.currentTarget.classList.add('drag'); });
@@ -911,9 +992,67 @@ document.addEventListener('DOMContentLoaded', () => {
 // ══════════════════════════════════════════════
 // LOGIN
 // ══════════════════════════════════════════════
+function verificarSessao() {
+  const logado = localStorage.getItem('creditOS_logado');
+  if (logado === 'true') {
+    document.getElementById('login').style.display = 'none';
+    document.getElementById('app').style.display = 'flex';
+    carregarStorage();
+    atualizarDashboard();
+    atualizarBadgeParecer();
+    renderPareceresPage();
+  }
+}
+
+function toggleSidebar() {
+  const sidebar = document.getElementById('sidebar');
+  const main = document.getElementById('main');
+  sidebar.classList.toggle('collapsed');
+  main.classList.toggle('collapsed');
+  localStorage.setItem('creditOS_sidebarCollapsed', sidebar.classList.contains('collapsed'));
+}
+
+// SVG ICONS - Minimalistas e profissionais
+const ICONS = {
+  dashboard: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>',
+  search: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>',
+  document: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="11" x2="12" y2="17"/><line x1="9" y1="14" x2="15" y2="14"/></svg>',
+  building: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>',
+  rocket: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>',
+  check: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>',
+  info: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>',
+  settings: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v6m0 6v6M4.22 4.22l4.24 4.24m5.08 5.08l4.24 4.24M1 12h6m6 0h6M4.22 19.78l4.24-4.24m5.08-5.08l4.24-4.24"/></svg>',
+  logout: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 3l4 4m0 0l-4 4m4-4v12a2 2 0 0 1-2 2h-4"/></svg>'
+};
+
+// Usuários padrão (depois conectar ao Supabase)
+const USERS = [
+  { email: 'admin@triadeiaos.com', senha: 'creditOS2026', nome: 'Administrador' },
+  { email: 'demo@triadeiaos.com', senha: 'demo123', nome: 'Demo User' }
+];
+
 function login() {
-  const v = document.getElementById('pwd').value;
-  if (v === state.pwd) {
+  const email = document.getElementById('email').value.trim();
+  const senha = document.getElementById('pwd').value;
+  const el = document.getElementById('login-err');
+
+  if (!email) {
+    el.textContent = 'Por favor, informe seu email.';
+    setTimeout(() => el.textContent = '', 3000);
+    return;
+  }
+
+  if (!senha) {
+    el.textContent = 'Por favor, informe sua senha.';
+    setTimeout(() => el.textContent = '', 3000);
+    return;
+  }
+
+  const usuario = USERS.find(u => u.email === email && u.senha === senha);
+
+  if (usuario) {
+    localStorage.setItem('creditOS_logado', 'true');
+    localStorage.setItem('creditOS_usuario', JSON.stringify(usuario));
     document.getElementById('login').style.display = 'none';
     document.getElementById('app').style.display = 'flex';
     carregarStorage();
@@ -921,15 +1060,18 @@ function login() {
     atualizarBadgeParecer();
     renderPareceresPage();
   } else {
-    const el = document.getElementById('login-err');
-    el.textContent = 'Senha incorreta. Tente novamente.';
+    el.textContent = 'Email ou senha incorretos.';
+    document.getElementById('email').value = '';
     document.getElementById('pwd').value = '';
     setTimeout(() => el.textContent = '', 3000);
   }
 }
 function logout() {
+  localStorage.removeItem('creditOS_logado');
+  localStorage.removeItem('creditOS_usuario');
   document.getElementById('login').style.display = 'flex';
   document.getElementById('app').style.display = 'none';
+  document.getElementById('email').value = '';
   document.getElementById('pwd').value = '';
 }
 function alterarSenha() {
@@ -1198,14 +1340,19 @@ function mostrarResultado(r) {
 // ══════════════════════════════════════════════
 // IMPRESSÃO / DOWNLOAD
 // ══════════════════════════════════════════════
-function imprimirParecer() {
+async function imprimirParecer() {
   const r = state.ultimaAnalise;
   if (!r) return;
+
+  // Carregar logo como base64
+  let logoBase64 = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNzAiIGhlaWdodD0iNzAiIHZpZXdCb3g9IjAgMCA3MCA3MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48Y2lyY2xlIGN4PSIzNSIgY3k9IjM1IiByPSIzMyIgc3Ryb2tlPSIjNjM2NmYxIiBzdHJva2Utd2lkdGg9IjIiLz48dGV4dCB4PSIzNSIgeT0iNDIiIGZvbnQtd2VpZ2h0PSJib2xkIiBmb250LXNpemU9IjI0IiBmaWxsPSIjNjM2NmYxIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj7imaQ8L3RleHQ+PHRleHQgeD0iMzUiIHk9IjYwIiBmb250LXdlaWdodD0iYm9sZCIgZm9udC1zaXplPSI3IiBmaWxsPSIjNjM2NmYxIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5UUkHDDEFERTwvdGV4dD48L3N2Zz4=';
+
   const html = `<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><title>${r.parecerId}</title><style>body{font-family:Arial,sans-serif;max-width:800px;margin:40px auto;color:#1e293b;line-height:1.6}h1{font-size:22px;margin-bottom:4px}h3{font-size:14px;text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid #e2e8f0;padding-bottom:8px;margin:24px 0 12px}.row{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid #f1f5f9;font-size:13px}.badge{padding:2px 9px;border-radius:20px;font-size:11px;font-weight:700}.verde{background:#dcfce7;color:#166534}.amarelo{background:#fef3c7;color:#92400e}.total{font-size:18px;font-weight:900;color:#4f46e5}.tese{background:#f8fafc;border-left:3px solid #6366f1;padding:14px 18px;font-size:13px;margin:16px 0;border-radius:0 6px 6px 0}.alert{background:#fffbeb;border:1px solid #fcd34d;padding:14px 18px;border-radius:8px;font-size:13px;margin:20px 0}</style></head><body>
 <div style="display:flex;justify-content:space-between;align-items:flex-start;padding-bottom:20px;border-bottom:2px solid #1e293b;margin-bottom:28px">
-<div><h1><span style="color:#6366f1">Credit</span>OS · Parecer Técnico</h1><div style="font-size:13px;color:#64748b">TRÍADE IA · Motor de Recuperação de Créditos Tributários</div></div>
+<div style="display:flex;gap:16px;align-items:center"><img src="${logoBase64}" style="width:70px;height:70px;border-radius:50%;object-fit:contain;background:#f5f5f5;padding:4px" alt="TRÍADE"/><div><h1 style="margin:0"><span style="color:#6366f1">Credit</span>OS · Parecer Técnico</h1><div style="font-size:13px;color:#64748b">TRÍADE IA · Motor de Recuperação de Créditos Tributários</div></div></div>
 <div style="text-align:right;font-size:12px;color:#64748b">${r.parecerId}<br>${r.dataGeracao}<br>${state.config.nome || 'TRÍADE IA'}</div></div>
 ${buildParecerHTML(r, true)}</body></html>`;
+
   const blob = new Blob([html], {type:'text/html;charset=utf-8'});
   const url = URL.createObjectURL(blob);
   const win = window.open(url, '_blank', 'width=1000,height=800');
@@ -1258,7 +1405,7 @@ function baixarParecer() {
   if (!r) return;
   const html = `<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><title>${r.parecerId}</title><style>body{font-family:Arial,sans-serif;max-width:800px;margin:40px auto;color:#1e293b;line-height:1.6}h1{font-size:22px;margin-bottom:4px}h3{font-size:14px;text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid #e2e8f0;padding-bottom:8px;margin:24px 0 12px}.row{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid #f1f5f9;font-size:13px}.badge{padding:2px 9px;border-radius:20px;font-size:11px;font-weight:700}.verde{background:#dcfce7;color:#166534}.amarelo{background:#fef3c7;color:#92400e}.total{font-size:18px;font-weight:900;color:#4f46e5}.tese{background:#f8fafc;border-left:3px solid #6366f1;padding:14px 18px;font-size:13px;margin:16px 0;border-radius:0 6px 6px 0}.alert{background:#fffbeb;border:1px solid #fcd34d;padding:14px 18px;border-radius:8px;font-size:13px;margin:20px 0}</style></head><body>
 <div style="display:flex;justify-content:space-between;align-items:flex-start;padding-bottom:20px;border-bottom:2px solid #1e293b;margin-bottom:28px">
-<div><h1><span style="color:#6366f1">Credit</span>OS · Parecer Técnico</h1><div style="font-size:13px;color:#64748b">TRÍADE IA · Motor de Recuperação de Créditos Tributários</div></div>
+<div><h1 style="margin:0"><span style="color:#6366f1">Credit</span>OS · Parecer Técnico</h1><div style="font-size:13px;color:#64748b">TRÍADE IA · Motor de Recuperação de Créditos Tributários</div></div>
 <div style="text-align:right;font-size:12px;color:#64748b">${r.parecerId}<br>${r.dataGeracao}<br>${state.config.nome || 'TRÍADE IA'}</div></div>
 ${buildParecerHTML(r, true)}</body></html>`;
   const blob = new Blob([html], {type:'text/html;charset=utf-8'});
@@ -1300,10 +1447,16 @@ function buildParecerHTML(r, plain=false) {
     <div class="tese"><strong>STJ REsp 1.221.170/PR (Tema 779)</strong> — Créditos de insumos essenciais são aproveitáveis independente de contato físico direto com o produto final. O conceito de insumo deve ser analisado à luz da <em>essencialidade</em> e <em>relevância</em>.<br><br>Base normativa: Lei 10.637/2002 art. 3º, II (PIS) · Lei 10.833/2003 art. 3º, II (COFINS) · IN RFB 1.911/2019 art. 167. Prazo prescricional: 5 anos (art. 168 CTN).</div>
     <h3>Ação Recomendada</h3>
     <div class="alert"><strong>⚠ PER/DCOMP antes de Janeiro/2027</strong><br>Protocolar Pedido Eletrônico de Ressarcimento / Declaração de Compensação (PER/DCOMP) no e-CAC da Receita Federal antes da entrada em vigor do CBS (EC 132/2023). Créditos de ICMS: DARE estadual ou transferência para terceiros.<br><br><em>EC 132/2023 substitui PIS/COFINS pelo CBS em 2027. Créditos não homologados ficam expostos a auditoria retroativa de 5 anos.</em></div>
-    <div style="margin-top:40px;padding-top:20px;border-top:1px solid #e2e8f0;font-size:12px;color:#94a3b8;text-align:center">
+    <div style="margin-top:40px;padding:20px 0;border-top:1px solid #e2e8f0;text-align:center">
+      <div style="display:inline-block;padding:12px 24px;border:2px solid #e2e8f0;border-radius:8px;margin-bottom:16px;background:#f8fafc">
+        <div style="font-weight:800;font-size:14px;color:#1e293b">TRÍADE IA</div>
+        <div style="font-size:10px;color:#6366f1;letter-spacing:.05em">AI-First Fiscal</div>
+      </div>
+      <div style="font-size:12px;color:#94a3b8">
       Parecer gerado por CreditOS v1.0 · Motor IA TRÍADE IA · ${r.dataGeracao}<br>
       Base normativa: EC 132/2023 · STJ Tema 779 · IN RFB 1.911/2019<br>
       Este documento é um auxílio à decisão profissional e não substitui o juízo do contador responsável.
+      </div>
     </div>`;
 }
 
