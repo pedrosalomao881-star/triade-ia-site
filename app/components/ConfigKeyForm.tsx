@@ -71,16 +71,17 @@ export default function ConfigKeyForm({
     }
 
     setLoading(true);
+    setError(null);
     try {
       // Teste simples: validar formato da chave
       if (keyName === 'ANTHROPIC_API_KEY' && !value.startsWith('sk-ant-')) {
-        setError('Chave Anthropic inválida. Deve começar com sk-ant-');
+        setError('❌ Chave Anthropic inválida. Deve começar com sk-ant-');
         return;
       }
 
-      setSuccess('✓ Formato da chave válido');
+      setSuccess('✅ Formato da chave válido');
     } catch (err) {
-      setError('Erro ao testar chave');
+      setError('❌ Erro ao testar chave');
     } finally {
       setLoading(false);
     }
