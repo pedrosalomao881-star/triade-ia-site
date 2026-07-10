@@ -49,6 +49,16 @@ const sistemasPremiun = [
     preco: "Sob demanda",
   },
   {
+    id: "creditorx",
+    titulo: "CreditorX",
+    descricao: "Validador inteligente de crédito tributário PIS/COFINS. Análise em tempo real com 8-checks de elegibilidade e gerador de parecer técnico defensável.",
+    categoria: "Crédito Tributário",
+    cor: "from-rose-500 to-pink-500",
+    icon: BarChart3,
+    href: "https://triadeiaos.com/creditorX/sistema",
+    preco: "Sob demanda",
+  },
+  {
     id: "contabos",
     titulo: "ContabOS",
     descricao: "CRM para contadores e escritórios. Gestão de clientes, documentos e automação contábil com IA.",
