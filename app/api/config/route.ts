@@ -39,7 +39,7 @@ export async function POST(request: NextRequest) {
       .from("soaf_config")
       .select("id")
       .eq("key", key)
-      .single();
+      .maybeSingle();
 
     let result;
     if (existing) {
