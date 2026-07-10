@@ -65,7 +65,7 @@ const sistemasPremiun = [
     categoria: "Contabilidade",
     cor: "from-indigo-500 to-blue-500",
     icon: Briefcase,
-    href: "https://contabos.triadeiaos.com/",
+    href: "https://app-contabos.triadeiaos.com/solucoes",
     preco: "Sob demanda",
   },
 ];
