@@ -12,9 +12,34 @@ function getSupabase() {
 
 export const runtime = "nodejs";
 
-const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
-
 type ApiMsg = { role: "user" | "assistant"; content: string | Anthropic.ContentBlock[] };
+
+// Função para obter a chave da API Anthropic (do Supabase ou variável de ambiente)
+async function getAnthropicApiKey(): Promise<string> {
+  const supabase = getSupabase();
+
+  // Tentar buscar do Supabase primeiro
+  try {
+    const { data, error } = await supabase
+      .from("soaf_config")
+      .select("value")
+      .eq("key", "ANTHROPIC_API_KEY")
+      .single();
+
+    if (!error && data?.value) {
+      return data.value;
+    }
+  } catch (e) {
+    // Ignorar erro e usar fallback
+  }
+
+  // Fallback: usar variável de ambiente
+  const envKey = process.env.ANTHROPIC_API_KEY;
+  if (!envKey) {
+    throw new Error("ANTHROPIC_API_KEY não configurada no Supabase nem em variáveis de ambiente");
+  }
+  return envKey;
+}
 
 function sse(payload: object): string {
   return `data: ${JSON.stringify(payload)}\n\n`;
@@ -31,6 +56,10 @@ export async function POST(request: NextRequest) {
         controller.enqueue(encoder.encode(sse(payload)));
 
       try {
+        // Obter chave do Supabase
+        const apiKey = await getAnthropicApiKey();
+        const anthropic = new Anthropic({ apiKey });
+
         const firstStream = anthropic.messages.stream({
           model: "claude-haiku-4-5-20251001",
           max_tokens: 1024,
