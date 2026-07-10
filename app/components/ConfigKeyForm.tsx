@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 interface ConfigKeyFormProps {
   keyName: string;
@@ -19,6 +19,35 @@ export default function ConfigKeyForm({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
+  const [loaded, setLoaded] = useState(false);
+
+  // Carregar chave ao montar
+  useEffect(() => {
+    const loadKey = async () => {
+      try {
+        // Tentar carregar do servidor primeiro
+        const res = await fetch(`/api/config?key=${keyName}`);
+        if (res.ok) {
+          const data = await res.json();
+          setValue(data.value);
+          setSuccess(`✓ Chave carregada do servidor`);
+          setLoaded(true);
+          return;
+        }
+      } catch (err) {
+        // Ignorar erro e tentar localStorage
+      }
+
+      // Fallback: carregar do localStorage
+      const localKey = localStorage.getItem(`config_${keyName}`);
+      if (localKey) {
+        setValue(localKey);
+        setSuccess('✓ Chave carregada do navegador (fallback)');
+      }
+      setLoaded(true);
+    };
+    loadKey();
+  }, [keyName]);
 
   const handleSave = async () => {
     if (!value.trim()) {
