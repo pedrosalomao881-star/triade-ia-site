@@ -55,7 +55,7 @@ export async function generateMetadata({
       title: setor.titulo,
       description: setor.descricao,
       type: "article",
-      url: `https://triadeiaos.com/blog/ia-para-negocios/${params.slug}`,
+      url: `https://triadeiaos.com/blog/ia-para-negocios/${slug}`,
     },
   };
 }
