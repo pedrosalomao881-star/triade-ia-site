@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { ArrowRight, Zap, BarChart3, BookOpen, Briefcase, TrendingUp } from "lucide-react";
+import { ArrowRight, Zap, BarChart3, BookOpen, Briefcase, TrendingUp, Building2 } from "lucide-react";
 import Link from "next/link";
 
 export const metadata: Metadata = {
@@ -8,6 +8,16 @@ export const metadata: Metadata = {
 };
 
 const sistemasPremiun = [
+  {
+    id: "scenarioos",
+    titulo: "ScenarioOS",
+    descricao: "Análise tributária municipal com IA para preparação da reforma. Triagem de regimes, documentação de decisão e acompanhamento normativo.",
+    categoria: "Reforma Tributária",
+    cor: "from-teal-500 to-green-500",
+    icon: Building2,
+    href: "https://app.triadeiaos.com",
+    preco: "Sob demanda",
+  },
   {
     id: "soaf-v3",
     titulo: "SOAF V3.0",
