@@ -15,7 +15,7 @@ const sistemasPremiun = [
     categoria: "Reforma Tributária",
     cor: "from-teal-500 to-green-500",
     icon: Building2,
-    href: "https://app.triadeiaos.com",
+    href: "/scenarioos",
     preco: "Sob demanda",
   },
   {
