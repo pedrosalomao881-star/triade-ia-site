@@ -48,7 +48,7 @@ export default function ScenarioOS() {
             Análise tributária municipal com IA para preparação da reforma. Triagem de regimes, documentação de decisão e acompanhamento normativo.
           </p>
           <Link
-            href="https://app.triadeiaos.com/scenarioos-next"
+            href="https://scenarioos-triade.vercel.app"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-3 bg-teal-500 hover:bg-teal-600 text-white font-bold text-lg px-8 py-4 rounded-lg transition-colors"
@@ -90,7 +90,7 @@ export default function ScenarioOS() {
               Acesse a plataforma completa e comece sua análise tributária municipal com inteligência artificial.
             </p>
             <Link
-              href="https://app.triadeiaos.com/scenarioos-next"
+              href="https://scenarioos-triade.vercel.app"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-3 bg-teal-600 hover:bg-teal-700 text-white font-bold text-lg px-8 py-4 rounded-lg transition-colors"
