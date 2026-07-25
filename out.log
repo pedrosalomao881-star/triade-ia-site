@@ -1,0 +1,11 @@
+
+> triade-ia-site@0.1.0 dev
+> next dev
+
+▲ Next.js 16.2.9 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://100.90.63.108:3000
+✓ Ready in 1074ms
+⚠ The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+
+ GET / 200 in 4.1s (next.js: 3.1s, proxy.ts: 112ms, application-code: 834ms)

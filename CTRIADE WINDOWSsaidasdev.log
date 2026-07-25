@@ -1,0 +1,420 @@
+
+> triade-ia-site@0.1.0 dev
+> next dev -p 3002
+
+â–² Next.js 16.2.9 (Turbopack)
+- Local:         http://localhost:3002
+- Network:       http://100.90.63.108:3002
+âœ“ Ready in 705ms
+âš  The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+
+ GET /blog/sua-empresa-ai-first 200 in 2.3s (next.js: 1088ms, proxy.ts: 181ms, application-code: 1053ms)
+ GET /blog/ia-para-negocios 200 in 2.5s (next.js: 408ms, proxy.ts: 197ms, application-code: 1882ms)
+ GET /blog/sua-empresa-ai-first 200 in 759ms (next.js: 176ms, proxy.ts: 76ms, application-code: 507ms)
+ GET /blog/reforma-tributaria 200 in 1263ms (next.js: 145ms, proxy.ts: 133ms, application-code: 985ms)
+ GET /blog/ia-para-negocios 200 in 1225ms (next.js: 227ms, proxy.ts: 28ms, application-code: 969ms)
+ GET /blog/ia-para-negocios 200 in 683ms (next.js: 12ms, proxy.ts: 4ms, application-code: 667ms)
+ GET /blog/ia-para-negocios 200 in 577ms (next.js: 14ms, proxy.ts: 7ms, application-code: 556ms)
+ GET /blog/ia-para-negocios 200 in 461ms (next.js: 26ms, proxy.ts: 6ms, application-code: 429ms)
+ GET /blog/ia-para-negocios 200 in 469ms (next.js: 157ms, proxy.ts: 12ms, application-code: 301ms)
+ GET /blog/reforma-tributaria 200 in 124ms (next.js: 10ms, proxy.ts: 6ms, application-code: 109ms)
+ GET /blog/reforma-tributaria/saldo-credor-pis-cofins 200 in 405ms (next.js: 70ms, proxy.ts: 4ms, application-code: 331ms)
+ GET /blog/reforma-tributaria 200 in 110ms (next.js: 7ms, proxy.ts: 3ms, application-code: 101ms)
+ GET /blog/reforma-tributaria/janela-de-ouro-janeiro-2027 200 in 296ms (next.js: 63ms, proxy.ts: 5ms, application-code: 227ms)
+[browser] A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <HotReload globalError={[...]} webSocket={WebSocket} staticIndicatorState={{pathname:null, ...}}>
+      <AppDevOverlayErrorBoundary globalError={[...]}>
+        <ReplaySsrOnlyErrors>
+        <DevRootHTTPAccessFallbackBoundary>
+          <HTTPAccessFallbackBoundary notFound={<NotAllowedRootHTTPFallbackError>}>
+            <HTTPAccessFallbackErrorBoundary pathname="/blog/refo..." notFound={<NotAllowedRootHTTPFallbackError>} ...>
+              <RedirectBoundary>
+                <RedirectErrorBoundary router={{...}}>
+                  <Head>
+                  <__next_root_layout_boundary__>
+                    <SegmentViewNode type="layout" pagePath="layout.tsx">
+                      <SegmentTrieNode>
+                      <link>
+                      <script>
+                      <script>
+                      <script>
+                      <RootLayout>
+                        <html lang="pt-BR" className="inter_fe8b...">
+                          <head>
+                          <body
+                            className="min-h-screen flex flex-col bg-navy text-ice font-sans antialiased"
+-                           cz-shortcut-listen="true"
+                          >
+                  ...
+ 
+ GET /blog/sua-empresa-ai-first/maturidade-ai-first 200 in 351ms (next.js: 58ms, proxy.ts: 4ms, application-code: 289ms)
+[browser] A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <HotReload globalError={[...]} webSocket={WebSocket} staticIndicatorState={{pathname:null, ...}}>
+      <AppDevOverlayErrorBoundary globalError={[...]}>
+        <ReplaySsrOnlyErrors>
+        <DevRootHTTPAccessFallbackBoundary>
+          <HTTPAccessFallbackBoundary notFound={<NotAllowedRootHTTPFallbackError>}>
+            <HTTPAccessFallbackErrorBoundary pathname="/blog/sua-..." notFound={<NotAllowedRootHTTPFallbackError>} ...>
+              <RedirectBoundary>
+                <RedirectErrorBoundary router={{...}}>
+                  <Head>
+                  <__next_root_layout_boundary__>
+                    <SegmentViewNode type="layout" pagePath="layout.tsx">
+                      <SegmentTrieNode>
+                      <link>
+                      <script>
+                      <script>
+                      <script>
+                      <RootLayout>
+                        <html lang="pt-BR" className="inter_fe8b...">
+                          <head>
+                          <body
+                            className="min-h-screen flex flex-col bg-navy text-ice font-sans antialiased"
+-                           cz-shortcut-listen="true"
+                          >
+                  ...
+ 
+Error: Route "/blog/ia-para-negocios/[slug]" used `params.slug`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at IAParaSegmentoRedirect (app\blog\ia-para-negocios\[slug]\page.tsx:13:32)
+  11 |
+  12 | export default function IAParaSegmentoRedirect({ params }: { params: { slug: string } }) {
+> 13 |   const route = slugMap[params.slug];
+     |                                ^
+  14 |
+  15 |   if (!route) {
+  16 |     redirect("/blog/ia-para-negocios");
+ GET /blog/ia-para-negocios/cooperativas 307 in 1798ms (next.js: 1464ms, proxy.ts: 4ms, application-code: 330ms)
+ GET /blog/ia-para-negocios 200 in 159ms (next.js: 10ms, proxy.ts: 5ms, application-code: 144ms)
+Error: Route "/blog/ia-para-negocios/[slug]" used `params.slug`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at IAParaSegmentoRedirect (app\blog\ia-para-negocios\[slug]\page.tsx:13:32)
+  11 |
+  12 | export default function IAParaSegmentoRedirect({ params }: { params: { slug: string } }) {
+> 13 |   const route = slugMap[params.slug];
+     |                                ^
+  14 |
+  15 |   if (!route) {
+  16 |     redirect("/blog/ia-para-negocios");
+ GET /blog/ia-para-negocios/contabilidade 307 in 380ms (next.js: 42ms, proxy.ts: 6ms, application-code: 331ms)
+ GET /blog/ia-para-negocios 200 in 259ms (next.js: 9ms, proxy.ts: 6ms, application-code: 245ms)
+[browser] A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <HotReload globalError={[...]} webSocket={WebSocket} staticIndicatorState={{pathname:null, ...}}>
+      <AppDevOverlayErrorBoundary globalError={[...]}>
+        <ReplaySsrOnlyErrors>
+        <DevRootHTTPAccessFallbackBoundary>
+          <HTTPAccessFallbackBoundary notFound={<NotAllowedRootHTTPFallbackError>}>
+            <HTTPAccessFallbackErrorBoundary pathname="/blog/ia-p..." notFound={<NotAllowedRootHTTPFallbackError>} ...>
+              <RedirectBoundary>
+                <RedirectErrorBoundary router={{...}}>
+                  <Head>
+                  <__next_root_layout_boundary__>
+                    <SegmentViewNode type="layout" pagePath="layout.tsx">
+                      <SegmentTrieNode>
+                      <link>
+                      <script>
+                      <script>
+                      <script>
+                      <RootLayout>
+                        <html lang="pt-BR" className="inter_fe8b...">
+                          <head>
+                          <body
+                            className="min-h-screen flex flex-col bg-navy text-ice font-sans antialiased"
+-                           cz-shortcut-listen="true"
+                          >
+                  ...
+ 
+Error: Route "/blog/ia-para-negocios/[slug]" used `params.slug`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at IAParaSegmentoRedirect (app\blog\ia-para-negocios\[slug]\page.tsx:13:32)
+  11 |
+  12 | export default function IAParaSegmentoRedirect({ params }: { params: { slug: string } }) {
+> 13 |   const route = slugMap[params.slug];
+     |                                ^
+  14 |
+  15 |   if (!route) {
+  16 |     redirect("/blog/ia-para-negocios");
+ GET /blog/ia-para-negocios/cooperativas 307 in 334ms (next.js: 26ms, proxy.ts: 6ms, application-code: 303ms)
+ GET /blog/ia-para-negocios 200 in 170ms (next.js: 13ms, proxy.ts: 6ms, application-code: 151ms)
+[browser] A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <HotReload globalError={[...]} webSocket={WebSocket} staticIndicatorState={{pathname:null, ...}}>
+      <AppDevOverlayErrorBoundary globalError={[...]}>
+        <ReplaySsrOnlyErrors>
+        <DevRootHTTPAccessFallbackBoundary>
+          <HTTPAccessFallbackBoundary notFound={<NotAllowedRootHTTPFallbackError>}>
+            <HTTPAccessFallbackErrorBoundary pathname="/blog/ia-p..." notFound={<NotAllowedRootHTTPFallbackError>} ...>
+              <RedirectBoundary>
+                <RedirectErrorBoundary router={{...}}>
+                  <Head>
+                  <__next_root_layout_boundary__>
+                    <SegmentViewNode type="layout" pagePath="layout.tsx">
+                      <SegmentTrieNode>
+                      <link>
+                      <script>
+                      <script>
+                      <script>
+                      <RootLayout>
+                        <html lang="pt-BR" className="inter_fe8b...">
+                          <head>
+                          <body
+                            className="min-h-screen flex flex-col bg-navy text-ice font-sans antialiased"
+-                           cz-shortcut-listen="true"
+                          >
+                  ...
+ 
+'wmic' nÆo ‚ reconhecido como um comando interno
+ou externo, um programa oper vel ou um arquivo em lotes.
+Error: Route "/blog/ia-para-negocios/[slug]" used `params.slug`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at IAParaSegmentoRedirect (app\blog\ia-para-negocios\[slug]\page.tsx:13:32)
+  11 |
+  12 | export default function IAParaSegmentoRedirect({ params }: { params: { slug: string } }) {
+> 13 |   const route = slugMap[params.slug];
+     |                                ^
+  14 |
+  15 |   if (!route) {
+  16 |     redirect("/blog/ia-para-negocios");
+ GET /blog/ia-para-negocios/contabilidade 307 in 405ms (next.js: 49ms, proxy.ts: 11ms, application-code: 345ms)
+ GET /blog/ia-para-negocios 200 in 181ms (next.js: 15ms, proxy.ts: 4ms, application-code: 161ms)
+[browser] A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <HotReload globalError={[...]} webSocket={WebSocket} staticIndicatorState={{pathname:null, ...}}>
+      <AppDevOverlayErrorBoundary globalError={[...]}>
+        <ReplaySsrOnlyErrors>
+        <DevRootHTTPAccessFallbackBoundary>
+          <HTTPAccessFallbackBoundary notFound={<NotAllowedRootHTTPFallbackError>}>
+            <HTTPAccessFallbackErrorBoundary pathname="/blog/ia-p..." notFound={<NotAllowedRootHTTPFallbackError>} ...>
+              <RedirectBoundary>
+                <RedirectErrorBoundary router={{...}}>
+                  <Head>
+                  <__next_root_layout_boundary__>
+                    <SegmentViewNode type="layout" pagePath="layout.tsx">
+                      <SegmentTrieNode>
+                      <link>
+                      <script>
+                      <script>
+                      <script>
+                      <RootLayout>
+                        <html lang="pt-BR" className="inter_fe8b...">
+                          <head>
+                          <body
+                            className="min-h-screen flex flex-col bg-navy text-ice font-sans antialiased"
+-                           cz-shortcut-listen="true"
+                          >
+                  ...
+ 
+ GET /solucoes 200 in 2.4s (next.js: 2.4s, proxy.ts: 7ms, application-code: 56ms)
+ GET / 200 in 168ms (next.js: 58ms, proxy.ts: 3ms, application-code: 107ms)
+ GET /sobre 200 in 503ms (next.js: 456ms, proxy.ts: 4ms, application-code: 43ms)
+ GET /blog/ia-para-negocios 200 in 57ms (next.js: 9ms, proxy.ts: 5ms, application-code: 42ms)
+Error: Route "/blog/ia-para-negocios/[slug]" used `params.slug`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at IAParaSegmentoRedirect (app\blog\ia-para-negocios\[slug]\page.tsx:13:32)
+  11 |
+  12 | export default function IAParaSegmentoRedirect({ params }: { params: { slug: string } }) {
+> 13 |   const route = slugMap[params.slug];
+     |                                ^
+  14 |
+  15 |   if (!route) {
+  16 |     redirect("/blog/ia-para-negocios");
+ GET /blog/ia-para-negocios/clinicas 200 in 73ms (next.js: 15ms, proxy.ts: 2ms, application-code: 56ms)
+ GET /blog/ia-para-negocios 200 in 120ms (next.js: 8ms, proxy.ts: 3ms, application-code: 109ms)
+ GET /blog/ia-para-negocios 200 in 62ms (next.js: 8ms, proxy.ts: 6ms, application-code: 48ms)
+ GET /blog/reforma-tributaria 200 in 55ms (next.js: 11ms, proxy.ts: 3ms, application-code: 41ms)
+ GET /blog/ia-para-negocios 200 in 63ms (next.js: 7ms, proxy.ts: 5ms, application-code: 50ms)
+ GET /blog/ia-para-negocios 200 in 26ms (next.js: 8ms, proxy.ts: 5ms, application-code: 14ms)
+ GET /blog/ia-para-negocios 200 in 67ms (next.js: 9ms, proxy.ts: 3ms, application-code: 54ms)
+ GET /blog/ia-para-negocios 200 in 20ms (next.js: 8ms, proxy.ts: 2ms, application-code: 10ms)
+ GET /blog/ia-para-negocios 200 in 45ms (next.js: 5ms, proxy.ts: 3ms, application-code: 37ms)
+Error: Route "/blog/ia-para-negocios/[slug]" used `params.slug`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at IAParaSegmentoRedirect (app\blog\ia-para-negocios\[slug]\page.tsx:13:32)
+  11 |
+  12 | export default function IAParaSegmentoRedirect({ params }: { params: { slug: string } }) {
+> 13 |   const route = slugMap[params.slug];
+     |                                ^
+  14 |
+  15 |   if (!route) {
+  16 |     redirect("/blog/ia-para-negocios");
+ GET /blog/ia-para-negocios/clinicas 307 in 263ms (next.js: 18ms, proxy.ts: 3ms, application-code: 242ms)
+ GET /blog/ia-para-negocios 200 in 149ms (next.js: 9ms, proxy.ts: 3ms, application-code: 137ms)
+[browser] A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <HotReload globalError={[...]} webSocket={WebSocket} staticIndicatorState={{pathname:null, ...}}>
+      <AppDevOverlayErrorBoundary globalError={[...]}>
+        <ReplaySsrOnlyErrors>
+        <DevRootHTTPAccessFallbackBoundary>
+          <HTTPAccessFallbackBoundary notFound={<NotAllowedRootHTTPFallbackError>}>
+            <HTTPAccessFallbackErrorBoundary pathname="/blog/ia-p..." notFound={<NotAllowedRootHTTPFallbackError>} ...>
+              <RedirectBoundary>
+                <RedirectErrorBoundary router={{...}}>
+                  <Head>
+                  <__next_root_layout_boundary__>
+                    <SegmentViewNode type="layout" pagePath="layout.tsx">
+                      <SegmentTrieNode>
+                      <link>
+                      <script>
+                      <script>
+                      <script>
+                      <RootLayout>
+                        <html lang="pt-BR" className="inter_fe8b...">
+                          <head>
+                          <body
+                            className="min-h-screen flex flex-col bg-navy text-ice font-sans antialiased"
+-                           cz-shortcut-listen="true"
+                          >
+                  ...
+ 
+Error: Route "/blog/ia-para-negocios/[slug]" used `params.slug`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at IAParaSegmentoRedirect (app\blog\ia-para-negocios\[slug]\page.tsx:13:32)
+  11 |
+  12 | export default function IAParaSegmentoRedirect({ params }: { params: { slug: string } }) {
+> 13 |   const route = slugMap[params.slug];
+     |                                ^
+  14 |
+  15 |   if (!route) {
+  16 |     redirect("/blog/ia-para-negocios");
+ GET /blog/ia-para-negocios/clinicas 307 in 273ms (next.js: 19ms, proxy.ts: 5ms, application-code: 250ms)
+ GET /blog/ia-para-negocios 200 in 135ms (next.js: 8ms, proxy.ts: 3ms, application-code: 124ms)
+âœ“ Compiled in 908ms
+ GET /blog/ia-para-negocios 200 in 553ms (next.js: 90ms, proxy.ts: 80ms, application-code: 383ms)
+ GET /blog/ia-para-negocios 200 in 373ms (next.js: 11ms, proxy.ts: 5ms, application-code: 357ms)
+ GET /blog/ia-para-negocios 200 in 304ms (next.js: 109ms, proxy.ts: 6ms, application-code: 188ms)
+ GET /blog/ia-para-negocios 200 in 308ms (next.js: 21ms, proxy.ts: 6ms, application-code: 280ms)
+ GET /blog/ia-para-negocios 200 in 307ms (next.js: 65ms, proxy.ts: 6ms, application-code: 236ms)
+ GET /blog/ia-para-negocios 200 in 305ms (next.js: 153ms, proxy.ts: 9ms, application-code: 143ms)
+ GET /blog/ia-para-negocios 200 in 440ms (next.js: 8ms, proxy.ts: 4ms, application-code: 428ms)
+ GET /blog/ia-para-negocios 200 in 443ms (next.js: 12ms, proxy.ts: 6ms, application-code: 426ms)
+ GET /blog/ia-para-negocios 200 in 392ms (next.js: 23ms, proxy.ts: 6ms, application-code: 364ms)
+ GET /blog/ia-para-negocios 200 in 394ms (next.js: 164ms, proxy.ts: 7ms, application-code: 223ms)
+ GET /blog/ia-para-negocios 200 in 400ms (next.js: 101ms, proxy.ts: 6ms, application-code: 293ms)
+ GET /blog/ia-para-negocios 200 in 397ms (next.js: 204ms, proxy.ts: 6ms, application-code: 187ms)
+ GET /blog/ia-para-negocios 200 in 378ms (next.js: 9ms, proxy.ts: 3ms, application-code: 367ms)
+ GET /blog/ia-para-negocios 200 in 389ms (next.js: 24ms, proxy.ts: 7ms, application-code: 358ms)
+ GET /blog/ia-para-negocios 200 in 383ms (next.js: 70ms, proxy.ts: 7ms, application-code: 307ms)
+ GET /blog/ia-para-negocios 200 in 387ms (next.js: 108ms, proxy.ts: 10ms, application-code: 269ms)
+ GET /blog/ia-para-negocios 200 in 385ms (next.js: 111ms, proxy.ts: 52ms, application-code: 222ms)
+ GET /blog/ia-para-negocios 200 in 386ms (next.js: 157ms, proxy.ts: 51ms, application-code: 178ms)
+ GET /blog/ia-para-negocios 200 in 417ms (next.js: 12ms, proxy.ts: 5ms, application-code: 400ms)
+ GET /blog/ia-para-negocios 200 in 343ms (next.js: 20ms, proxy.ts: 6ms, application-code: 317ms)
+ GET /blog/ia-para-negocios 200 in 341ms (next.js: 72ms, proxy.ts: 5ms, application-code: 263ms)
+ GET /blog/ia-para-negocios 200 in 396ms (next.js: 128ms, proxy.ts: 5ms, application-code: 263ms)
+ GET /blog/ia-para-negocios 200 in 451ms (next.js: 67ms, proxy.ts: 57ms, application-code: 327ms)
+ GET /blog/ia-para-negocios 200 in 445ms (next.js: 175ms, proxy.ts: 5ms, application-code: 265ms)
+ GET /blog/ia-para-negocios 200 in 436ms (next.js: 27ms, proxy.ts: 5ms, application-code: 404ms)
+ GET /blog/ia-para-negocios 200 in 432ms (next.js: 124ms, proxy.ts: 6ms, application-code: 302ms)
+ GET /blog/ia-para-negocios 200 in 427ms (next.js: 71ms, proxy.ts: 110ms, application-code: 246ms)
+ GET /blog/ia-para-negocios 200 in 317ms (next.js: 62ms, proxy.ts: 7ms, application-code: 248ms)
+ GET /blog/ia-para-negocios 200 in 318ms (next.js: 115ms, proxy.ts: 7ms, application-code: 196ms)
+ GET /blog/ia-para-negocios 200 in 379ms (next.js: 119ms, proxy.ts: 53ms, application-code: 207ms)
+ GET /blog/ia-para-negocios 200 in 462ms (next.js: 16ms, proxy.ts: 4ms, application-code: 442ms)
+ GET /blog/ia-para-negocios 200 in 465ms (next.js: 64ms, proxy.ts: 7ms, application-code: 394ms)
+ GET /blog/ia-para-negocios 200 in 412ms (next.js: 86ms, proxy.ts: 3ms, application-code: 323ms)
+ GET /blog/ia-para-negocios 200 in 452ms (next.js: 89ms, proxy.ts: 9ms, application-code: 354ms)
+ GET /blog/ia-para-negocios 200 in 446ms (next.js: 81ms, proxy.ts: 70ms, application-code: 295ms)
+ GET /blog/ia-para-negocios 200 in 571ms (next.js: 157ms, proxy.ts: 9ms, application-code: 405ms)
+ GET /blog/ia-para-negocios 200 in 602ms (next.js: 18ms, proxy.ts: 5ms, application-code: 579ms)
+ GET /blog/ia-para-negocios 200 in 513ms (next.js: 117ms, proxy.ts: 7ms, application-code: 389ms)
+ GET /blog/ia-para-negocios 200 in 607ms (next.js: 23ms, proxy.ts: 95ms, application-code: 489ms)
+ GET /blog/ia-para-negocios 200 in 532ms (next.js: 42ms, proxy.ts: 97ms, application-code: 393ms)
+ GET /blog/ia-para-negocios 200 in 435ms (next.js: 116ms, proxy.ts: 23ms, application-code: 296ms)
+ GET /blog/ia-para-negocios 200 in 592ms (next.js: 194ms, proxy.ts: 12ms, application-code: 386ms)
+ GET /blog/ia-para-negocios 200 in 524ms (next.js: 15ms, proxy.ts: 7ms, application-code: 501ms)
+ GET /blog/ia-para-negocios 200 in 406ms (next.js: 24ms, proxy.ts: 6ms, application-code: 376ms)
+ GET /blog/ia-para-negocios 200 in 405ms (next.js: 124ms, proxy.ts: 6ms, application-code: 275ms)
+ GET /blog/ia-para-negocios 200 in 398ms (next.js: 89ms, proxy.ts: 7ms, application-code: 302ms)
+ GET /blog/ia-para-negocios 200 in 487ms (next.js: 74ms, proxy.ts: 78ms, application-code: 335ms)
+ GET /blog/ia-para-negocios 200 in 471ms (next.js: 127ms, proxy.ts: 5ms, application-code: 338ms)
+ GET /blog/ia-para-negocios 200 in 516ms (next.js: 20ms, proxy.ts: 3ms, application-code: 492ms)
+ GET /blog/ia-para-negocios 200 in 519ms (next.js: 106ms, proxy.ts: 7ms, application-code: 406ms)
+ GET /blog/ia-para-negocios 200 in 429ms (next.js: 103ms, proxy.ts: 7ms, application-code: 319ms)
+ GET /blog/ia-para-negocios 200 in 449ms (next.js: 78ms, proxy.ts: 8ms, application-code: 364ms)
+ GET /blog/ia-para-negocios 200 in 385ms (next.js: 86ms, proxy.ts: 7ms, application-code: 292ms)
+ GET /blog/ia-para-negocios 200 in 379ms (next.js: 158ms, proxy.ts: 4ms, application-code: 217ms)
+ GET /blog/ia-para-negocios 200 in 142ms (next.js: 17ms, proxy.ts: 6ms, application-code: 119ms)
+ GET /blog/reforma-tributaria 200 in 465ms (next.js: 90ms, proxy.ts: 54ms, application-code: 321ms)
+ GET /blog/ia-para-negocios 200 in 170ms (next.js: 16ms, proxy.ts: 3ms, application-code: 152ms)
+Error: Route "/blog/ia-para-negocios/[slug]" used `params.slug`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at SetorPage (app\blog\ia-para-negocios\[slug]\page.tsx:62:36)
+  60 |
+  61 | export default function SetorPage({ params }: { params: { slug: string } }) {
+> 62 |   const setor = setoresData[params.slug];
+     |                                    ^
+  63 |
+  64 |   if (!setor) {
+  65 |     return (
+Error: Route "/blog/ia-para-negocios/[slug]" used `params.slug`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at Module.generateMetadata (app\blog\ia-para-negocios\[slug]\page.tsx:43:36)
+  41 |   params: { slug: string };
+  42 | }): Promise<Metadata> {
+> 43 |   const setor = setoresData[params.slug];
+     |                                    ^
+  44 |
+  45 |   if (!setor) {
+  46 |     return { title: "Setor nÃ£o encontrado" };
+ GET /blog/ia-para-negocios/clinicas 200 in 669ms (next.js: 179ms, proxy.ts: 5ms, application-code: 485ms)
+[?25h
