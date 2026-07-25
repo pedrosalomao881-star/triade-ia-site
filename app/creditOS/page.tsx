@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { ArrowRight, Clock, TrendingUp, FileCheck, AlertTriangle, Zap, BarChart2 } from 'lucide-react'
+import { ArrowRight, Clock, TrendingUp, FileCheck, AlertTriangle, Zap, BarChart2, Check } from 'lucide-react'
 
 export const metadata: Metadata = {
   title: 'CreditOS — Recuperação de Créditos Tributários com IA | TRÍADE IA',
@@ -331,41 +331,156 @@ export default function CreditOSPage() {
         </div>
       </section>
 
-      {/* ── INTERFACE ── */}
-      <section className="py-20 px-6 border-t border-white/[0.06] bg-white/[0.01]">
-        <div className="max-w-4xl mx-auto">
-          <div className="flex items-center gap-2 mb-10">
-            <TrendingUp className="w-3.5 h-3.5 text-brand/50" strokeWidth={1.5} />
-            <span className="text-xs font-mono font-semibold text-brand/60 uppercase tracking-widest">Interface do agente</span>
-          </div>
-          <h2 className="font-display font-bold text-3xl text-ice mb-4 leading-tight">
-            Tela de login segura e intuitiva.
-          </h2>
-          <p className="text-ice/50 text-base leading-relaxed mb-12">
-            A interface do CreditOS foi projetada para contadores e gerentes financeiros. Login seguro, análise em tempo real, e pareceres técnicos em um clique.
-          </p>
-
-          {/* Tela de login */}
-          <div className="border border-white/[0.06] rounded-xl overflow-hidden bg-white/[0.01] p-8 flex justify-center">
-            <img
-              src="/images/creditOS/tela-login.png"
-              alt="CreditOS — Tela de Login com Logo TRÍADE"
-              className="max-w-sm h-auto rounded-lg shadow-2xl"
-            />
+      {/* ── PLANOS E ASSINATURAS ── */}
+      <section className="py-20 px-6 border-t border-white/[0.06]">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="font-display font-bold text-3xl text-ice mb-4 leading-tight">
+              Planos e Assinaturas
+            </h2>
+            <p className="text-ice/50 text-base leading-relaxed max-w-2xl mx-auto">
+              Escolha o plano ideal para sua necessidade. Todos incluem acesso à plataforma CreditOS com análise de créditos em tempo real.
+            </p>
           </div>
 
-          <div className="mt-10 grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="border border-white/[0.05] rounded-lg p-5 bg-white/[0.01]">
-              <div className="text-brand font-semibold text-sm mb-2">🔐 Autenticação Segura</div>
-              <p className="text-ice/40 text-xs leading-relaxed">OAuth2, MFA e criptografia de dados. Conformidade LGPD.</p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {/* Mensal */}
+            <div className="border border-white/[0.06] rounded-xl overflow-hidden bg-white/[0.01] flex flex-col">
+              <div className="p-6 border-b border-white/[0.06]">
+                <h3 className="text-2xl font-display font-bold text-brand mb-2">Mensal</h3>
+                <p className="text-ice/50 text-sm mb-4">Flexibilidade para começar</p>
+                <div className="text-ice/40 text-xs line-through mb-2">De R$ 497/mês</div>
+                <div className="text-3xl font-display font-bold text-brand">
+                  R$ <span className="text-2xl">47</span>
+                  <span className="text-sm text-ice/60 font-normal">/mês</span>
+                </div>
+              </div>
+              <div className="p-6 flex-1">
+                <ul className="space-y-3 mb-8">
+                  <li className="flex items-start gap-3">
+                    <Check className="w-4 h-4 text-brand shrink-0 mt-0.5" strokeWidth={2} />
+                    <span className="text-ice/60 text-sm">Acesso completo à plataforma</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <Check className="w-4 h-4 text-brand shrink-0 mt-0.5" strokeWidth={2} />
+                    <span className="text-ice/60 text-sm">Suporte prioritário</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <Check className="w-4 h-4 text-brand shrink-0 mt-0.5" strokeWidth={2} />
+                    <span className="text-ice/60 text-sm">Atualizações contínuas</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <Check className="w-4 h-4 text-brand shrink-0 mt-0.5" strokeWidth={2} />
+                    <span className="text-ice/60 text-sm">Relatórios e dashboards</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <Check className="w-4 h-4 text-brand shrink-0 mt-0.5" strokeWidth={2} />
+                    <span className="text-ice/60 text-sm">Integrações básicas</span>
+                  </li>
+                </ul>
+                <Link
+                  href="/creditOS/assinatura/?plan=mensal"
+                  className="block w-full text-center border border-brand/30 text-brand/70 font-semibold px-6 py-3 rounded-sm hover:border-brand hover:text-brand transition-colors text-sm"
+                  style={{ borderRadius: '2px' }}
+                >
+                  Assinar plano mensal
+                </Link>
+              </div>
             </div>
-            <div className="border border-white/[0.05] rounded-lg p-5 bg-white/[0.01]">
-              <div className="text-brand font-semibold text-sm mb-2">⚡ Análise em Tempo Real</div>
-              <p className="text-ice/40 text-xs leading-relaxed">EFD, DCTF e razão contábil processados em paralelo.</p>
+
+            {/* Semestral - DESTAQUE */}
+            <div className="border-2 border-brand rounded-xl overflow-hidden bg-white/[0.02] flex flex-col relative">
+              <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2">
+                <span className="inline-block bg-brand text-navy font-semibold text-xs px-4 py-1 rounded-full uppercase tracking-widest">
+                  Mais escolhido
+                </span>
+              </div>
+              <div className="p-6 border-b border-brand/20 mt-4">
+                <h3 className="text-2xl font-display font-bold text-brand mb-2">Semestral</h3>
+                <p className="text-ice/50 text-sm mb-4">Mais economia, mais resultados</p>
+                <div className="text-ice/40 text-xs line-through mb-2">De R$ 2.497/semestre</div>
+                <div className="text-3xl font-display font-bold text-brand">
+                  R$ <span className="text-2xl">197</span>
+                  <span className="text-sm text-ice/60 font-normal">/semestre</span>
+                </div>
+                <div className="text-ice/40 text-xs mt-2">Equivale a R$ 32,83/mês</div>
+              </div>
+              <div className="p-6 flex-1">
+                <ul className="space-y-3 mb-8">
+                  <li className="flex items-start gap-3">
+                    <Check className="w-4 h-4 text-brand shrink-0 mt-0.5" strokeWidth={2} />
+                    <span className="text-ice/60 text-sm">Todos os recursos do plano mensal</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <Check className="w-4 h-4 text-brand shrink-0 mt-0.5" strokeWidth={2} />
+                    <span className="text-ice/60 text-sm">Desconto especial</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <Check className="w-4 h-4 text-brand shrink-0 mt-0.5" strokeWidth={2} />
+                    <span className="text-ice/60 text-sm">Material de Apoio</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <Check className="w-4 h-4 text-brand shrink-0 mt-0.5" strokeWidth={2} />
+                    <span className="text-ice/60 text-sm">Integrações avançadas</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <Check className="w-4 h-4 text-brand shrink-0 mt-0.5" strokeWidth={2} />
+                    <span className="text-ice/60 text-sm">Suporte premium</span>
+                  </li>
+                </ul>
+                <Link
+                  href="/creditOS/assinatura/?plan=semestral"
+                  className="block w-full text-center bg-brand text-navy font-semibold px-6 py-3 rounded-sm hover:bg-brand/90 transition-colors text-sm"
+                  style={{ borderRadius: '2px' }}
+                >
+                  Assinar plano semestral
+                </Link>
+              </div>
             </div>
-            <div className="border border-white/[0.05] rounded-lg p-5 bg-white/[0.01]">
-              <div className="text-brand font-semibold text-sm mb-2">📊 Pareceres Prontos</div>
-              <p className="text-ice/40 text-xs leading-relaxed">PT em HTML, PDF e formato jurídico — pronto para protocolo.</p>
+
+            {/* Anual */}
+            <div className="border border-white/[0.06] rounded-xl overflow-hidden bg-white/[0.01] flex flex-col">
+              <div className="p-6 border-b border-white/[0.06]">
+                <h3 className="text-2xl font-display font-bold text-cyan-400 mb-2">Anual</h3>
+                <p className="text-ice/50 text-sm mb-4">Máximo desempenho e economia</p>
+                <div className="text-ice/40 text-xs line-through mb-2">De R$ 4.997/ano</div>
+                <div className="text-3xl font-display font-bold text-cyan-400">
+                  R$ <span className="text-2xl">497</span>
+                  <span className="text-sm text-ice/60 font-normal">/ano</span>
+                </div>
+                <div className="text-ice/40 text-xs mt-2">Equivale a R$ 41,41/mês</div>
+              </div>
+              <div className="p-6 flex-1">
+                <ul className="space-y-3 mb-8">
+                  <li className="flex items-start gap-3">
+                    <Check className="w-4 h-4 text-cyan-400 shrink-0 mt-0.5" strokeWidth={2} />
+                    <span className="text-ice/60 text-sm">Todos os recursos dos planos anteriores</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <Check className="w-4 h-4 text-cyan-400 shrink-0 mt-0.5" strokeWidth={2} />
+                    <span className="text-ice/60 text-sm">Maior desconto do ano</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <Check className="w-4 h-4 text-cyan-400 shrink-0 mt-0.5" strokeWidth={2} />
+                    <span className="text-ice/60 text-sm">Material de Apoio</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <Check className="w-4 h-4 text-cyan-400 shrink-0 mt-0.5" strokeWidth={2} />
+                    <span className="text-ice/60 text-sm">Implantação personalizada</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <Check className="w-4 h-4 text-cyan-400 shrink-0 mt-0.5" strokeWidth={2} />
+                    <span className="text-ice/60 text-sm">Suporte VIP 24/7</span>
+                  </li>
+                </ul>
+                <Link
+                  href="/creditOS/assinatura/?plan=anual"
+                  className="block w-full text-center border border-cyan-400/30 text-cyan-400/70 font-semibold px-6 py-3 rounded-sm hover:border-cyan-400 hover:text-cyan-400 transition-colors text-sm"
+                  style={{ borderRadius: '2px' }}
+                >
+                  Assinar plano anual
+                </Link>
+              </div>
             </div>
           </div>
         </div>

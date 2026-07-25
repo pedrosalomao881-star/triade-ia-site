@@ -106,7 +106,7 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
         />
       </head>
-      <body className="min-h-screen flex flex-col bg-navy text-ice font-sans antialiased">
+      <body className="min-h-screen flex flex-col bg-navy text-ice font-sans antialiased" suppressHydrationWarning={true}>
         <AnnouncementBar />
         <Navbar />
         <main className="flex-1">{children}</main>

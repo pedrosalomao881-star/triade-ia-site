@@ -1,37 +1,51 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useState } from "react";
 import { ChevronDown } from "lucide-react";
 import { WA_DIAGNOSTICO } from "@/lib/whatsapp";
 
+const aiFirst = [
+  { href: "/#cenario-atual", label: "Cenário Atual" },
+  { href: "/#modelo-de-maturidade", label: "Modelo de Maturidade" },
+  { href: "/#aplicacoes-reais", label: "Aplicações Reais" },
+  { href: "/#diagnostico-ai-first", label: "Diagnóstico AI-First" },
+  { href: "/#capacidades", label: "Capacidades" },
+  { href: "/#nossa-diferenca", label: "Nossa Diferença" },
+];
+
 const reforma = [
-  { href: "/#reforma", label: "O que muda (EC 132/2023)" },
-  { href: "/#split-payment", label: "Split Payment explicado" },
-  { href: "/ferramentas", label: "Ferramentas gratuitas" },
+  { href: "/reforma-tributaria#ec132-2023", label: "O que muda?" },
+  { href: "/reforma-tributaria#o-que-e-cbs-ibs", label: "O que é CBS/IBS?" },
+  { href: "/reforma-tributaria#split-payment", label: "Split Payment explicado" },
+  { href: "/reforma-tributaria#ferramentas", label: "Ferramentas gratuitas" },
   { href: "https://app.triadeiaos.com", label: "SOAF para prefeituras", external: true },
 ];
 
 const produtos = [
-  { href: "/produtos", label: "Ver catálogo de produtos" },
-  { href: "/creditOS", label: "CreditOS — Recuperar Créditos ⚡" },
-  { href: "/produtos/do-caos-ao-sistema", label: "Do Caos ao Sistema — R$37" },
   { href: "https://soaf.triadeiaos.com", label: "SOAF — Auditoria Fiscal", external: true },
+  { href: "/soaf-privado-empresario", label: "SOAF Privado — Empresário" },
+  { href: "/soaf-privado-contador", label: "SOAF Privado — Contador" },
+  { href: "/scenarioos", label: "ScenarioOS — Do Imposto ao Lucro" },
+  { href: "/creditOS", label: "CreditOS — Recuperar Créditos" },
+  { href: "/creditorx-landing", label: "CreditorX — Validar EFD e Livro Razão" },
   { href: "https://contabos.triadeiaos.com", label: "ContabOS — Para Contadores", external: true },
-  { href: "/ferramentas", label: "Ferramentas tributárias" },
+  { href: "/produtos/do-caos-ao-sistema", label: "Do Caos ao Sistema" },
+  { href: "/ferramentas", label: "Ferramentas Tributárias" },
 ];
 
 const blog = [
   { divider: true },
   {
-    label: "📚 Artigos",
+    label: "Artigos",
     items: [
       { href: "/blog/reforma-tributaria", label: "Reforma Tributária" },
       { href: "/blog/sua-empresa-ai-first", label: "Sua Empresa AI-First" },
     ],
   },
   {
-    label: "💡 Insights",
+    label: "Insights",
     items: [
       { href: "/blog/insights", label: "Todos os Insights" },
       { href: "/blog/insights/diagnostico-antes-da-ferramenta", label: "Diagnóstico antes da ferramenta" },
@@ -40,7 +54,7 @@ const blog = [
     ],
   },
   {
-    label: "🚀 IA para Negócios",
+    label: "IA para Negócios",
     items: [
       { href: "/blog/ia-para-negocios", label: "Ver todos os segmentos" },
       { href: "/blog/ia-para-negocios/clinicas", label: "IA para Clínicas" },
@@ -55,6 +69,7 @@ const blog = [
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
+  const [aiFirstOpen, setAiFirstOpen] = useState(false);
   const [reformaOpen, setReformaOpen] = useState(false);
   const [produtosOpen, setProdutosOpen] = useState(false);
   const [blogOpen, setBlogOpen] = useState(false);
@@ -62,35 +77,79 @@ export default function Navbar() {
   return (
     <header className="sticky top-0 z-50 bg-navy/95 border-b border-white/[0.08] backdrop-blur-sm">
       <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-        <Link
-          href="/"
-          className="font-display font-bold text-lg text-ice tracking-tight"
-        >
-          TRÍADE <span className="text-brand">IA</span>
+        <Link href="/" className="flex items-center">
+          <div className="h-10 w-auto flex items-center">
+            <Image
+              src="/logos/triade-logo-navbar.png"
+              alt="TRÍADE IA"
+              height={48}
+              width={240}
+              priority
+              className="w-auto h-full object-contain"
+            />
+          </div>
         </Link>
 
         {/* Desktop nav */}
         <nav className="hidden md:flex items-center gap-7">
-          {/* Reforma 2026 dropdown */}
+          {/* AI-FIRST dropdown */}
           <div className="relative group">
-            <button className="flex items-center gap-1 text-sm text-ice/60 hover:text-ice transition-colors py-1">
-              Reforma 2026
+            <button className="flex items-center gap-1 text-sm text-ice/60 hover:text-ice transition-colors py-1 font-semibold text-brand">
+              AI-FIRST
               <ChevronDown className="w-3.5 h-3.5 group-hover:rotate-180 transition-transform duration-200" strokeWidth={2} />
             </button>
             <div className="absolute top-full left-1/2 -translate-x-1/2 pt-3 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
               <div className="bg-navy-soft border border-white/[0.08] rounded-xl p-2 w-56 shadow-xl shadow-black/40">
-                {reforma.map((item) => (
-                  item.external ? (
-                    <a
-                      key={item.href}
-                      href={item.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="block px-3 py-2 text-sm text-ice/60 hover:text-ice hover:bg-white/[0.04] rounded-lg transition-colors"
-                    >
-                      {item.label}
-                    </a>
-                  ) : (
+                {aiFirst.map((item) => (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className="block px-3 py-2 text-sm text-ice/60 hover:text-ice hover:bg-white/[0.04] rounded-lg transition-colors"
+                  >
+                    {item.label}
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Reforma Tributária dropdown */}
+          <div className="relative group">
+            <button className="flex items-center gap-1 text-sm text-ice/60 hover:text-ice transition-colors py-1">
+              Reforma Tributária
+              <ChevronDown className="w-3.5 h-3.5 group-hover:rotate-180 transition-transform duration-200" strokeWidth={2} />
+            </button>
+            <div className="absolute top-full left-1/2 -translate-x-1/2 pt-3 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+              <div className="bg-navy-soft border border-white/[0.08] rounded-xl p-2 w-56 shadow-xl shadow-black/40">
+                {reforma.map((item) => {
+                  if (item.external) {
+                    return (
+                      <a
+                        key={item.href}
+                        href={item.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="block px-3 py-2 text-sm text-ice/60 hover:text-ice hover:bg-white/[0.04] rounded-lg transition-colors"
+                      >
+                        {item.label}
+                      </a>
+                    );
+                  }
+
+                  const isAnchor = item.href.includes("#");
+                  if (isAnchor) {
+                    return (
+                      <a
+                        key={item.href}
+                        href={item.href}
+                        className="block px-3 py-2 text-sm text-ice/60 hover:text-ice hover:bg-white/[0.04] rounded-lg transition-colors"
+                      >
+                        {item.label}
+                      </a>
+                    );
+                  }
+
+                  return (
                     <Link
                       key={item.href}
                       href={item.href}
@@ -98,8 +157,8 @@ export default function Navbar() {
                     >
                       {item.label}
                     </Link>
-                  )
-                ))}
+                  );
+                })}
               </div>
             </div>
           </div>
@@ -113,25 +172,15 @@ export default function Navbar() {
             <div className="absolute top-full left-1/2 -translate-x-1/2 pt-3 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
               <div className="bg-navy-soft border border-white/[0.08] rounded-xl p-2 w-56 shadow-xl shadow-black/40">
                 {produtos.map((item) => (
-                  item.external ? (
-                    <a
-                      key={item.href}
-                      href={item.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="block px-3 py-2 text-sm text-ice/60 hover:text-ice hover:bg-white/[0.04] rounded-lg transition-colors"
-                    >
-                      {item.label}
-                    </a>
-                  ) : (
-                    <Link
-                      key={item.href}
-                      href={item.href}
-                      className="block px-3 py-2 text-sm text-ice/60 hover:text-ice hover:bg-white/[0.04] rounded-lg transition-colors"
-                    >
-                      {item.label}
-                    </Link>
-                  )
+                  <a
+                    key={item.href}
+                    href={item.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block px-3 py-2 text-sm text-ice/60 hover:text-ice hover:bg-white/[0.04] rounded-lg transition-colors"
+                  >
+                    {item.label}
+                  </a>
                 ))}
               </div>
             </div>
@@ -216,27 +265,67 @@ export default function Navbar() {
       {open && (
         <div className="md:hidden border-t border-white/[0.08] bg-navy px-6 py-5 flex flex-col gap-1">
           <button
+            className="flex items-center justify-between text-sm text-ice/70 py-2 w-full font-semibold text-brand"
+            onClick={() => setAiFirstOpen(!aiFirstOpen)}
+          >
+            AI-FIRST
+            <ChevronDown className={`w-4 h-4 transition-transform ${aiFirstOpen ? "rotate-180" : ""}`} strokeWidth={2} />
+          </button>
+          {aiFirstOpen && (
+            <div className="pl-4 flex flex-col gap-1 mb-1">
+              {aiFirst.map((item) => (
+                <a
+                  key={item.href}
+                  href={item.href}
+                  className="text-sm text-ice/50 hover:text-ice py-1.5 transition-colors"
+                  onClick={() => setOpen(false)}
+                >
+                  {item.label}
+                </a>
+              ))}
+            </div>
+          )}
+
+          <button
             className="flex items-center justify-between text-sm text-ice/70 py-2 w-full"
             onClick={() => setReformaOpen(!reformaOpen)}
           >
-            Reforma 2026
+            Reforma Tributária
             <ChevronDown className={`w-4 h-4 transition-transform ${reformaOpen ? "rotate-180" : ""}`} strokeWidth={2} />
           </button>
           {reformaOpen && (
             <div className="pl-4 flex flex-col gap-1 mb-1">
-              {reforma.map((item) => (
-                item.external ? (
-                  <a
-                    key={item.href}
-                    href={item.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-sm text-ice/50 hover:text-ice py-1.5 transition-colors"
-                    onClick={() => setOpen(false)}
-                  >
-                    {item.label}
-                  </a>
-                ) : (
+              {reforma.map((item) => {
+                if (item.external) {
+                  return (
+                    <a
+                      key={item.href}
+                      href={item.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-sm text-ice/50 hover:text-ice py-1.5 transition-colors"
+                      onClick={() => setOpen(false)}
+                    >
+                      {item.label}
+                    </a>
+                  );
+                }
+
+                const isAnchor = item.href.includes("#");
+                if (isAnchor) {
+                  return (
+                    <a
+                      key={item.href}
+                      href={item.href}
+                      className="text-sm text-ice/50 hover:text-ice py-1.5 transition-colors"
+                      onClick={() => setOpen(false)}
+                    >
+                      {item.label}
+                    </a>
+                  );
+                }
+
+                return (
                   <Link
                     key={item.href}
                     href={item.href}
@@ -245,8 +334,8 @@ export default function Navbar() {
                   >
                     {item.label}
                   </Link>
-                )
-              ))}
+                );
+              })}
             </div>
           )}
 
@@ -260,27 +349,16 @@ export default function Navbar() {
           {produtosOpen && (
             <div className="pl-4 flex flex-col gap-1 mb-1">
               {produtos.map((item) => (
-                item.external ? (
-                  <a
-                    key={item.href}
-                    href={item.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-sm text-ice/50 hover:text-ice py-1.5 transition-colors"
-                    onClick={() => setOpen(false)}
-                  >
-                    {item.label}
-                  </a>
-                ) : (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    className="text-sm text-ice/50 hover:text-ice py-1.5 transition-colors"
-                    onClick={() => setOpen(false)}
-                  >
-                    {item.label}
-                  </Link>
-                )
+                <a
+                  key={item.href}
+                  href={item.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm text-ice/50 hover:text-ice py-1.5 transition-colors"
+                  onClick={() => setOpen(false)}
+                >
+                  {item.label}
+                </a>
               ))}
             </div>
           )}

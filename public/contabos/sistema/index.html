@@ -2205,7 +2205,7 @@ function fazerLogin() {
   err.textContent = '';
 
   if (!email) { err.textContent = 'Por favor, insira seu email.'; return; }
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { err.textContent = 'Email inválido.'; return; }
+  if (!/^[^\s@]+@[^\s@]+$/.test(email)) { err.textContent = 'Email inválido.'; return; }
   if (!pwd || pwd.length < 4) { err.textContent = 'A senha deve ter ao menos 4 caracteres.'; return; }
 
   const stored = localStorage.getItem('contabos_pwd');

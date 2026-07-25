@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { WA_DIAGNOSTICO } from "@/lib/whatsapp";
 
 const solucoes = [
@@ -21,9 +22,16 @@ export default function Footer() {
       <div className="max-w-6xl mx-auto px-6 py-16 grid grid-cols-1 md:grid-cols-4 gap-10">
         {/* Brand */}
         <div className="md:col-span-2">
-          <p className="font-display font-bold text-xl text-ice mb-3">
-            TRÍADE <span className="text-brand">IA</span>
-          </p>
+          <div className="mb-6">
+            <Image
+              src="/logos/triade-logo-horizontal.png"
+              alt="TRÍADE IA Logo"
+              height={120}
+              width={300}
+              loading="lazy"
+              className="h-auto w-auto"
+            />
+          </div>
           <p className="text-ice/35 text-sm leading-relaxed max-w-xs mb-5">
             Consultoria AI-First. Diagnóstico, estratégia e implementação
             com resultado mensurável — baseados em Itumbiara, Goiás.

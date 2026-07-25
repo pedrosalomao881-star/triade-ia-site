@@ -9,9 +9,9 @@ export const metadata: Metadata = {
 }
 
 const CAKTO = {
-  mensal: 'https://pay.cakto.com.br/3bnea4p_953102',
-  semestral: 'https://pay.cakto.com.br/tat5gnh',
-  anual: 'https://pay.cakto.com.br/33vivx8',
+  mensal: 'https://pay.cakto.com.br/6kdv3xk_993511',
+  semestral: 'https://pay.cakto.com.br/3diya39_993535',
+  anual: 'https://pay.cakto.com.br/jyygigx_993540',
 }
 
 const planos = [
