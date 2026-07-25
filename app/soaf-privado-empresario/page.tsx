@@ -2,6 +2,57 @@ import type { Metadata } from "next";
 import { ArrowRight, TrendingUp, BarChart3, AlertCircle, Zap, Target, Clock, Layers, ShieldCheck, Building2, Calculator, CreditCard, LineChart, ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 
+const FALLBACK_CHECKOUT_URL = "https://triadeiaos.com/soaf-privado/empresario/index.html";
+
+const planos = [
+  {
+    nome: "Mensal",
+    subtitulo: "O essencial para começar",
+    preco: "R$ 147",
+    cadencia: "/mês",
+    recursos: [
+      "Acesso completo ao motor do SOAF Empresário",
+      "Simulações essenciais de auditoria e conformidade fiscal",
+      "Atualizações normativas padrão do mês",
+    ],
+    checkoutUrl: process.env.NEXT_PUBLIC_CAKTO_SOAF_EMPRESARIO_MONTHLY_URL || FALLBACK_CHECKOUT_URL,
+  },
+  {
+    nome: "Semestral",
+    subtitulo: "Mais economia, mais resultados",
+    preco: "R$ 697",
+    cadencia: "/semestre",
+    equivalente: "Equivalente a R$ 116/mês",
+    recursos: [
+      "Todos os recursos do plano mensal",
+      "Histórico fiscal de 6 meses para rastreabilidade de tendências",
+      "Kit de orientação prática (checklists de conformidade e auditoria)",
+      "Atualização antecipada de novas regras publicadas",
+      "Suporte ágil em horário comercial",
+    ],
+    checkoutUrl: process.env.NEXT_PUBLIC_CAKTO_SOAF_EMPRESARIO_SEMESTRAL_URL || FALLBACK_CHECKOUT_URL,
+  },
+  {
+    nome: "Anual",
+    subtitulo: "O passaporte AI-First",
+    preco: "R$ 997",
+    cadencia: "/ano",
+    equivalente: "Equivalente a R$ 83/mês",
+    destaque: true,
+    recursos: [
+      "Call estratégica 1:1 com o fundador (30 min) — onboarding executivo AI-First",
+      "Acesso exclusivo à IA Sofia, nossa consultora tributária 24/7",
+      "Acesso total ao Hub e Ecossistema TRÍADE",
+      "Descontos especiais em ScenarioOS, CreditOS e ContábilOS",
+      "Biblioteca completa de Dossiês Executivos",
+      "Atualizações 2027 garantidas",
+      "Preço congelado por 12 meses",
+      "Suporte VIP prioritário",
+    ],
+    checkoutUrl: process.env.NEXT_PUBLIC_CAKTO_SOAF_EMPRESARIO_ANNUAL_URL || FALLBACK_CHECKOUT_URL,
+  },
+];
+
 export const metadata: Metadata = {
   title: "SOAF Privado Empresário — Inteligência Tributária com IA | Tríade IA",
   description: "Análise tributária em tempo real, EC 132/2023, simulações de regime e planejamento fiscal. Preparação completa para a Reforma Tributária.",
@@ -234,156 +285,76 @@ export default function SOAFPrivadoEmpresario() {
       {/* Planos de Assinatura */}
       <section className="py-24 px-6 bg-[#050505]">
         <div className="max-w-6xl mx-auto">
-          <div className="mb-16 text-center">
-            <p className="text-xs font-mono text-[#FFD700] uppercase mb-4">Planos de Assinatura</p>
+          <div className="mb-10 text-center">
+            <p className="text-xs font-mono text-[#FFD700] uppercase mb-4">Planos de Lançamento</p>
             <h2 className="text-4xl md:text-5xl font-semibold text-white">
               Escolha o Plano <span className="text-[#00FF87]">Ideal</span> para Você
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            {/* Plano Mensal */}
-            <div className="border border-white/[0.12] rounded-2xl p-8 bg-gradient-to-br from-[#0c1830] to-[#050505] hover:border-[#00FF87]/30 transition-all">
-              <div className="mb-6">
-                <h3 className="text-2xl font-semibold text-[#00FF87] mb-2">Mensal</h3>
-                <p className="text-sm text-[#B8BCC8]">Flexibilidade para começar</p>
+          <div className="max-w-3xl mx-auto flex items-center justify-center gap-3 text-center px-6 py-4 mb-10 border border-[#00FF87]/25 rounded-xl bg-[#00FF87]/[0.04]">
+            <ShieldCheck className="w-5 h-5 text-[#00FF87] flex-shrink-0" />
+            <p className="text-sm text-[#B8BCC8]">
+              <strong className="text-white">Garantia Incondicional:</strong> Teste por 7 dias. Se não atender, devolvemos 100% do seu investimento.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 items-stretch">
+            {planos.map((plano) => (
+              <div
+                key={plano.nome}
+                className={`relative rounded-2xl p-8 bg-gradient-to-br from-[#0c1830] to-[#050505] transition-all flex flex-col ${
+                  plano.destaque
+                    ? "border-2 border-[#00FF87] ring-1 ring-[#00FF87]/20"
+                    : "border border-white/[0.12] hover:border-[#00FF87]/30"
+                }`}
+              >
+                {plano.destaque && (
+                  <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
+                    <span className="bg-[#00FF87] text-[#050505] text-xs font-bold px-3 py-1 rounded-full whitespace-nowrap">
+                      MAIS VANTAJOSO
+                    </span>
+                  </div>
+                )}
+
+                <div className={`mb-6 ${plano.destaque ? "pt-6" : ""}`}>
+                  <h3 className="text-2xl font-semibold text-[#00FF87] mb-2">{plano.nome}</h3>
+                  <p className="text-sm text-[#B8BCC8]">{plano.subtitulo}</p>
+                </div>
+
+                <div className="mb-8 pb-8 border-b border-white/[0.08]">
+                  <p className="text-5xl font-bold text-[#00FF87]">
+                    {plano.preco}
+                    <span className="text-sm text-[#B8BCC8]"> {plano.cadencia}</span>
+                  </p>
+                  {plano.equivalente && (
+                    <p className="text-xs text-[#7D8290] mt-2">{plano.equivalente}</p>
+                  )}
+                </div>
+
+                <ul className="space-y-3 mb-8 flex-1">
+                  {plano.recursos.map((recurso) => (
+                    <li key={recurso} className="flex items-start gap-3 text-sm text-[#B8BCC8]">
+                      <span className="text-[#00FF87] font-bold mt-0.5">✓</span>
+                      {recurso}
+                    </li>
+                  ))}
+                </ul>
+
+                <Link
+                  href={plano.checkoutUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className={`w-full py-3 text-center font-semibold rounded-lg transition-all ${
+                    plano.destaque
+                      ? "bg-[#00FF87] text-[#050505] hover:bg-[#00e576]"
+                      : "border border-[#00FF87] text-[#00FF87] hover:bg-[#00FF87]/10"
+                  }`}
+                >
+                  Assinar plano {plano.nome.toLowerCase()}
+                </Link>
               </div>
-
-              <div className="mb-8 pb-8 border-b border-white/[0.08]">
-                <p className="text-xs text-[#7D8290] line-through mb-2">
-                  De R$ 497 /mês
-                </p>
-                <p className="text-5xl font-bold text-[#00FF87]">
-                  R$ 47
-                  <span className="text-sm text-[#B8BCC8]"> /mês</span>
-                </p>
-              </div>
-
-              <ul className="space-y-3 mb-8">
-                <li className="flex items-start gap-3 text-sm text-[#B8BCC8]">
-                  <span className="text-[#00FF87] font-bold mt-0.5">✓</span>
-                  Acesso completo à plataforma
-                </li>
-                <li className="flex items-start gap-3 text-sm text-[#B8BCC8]">
-                  <span className="text-[#00FF87] font-bold mt-0.5">✓</span>
-                  Suporte prioritário
-                </li>
-                <li className="flex items-start gap-3 text-sm text-[#B8BCC8]">
-                  <span className="text-[#00FF87] font-bold mt-0.5">✓</span>
-                  Atualizações contínuas
-                </li>
-                <li className="flex items-start gap-3 text-sm text-[#B8BCC8]">
-                  <span className="text-[#00FF87] font-bold mt-0.5">✓</span>
-                  Relatórios e dashboards
-                </li>
-                <li className="flex items-start gap-3 text-sm text-[#B8BCC8]">
-                  <span className="text-[#00FF87] font-bold mt-0.5">✓</span>
-                  Integrações básicas
-                </li>
-              </ul>
-
-              <button className="w-full py-3 border border-[#00FF87] text-[#00FF87] font-semibold rounded-lg hover:bg-[#00FF87]/10 transition-all">
-                Assinar plano mensal
-              </button>
-            </div>
-
-            {/* Plano Semestral (Destacado) */}
-            <div className="border-2 border-[#00FF87] rounded-2xl p-8 bg-gradient-to-br from-[#0c1830] to-[#050505] relative ring-1 ring-[#00FF87]/20">
-              <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                <span className="bg-[#00FF87] text-[#050505] text-xs font-bold px-3 py-1 rounded-full">
-                  MAIS ESCOLHIDO
-                </span>
-              </div>
-
-              <div className="mb-6 pt-6">
-                <h3 className="text-2xl font-semibold text-[#00FF87] mb-2">Semestral</h3>
-                <p className="text-sm text-[#B8BCC8]">Mais economia, mais resultados</p>
-              </div>
-
-              <div className="mb-8 pb-8 border-b border-white/[0.08]">
-                <p className="text-xs text-[#7D8290] line-through mb-2">
-                  De R$ 2.497 /semestre
-                </p>
-                <p className="text-5xl font-bold text-[#00FF87] mb-1">
-                  R$ 197
-                  <span className="text-sm text-[#B8BCC8]"> /semestre</span>
-                </p>
-                <p className="text-xs text-[#7D8290]">Equivale a R$ 32,83/mês</p>
-              </div>
-
-              <ul className="space-y-3 mb-8">
-                <li className="flex items-start gap-3 text-sm text-[#B8BCC8]">
-                  <span className="text-[#00FF87] font-bold mt-0.5">✓</span>
-                  Todos os recursos do plano mensal
-                </li>
-                <li className="flex items-start gap-3 text-sm text-[#B8BCC8]">
-                  <span className="text-[#00FF87] font-bold mt-0.5">✓</span>
-                  Desconto especial
-                </li>
-                <li className="flex items-start gap-3 text-sm text-[#B8BCC8]">
-                  <span className="text-[#00FF87] font-bold mt-0.5">✓</span>
-                  Material de Apoio
-                </li>
-                <li className="flex items-start gap-3 text-sm text-[#B8BCC8]">
-                  <span className="text-[#00FF87] font-bold mt-0.5">✓</span>
-                  Integrações avançadas
-                </li>
-                <li className="flex items-start gap-3 text-sm text-[#B8BCC8]">
-                  <span className="text-[#00FF87] font-bold mt-0.5">✓</span>
-                  Suporte premium
-                </li>
-              </ul>
-
-              <button className="w-full py-3 bg-[#00FF87] text-[#050505] font-semibold rounded-lg hover:bg-[#00e576] transition-all">
-                Assinar plano semestral
-              </button>
-            </div>
-
-            {/* Plano Anual */}
-            <div className="border border-[#00E5FF]/30 rounded-2xl p-8 bg-gradient-to-br from-[#0c1830] to-[#050505] hover:border-[#00E5FF]/60 transition-all">
-              <div className="mb-6">
-                <h3 className="text-2xl font-semibold text-[#00E5FF] mb-2">Anual</h3>
-                <p className="text-sm text-[#B8BCC8]">Máximo desempenho e economia</p>
-              </div>
-
-              <div className="mb-8 pb-8 border-b border-white/[0.08]">
-                <p className="text-xs text-[#7D8290] line-through mb-2">
-                  De R$ 4.997 /ano
-                </p>
-                <p className="text-5xl font-bold text-[#00E5FF] mb-1">
-                  R$ 497
-                  <span className="text-sm text-[#B8BCC8]"> /ano</span>
-                </p>
-                <p className="text-xs text-[#7D8290]">Equivale a R$ 41,41/mês</p>
-              </div>
-
-              <ul className="space-y-3 mb-8">
-                <li className="flex items-start gap-3 text-sm text-[#B8BCC8]">
-                  <span className="text-[#00E5FF] font-bold mt-0.5">✓</span>
-                  Todos os recursos dos planos anteriores
-                </li>
-                <li className="flex items-start gap-3 text-sm text-[#B8BCC8]">
-                  <span className="text-[#00E5FF] font-bold mt-0.5">✓</span>
-                  Maior desconto do ano
-                </li>
-                <li className="flex items-start gap-3 text-sm text-[#B8BCC8]">
-                  <span className="text-[#00E5FF] font-bold mt-0.5">✓</span>
-                  Material de Apoio
-                </li>
-                <li className="flex items-start gap-3 text-sm text-[#B8BCC8]">
-                  <span className="text-[#00E5FF] font-bold mt-0.5">✓</span>
-                  Implantação personalizada
-                </li>
-                <li className="flex items-start gap-3 text-sm text-[#B8BCC8]">
-                  <span className="text-[#00E5FF] font-bold mt-0.5">✓</span>
-                  Suporte VIP 24/7
-                </li>
-              </ul>
-
-              <button className="w-full py-3 border border-[#00E5FF] text-[#00E5FF] font-semibold rounded-lg hover:bg-[#00E5FF]/10 transition-all">
-                Assinar plano anual
-              </button>
-            </div>
+            ))}
           </div>
 
           {/* Rodapé de Segurança */}
