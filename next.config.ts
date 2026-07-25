@@ -10,11 +10,11 @@ const nextConfig: NextConfig = {
         // Serve ScenarioOS em /scenarioos-app (proxy para o deployment scenarioos-triade)
         {
           source: "/scenarioos-app",
-          destination: "https://scenarioos-triade.vercel.app/scenarioos-app",
+          destination: "https://scenarioos-triade-kappa.vercel.app/scenarioos-app",
         },
         {
           source: "/scenarioos-app/:path*",
-          destination: "https://scenarioos-triade.vercel.app/scenarioos-app/:path*",
+          destination: "https://scenarioos-triade-kappa.vercel.app/scenarioos-app/:path*",
         },
         // Serve ContabOS Sistema (app-contabos.triadeiaos.com)
         {
