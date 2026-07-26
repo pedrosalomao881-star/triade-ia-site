@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useRef, useEffect, useState } from 'react';
+import Link from 'next/link';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -138,17 +139,19 @@ export default function HeroScrollytelling() {
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 items-center justify-center">
             <a
-              href="#solucoes"
+              href="https://bit.ly/FalarComaSofia"
+              target="_blank"
+              rel="noopener noreferrer"
               className="px-8 py-3.5 rounded-lg font-semibold bg-[#00FF87] text-[#050505] hover:bg-[#00e576] active:scale-95 transition-all duration-200 shadow-lg shadow-[#00FF87]/20 text-sm tracking-wide"
             >
               Agendar Diagnóstico
             </a>
-            <a
-              href="#diferenciais"
+            <Link
+              href="/metodologia"
               className="px-8 py-3.5 rounded-lg font-semibold border border-[#f0f4ff]/20 text-[#f0f4ff] hover:bg-[#f0f4ff]/5 active:scale-95 transition-all duration-200 text-sm tracking-wide backdrop-blur-sm"
             >
               Conheça a Metodologia
-            </a>
+            </Link>
           </div>
 
         </div>

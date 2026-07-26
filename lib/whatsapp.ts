@@ -46,5 +46,9 @@ export function buildWhatsAppUrl(ctx?: WhatsAppContext): string {
 
 // Pre-built constants — import these instead of hardcoding WA_LINK everywhere
 export const WA_DEFAULT = buildWhatsAppUrl();
-export const WA_DIAGNOSTICO = buildWhatsAppUrl({ origem: "diagnostico" });
+// Link canônico da Sofia (bit.ly) — usado nos CTAs genéricos de "Diagnóstico"
+// (Navbar, Footer). Os formulários (DiagnosticoForm/QuizMaturidade) continuam
+// chamando buildWhatsAppUrl() diretamente para manter a mensagem pré-preenchida
+// com nome/empresa/nível — não afetados por esta constante.
+export const WA_DIAGNOSTICO = "https://bit.ly/FalarComaSofia";
 export const WA_QUIZ = buildWhatsAppUrl({ origem: "quiz" });

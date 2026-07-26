@@ -94,7 +94,9 @@ export default function DiagnosticoSection() {
 
             {/* Botão */}
             <a
-              href="#diagnostico"
+              href="https://bit.ly/FalarComaSofia"
+              target="_blank"
+              rel="noopener noreferrer"
               className="inline-block px-8 py-4 rounded-lg font-semibold bg-[#00FF87] text-[#050505] hover:bg-[#00e576] active:scale-95 transition-all duration-200 shadow-lg shadow-[#00FF87]/20 text-sm tracking-wide"
             >
               Solicitar Diagnóstico Gratuito →

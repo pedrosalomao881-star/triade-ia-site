@@ -174,7 +174,9 @@ export default function ApplicacoesReaisSection() {
           </p>
 
           <a
-            href="#sofia"
+            href="https://bit.ly/FalarComaSofia"
+            target="_blank"
+            rel="noopener noreferrer"
             className="inline-block px-10 py-4 rounded-lg font-semibold bg-[#00FF87] text-[#050505] hover:bg-[#00e576] active:scale-95 transition-all duration-200 shadow-lg shadow-[#00FF87]/20 text-sm tracking-wide mb-4"
           >
             Falar com a Sof[IA] agora

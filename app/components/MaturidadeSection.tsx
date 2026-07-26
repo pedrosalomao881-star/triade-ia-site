@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Link from 'next/link';
 
 const radarPulseStyle = `
   @keyframes radarPulse {
@@ -128,18 +129,18 @@ export default function MaturidadeSection() {
 
         {/* CTA Section */}
         <div className="mt-20 flex flex-col sm:flex-row items-center justify-center gap-6 pt-8 border-t border-[#f0f4ff]/10">
-          <a
-            href="#diagnostico"
+          <Link
+            href="/quiz"
             className="px-8 py-3.5 rounded-lg font-semibold bg-[#00FF87] text-[#050505] hover:bg-[#00e576] active:scale-95 transition-all duration-200 shadow-lg shadow-[#00FF87]/20 text-sm tracking-wide"
           >
             Descobrir meu nível agora →
-          </a>
-          <a
-            href="#metodologia"
+          </Link>
+          <Link
+            href="/metodologia"
             className="text-[#a1a5b3] hover:text-[#00E5FF] transition-colors duration-200 text-sm font-medium"
           >
             Ver a metodologia completa
-          </a>
+          </Link>
         </div>
       </div>
     </section>

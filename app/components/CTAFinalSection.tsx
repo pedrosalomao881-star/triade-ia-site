@@ -1,4 +1,5 @@
 import React from 'react';
+import Link from 'next/link';
 
 export default function CTAFinalSection() {
   return (
@@ -15,17 +16,19 @@ export default function CTAFinalSection() {
         {/* CTA Buttons */}
         <div className="flex flex-col sm:flex-row gap-4 items-center justify-center mb-16">
           <a
-            href="#contato"
+            href="https://bit.ly/FalarComaSofia"
+            target="_blank"
+            rel="noopener noreferrer"
             className="px-10 py-4 rounded-lg font-semibold bg-[#00FF87] text-[#050505] hover:bg-[#00e576] active:scale-95 transition-all duration-200 shadow-lg shadow-[#00FF87]/20 text-sm tracking-wide"
           >
             Agendar Diagnóstico Gratuito
           </a>
-          <a
-            href="#sobre"
+          <Link
+            href="/metodologia"
             className="px-10 py-4 rounded-lg font-semibold border-2 border-[#00E5FF] text-[#00E5FF] hover:bg-[#00E5FF]/10 active:scale-95 transition-all duration-200 text-sm tracking-wide"
           >
             Saiba Mais Sobre Nossa Metodologia
-          </a>
+          </Link>
         </div>
 
       </div>
