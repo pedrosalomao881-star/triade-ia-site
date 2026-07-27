@@ -2,8 +2,6 @@ import type { Metadata } from "next";
 import { ArrowRight, TrendingUp, BarChart3, AlertCircle, Zap, Target, Clock, Layers, ShieldCheck, Building2, Calculator, CreditCard, LineChart, ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 
-const FALLBACK_CHECKOUT_URL = "https://triadeiaos.com/soaf-privado/empresario/index.html";
-
 const planos = [
   {
     nome: "Mensal",
@@ -15,7 +13,7 @@ const planos = [
       "Simulações essenciais de auditoria e conformidade fiscal",
       "Atualizações normativas padrão do mês",
     ],
-    checkoutUrl: process.env.NEXT_PUBLIC_CAKTO_SOAF_EMPRESARIO_MONTHLY_URL || FALLBACK_CHECKOUT_URL,
+    checkoutUrl: "https://pay.cakto.com.br/dnmxjtd",
   },
   {
     nome: "Semestral",
@@ -30,7 +28,7 @@ const planos = [
       "Atualização antecipada de novas regras publicadas",
       "Suporte ágil em horário comercial",
     ],
-    checkoutUrl: process.env.NEXT_PUBLIC_CAKTO_SOAF_EMPRESARIO_SEMESTRAL_URL || FALLBACK_CHECKOUT_URL,
+    checkoutUrl: "https://pay.cakto.com.br/53ugaxw",
   },
   {
     nome: "Anual",
@@ -49,7 +47,7 @@ const planos = [
       "Preço congelado por 12 meses",
       "Suporte VIP prioritário",
     ],
-    checkoutUrl: process.env.NEXT_PUBLIC_CAKTO_SOAF_EMPRESARIO_ANNUAL_URL || FALLBACK_CHECKOUT_URL,
+    checkoutUrl: "https://pay.cakto.com.br/32ygc9r",
   },
 ];
 
