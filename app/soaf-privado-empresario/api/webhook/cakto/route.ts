@@ -16,7 +16,7 @@ type CaktoWebhookPayload = {
 };
 
 export async function POST(request: Request) {
-  const configuredSecret = process.env.CAKTO_WEBHOOK_SECRET_SOAF_EMPRESARIO;
+  const configuredSecret = "e09a4dfc-518b-49d7-ae81-7dfa870f2b9a";
   if (!configuredSecret) {
     return NextResponse.json({ error: "Webhook não configurado" }, { status: 500 });
   }
