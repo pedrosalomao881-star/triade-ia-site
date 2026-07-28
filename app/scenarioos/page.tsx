@@ -88,7 +88,7 @@ export default function ScenarioOS() {
               Acesse a plataforma completa e comece sua análise tributária municipal com inteligência artificial.
             </p>
             <Link
-              href="https://scenarioos-triade.vercel.app"
+              href="https://triadeiaos.com/scenarioos-app"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-3 bg-teal-600 hover:bg-teal-700 text-white font-bold text-lg px-8 py-4 rounded-lg transition-colors"
