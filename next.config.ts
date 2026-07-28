@@ -16,6 +16,19 @@ const nextConfig: NextConfig = {
           source: "/scenarioos-app/:path*",
           destination: "https://scenarioos-triade.vercel.app/scenarioos-app/:path*",
         },
+        // Serve CreditorX Sistema em /creditorX/sistema (proxy para o deployment frontend)
+        {
+          source: "/creditorX",
+          destination: "https://frontend-three-iota-19.vercel.app/login",
+        },
+        {
+          source: "/creditorX/sistema",
+          destination: "https://frontend-three-iota-19.vercel.app",
+        },
+        {
+          source: "/creditorX/sistema/:path*",
+          destination: "https://frontend-three-iota-19.vercel.app/:path*",
+        },
         // Serve ContabOS Sistema (app-contabos.triadeiaos.com)
         {
           source: "/:path((?!api|_next|.*\\.).*)",

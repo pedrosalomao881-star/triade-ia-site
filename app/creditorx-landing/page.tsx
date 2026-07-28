@@ -214,9 +214,14 @@ export default function CreditorXLanding() {
                 </li>
               </ul>
 
-              <button className="w-full py-3 border border-[#00FF87] text-[#00FF87] font-semibold rounded-lg hover:bg-[#00FF87]/10 transition-all">
+              <a
+                href="https://pay.cakto.com.br/u5mzhk5"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block w-full text-center py-3 border border-[#00FF87] text-[#00FF87] font-semibold rounded-lg hover:bg-[#00FF87]/10 transition-all"
+              >
                 Assinar Mensal
-              </button>
+              </a>
             </div>
 
             {/* SEMESTRAL (DESTAQUE) */}
@@ -257,9 +262,14 @@ export default function CreditorXLanding() {
                 </li>
               </ul>
 
-              <button className="w-full py-3 bg-[#00FF87] text-[#050505] font-semibold rounded-lg hover:bg-[#00e576] transition-all">
+              <a
+                href="https://pay.cakto.com.br/tgcje5j"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block w-full text-center py-3 bg-[#00FF87] text-[#050505] font-semibold rounded-lg hover:bg-[#00e576] transition-all"
+              >
                 Assinar Trimestral
-              </button>
+              </a>
             </div>
 
             {/* ANUAL */}
@@ -294,9 +304,14 @@ export default function CreditorXLanding() {
                 </li>
               </ul>
 
-              <button className="w-full py-3 border border-[#00E5FF] text-[#00E5FF] font-semibold rounded-lg hover:bg-[#00E5FF]/10 transition-all">
+              <a
+                href="https://pay.cakto.com.br/38dvfje"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block w-full text-center py-3 border border-[#00E5FF] text-[#00E5FF] font-semibold rounded-lg hover:bg-[#00E5FF]/10 transition-all"
+              >
                 Assinar Anual
-              </button>
+              </a>
             </div>
           </div>
 
