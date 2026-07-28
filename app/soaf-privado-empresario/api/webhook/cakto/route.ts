@@ -31,10 +31,20 @@ export async function POST(request: Request) {
 
   const headerSecret =
     request.headers.get("x-cakto-secret") ?? request.headers.get("x-webhook-secret");
-  const receivedSecret = headerSecret ?? payload.secret ?? "";
+  const receivedSecret = (headerSecret ?? payload.secret ?? "").trim();
 
-  if (!receivedSecret || !constantTimeEqual(receivedSecret, configuredSecret)) {
-    return NextResponse.json({ error: "Não autorizado" }, { status: 401 });
+  if (!receivedSecret || !constantTimeEqual(receivedSecret, configuredSecret.trim())) {
+    return NextResponse.json(
+      {
+        error: "Não autorizado",
+        debug: {
+          source: headerSecret ? "header" : payload.secret ? "body" : "none",
+          receivedLength: receivedSecret.length,
+          expectedLength: configuredSecret.trim().length,
+        },
+      },
+      { status: 401 }
+    );
   }
 
   console.log(`[soaf-privado-empresario:cakto:webhook] evento recebido: ${payload.event ?? "desconhecido"}`, payload);
