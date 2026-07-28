@@ -18,7 +18,21 @@ type CaktoWebhookPayload = {
 export async function POST(request: Request) {
   const configuredSecret = process.env.CAKTO_WEBHOOK_SECRET_SOAF_EMPRESARIO;
   if (!configuredSecret) {
-    return NextResponse.json({ error: "Webhook não configurado" }, { status: 500 });
+    return NextResponse.json(
+      {
+        error: "Webhook não configurado",
+        debug: {
+          hasThisVar: !!process.env.CAKTO_WEBHOOK_SECRET_SOAF_EMPRESARIO,
+          hasContadorVar: !!process.env.CAKTO_WEBHOOK_SECRET_SOAF_CONTADOR,
+          hasAdminSecret: !!process.env.ADMIN_SECRET,
+          hasSupabaseUrl: !!process.env.NEXT_PUBLIC_SUPABASE_URL,
+          hasInternoPassword: !!process.env.INTERNO_PASSWORD,
+          vercelEnv: process.env.VERCEL_ENV ?? null,
+          totalEnvKeys: Object.keys(process.env).length,
+        },
+      },
+      { status: 500 }
+    );
   }
 
   const rawBody = await request.text();
