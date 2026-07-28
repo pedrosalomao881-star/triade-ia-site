@@ -21,7 +21,7 @@ type CaktoWebhookPayload = {
 };
 
 export async function POST(request: Request) {
-  const configuredSecret = "CpF5@gTxkhQTRtx";
+  const configuredSecret = "b0dcd885-7474-45d5-a817-73ffe7d13957";
 
   const rawBody = await request.text();
   let payload: CaktoWebhookPayload;
