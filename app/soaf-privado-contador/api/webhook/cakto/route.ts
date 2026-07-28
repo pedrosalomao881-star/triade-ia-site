@@ -16,7 +16,7 @@ type CaktoWebhookPayload = {
 };
 
 export async function POST(request: Request) {
-  const configuredSecret = process.env.CAKTO_WEBHOOK_SECRET_SOAF_EMPRESARIO;
+  const configuredSecret = process.env.CAKTO_WEBHOOK_SECRET_SOAF_CONTADOR;
   if (!configuredSecret) {
     return NextResponse.json({ error: "Webhook não configurado" }, { status: 500 });
   }
@@ -37,7 +37,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Não autorizado" }, { status: 401 });
   }
 
-  console.log(`[soaf-privado-empresario:cakto:webhook] evento recebido: ${payload.event ?? "desconhecido"}`, payload);
+  console.log(`[soaf-privado-contador:cakto:webhook] evento recebido: ${payload.event ?? "desconhecido"}`, payload);
 
   return NextResponse.json({ received: true }, { status: 200 });
 }
