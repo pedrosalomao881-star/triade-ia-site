@@ -389,8 +389,8 @@ export default function CreditOSPage() {
             </div>
 
             {/* Trimestral - DESTAQUE */}
-            <div className="border-2 border-brand rounded-xl overflow-hidden bg-white/[0.02] flex flex-col relative">
-              <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2">
+            <div className="border-2 border-brand rounded-xl bg-white/[0.02] flex flex-col relative">
+              <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10">
                 <span className="inline-block bg-brand text-navy font-semibold text-xs px-4 py-1 rounded-full uppercase tracking-widest">
                   Mais escolhido
                 </span>
