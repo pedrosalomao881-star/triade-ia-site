@@ -378,13 +378,15 @@ export default function CreditOSPage() {
                     <span className="text-ice/60 text-sm">Integrações básicas</span>
                   </li>
                 </ul>
-                <Link
-                  href="/creditOS/assinatura/?plan=mensal"
+                <a
+                  href="https://pay.cakto.com.br/3bnea4p_953102"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="block w-full text-center border border-brand/30 text-brand/70 font-semibold px-6 py-3 rounded-sm hover:border-brand hover:text-brand transition-colors text-sm"
                   style={{ borderRadius: '2px' }}
                 >
                   Assinar plano mensal
-                </Link>
+                </a>
               </div>
             </div>
 
@@ -428,13 +430,15 @@ export default function CreditOSPage() {
                     <span className="text-ice/60 text-sm">Suporte premium</span>
                   </li>
                 </ul>
-                <Link
-                  href="/creditOS/assinatura/?plan=semestral"
+                <a
+                  href="https://pay.cakto.com.br/tat5gnh"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="block w-full text-center bg-brand text-navy font-semibold px-6 py-3 rounded-sm hover:bg-brand/90 transition-colors text-sm"
                   style={{ borderRadius: '2px' }}
                 >
                   Assinar plano trimestral
-                </Link>
+                </a>
               </div>
             </div>
 
@@ -473,13 +477,15 @@ export default function CreditOSPage() {
                     <span className="text-ice/60 text-sm">Suporte VIP 24/7</span>
                   </li>
                 </ul>
-                <Link
-                  href="/creditOS/assinatura/?plan=anual"
+                <a
+                  href="https://pay.cakto.com.br/33vivx8"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="block w-full text-center border border-cyan-400/30 text-cyan-400/70 font-semibold px-6 py-3 rounded-sm hover:border-cyan-400 hover:text-cyan-400 transition-colors text-sm"
                   style={{ borderRadius: '2px' }}
                 >
                   Assinar plano anual
-                </Link>
+                </a>
               </div>
             </div>
           </div>
