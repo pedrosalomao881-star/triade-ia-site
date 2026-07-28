@@ -228,14 +228,14 @@ export default function CreditorXLanding() {
               </div>
 
               <div className="mb-6 pt-6">
-                <h3 className="text-2xl font-semibold text-[#00FF87] mb-2">Semestral</h3>
+                <h3 className="text-2xl font-semibold text-[#00FF87] mb-2">Trimestral</h3>
                 <p className="text-sm text-[#B8BCC8]">Mais economia, mais resultados</p>
               </div>
 
               <div className="mb-8 pb-8 border-b border-white/[0.08]">
-                <p className="text-xs text-[#7D8290] line-through mb-2">De R$ 2.497 /semestre</p>
-                <p className="text-5xl font-bold text-[#00FF87] mb-1">R$ 197<span className="text-sm text-[#B8BCC8]"> /semestre</span></p>
-                <p className="text-xs text-[#7D8290]">Equivale a R$ 32,83/mês</p>
+                <p className="text-xs text-[#7D8290] line-through mb-2">De R$ 1.497 /trimestre</p>
+                <p className="text-5xl font-bold text-[#00FF87] mb-1">R$ 127<span className="text-sm text-[#B8BCC8]"> /trimestre</span></p>
+                <p className="text-xs text-[#7D8290]">Equivale a R$ 42,33/mês</p>
               </div>
 
               <ul className="space-y-3 mb-8">
@@ -258,7 +258,7 @@ export default function CreditorXLanding() {
               </ul>
 
               <button className="w-full py-3 bg-[#00FF87] text-[#050505] font-semibold rounded-lg hover:bg-[#00e576] transition-all">
-                Assinar Semestral
+                Assinar Trimestral
               </button>
             </div>
 
@@ -270,9 +270,9 @@ export default function CreditorXLanding() {
               </div>
 
               <div className="mb-8 pb-8 border-b border-white/[0.08]">
-                <p className="text-xs text-[#7D8290] line-through mb-2">De R$ 4.997 /ano</p>
-                <p className="text-5xl font-bold text-[#00E5FF] mb-1">R$ 497<span className="text-sm text-[#B8BCC8]"> /ano</span></p>
-                <p className="text-xs text-[#7D8290]">Equivale a R$ 41,41/mês</p>
+                <p className="text-xs text-[#7D8290] line-through mb-2">De R$ 2.997 /ano</p>
+                <p className="text-5xl font-bold text-[#00E5FF] mb-1">R$ 397<span className="text-sm text-[#B8BCC8]"> /ano</span></p>
+                <p className="text-xs text-[#7D8290]">Equivale a R$ 33,08/mês</p>
               </div>
 
               <ul className="space-y-3 mb-8">
