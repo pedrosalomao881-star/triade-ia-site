@@ -2,8 +2,6 @@ import type { Metadata } from "next";
 import { ArrowRight, BarChart3, AlertCircle, Users, TrendingUp, Zap, Target, Clock, Layers, ShieldCheck, Building2, Calculator, CreditCard, LineChart, ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 
-const FALLBACK_CHECKOUT_URL = "https://triadeiaos.com/soaf-privado/contador/index.html";
-
 const planos = [
   {
     nome: "Mensal",
@@ -15,7 +13,7 @@ const planos = [
       "Gestão de até 5 clientes na carteira",
       "Atualizações normativas padrão do mês",
     ],
-    checkoutUrl: process.env.NEXT_PUBLIC_CAKTO_SOAF_CONTADOR_MONTHLY_URL || FALLBACK_CHECKOUT_URL,
+    checkoutUrl: "https://pay.cakto.com.br/33b4oyt",
   },
   {
     nome: "Semestral",
@@ -30,7 +28,7 @@ const planos = [
       "Kit de orientação prática (checklists de conformidade e transição ISS → IBS)",
       "Suporte ágil em horário comercial",
     ],
-    checkoutUrl: process.env.NEXT_PUBLIC_CAKTO_SOAF_CONTADOR_SEMESTRAL_URL || FALLBACK_CHECKOUT_URL,
+    checkoutUrl: "https://pay.cakto.com.br/qoqyd3s",
   },
   {
     nome: "Anual",
@@ -50,7 +48,7 @@ const planos = [
       "Preço congelado por 12 meses",
       "Suporte VIP prioritário",
     ],
-    checkoutUrl: process.env.NEXT_PUBLIC_CAKTO_SOAF_CONTADOR_ANNUAL_URL || FALLBACK_CHECKOUT_URL,
+    checkoutUrl: "https://pay.cakto.com.br/34v24nd",
   },
 ];
 
