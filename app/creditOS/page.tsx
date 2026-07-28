@@ -388,7 +388,7 @@ export default function CreditOSPage() {
               </div>
             </div>
 
-            {/* Semestral - DESTAQUE */}
+            {/* Trimestral - DESTAQUE */}
             <div className="border-2 border-brand rounded-xl overflow-hidden bg-white/[0.02] flex flex-col relative">
               <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2">
                 <span className="inline-block bg-brand text-navy font-semibold text-xs px-4 py-1 rounded-full uppercase tracking-widest">
@@ -396,14 +396,14 @@ export default function CreditOSPage() {
                 </span>
               </div>
               <div className="p-6 border-b border-brand/20 mt-4">
-                <h3 className="text-2xl font-display font-bold text-brand mb-2">Semestral</h3>
+                <h3 className="text-2xl font-display font-bold text-brand mb-2">Trimestral</h3>
                 <p className="text-ice/50 text-sm mb-4">Mais economia, mais resultados</p>
-                <div className="text-ice/40 text-xs line-through mb-2">De R$ 2.497/semestre</div>
+                <div className="text-ice/40 text-xs line-through mb-2">De R$ 1.497/trimestre</div>
                 <div className="text-3xl font-display font-bold text-brand">
-                  R$ <span className="text-2xl">197</span>
-                  <span className="text-sm text-ice/60 font-normal">/semestre</span>
+                  R$ <span className="text-2xl">127</span>
+                  <span className="text-sm text-ice/60 font-normal">/trimestre</span>
                 </div>
-                <div className="text-ice/40 text-xs mt-2">Equivale a R$ 32,83/mês</div>
+                <div className="text-ice/40 text-xs mt-2">Equivale a R$ 42,33/mês</div>
               </div>
               <div className="p-6 flex-1">
                 <ul className="space-y-3 mb-8">
@@ -433,7 +433,7 @@ export default function CreditOSPage() {
                   className="block w-full text-center bg-brand text-navy font-semibold px-6 py-3 rounded-sm hover:bg-brand/90 transition-colors text-sm"
                   style={{ borderRadius: '2px' }}
                 >
-                  Assinar plano semestral
+                  Assinar plano trimestral
                 </Link>
               </div>
             </div>
@@ -443,12 +443,12 @@ export default function CreditOSPage() {
               <div className="p-6 border-b border-white/[0.06]">
                 <h3 className="text-2xl font-display font-bold text-cyan-400 mb-2">Anual</h3>
                 <p className="text-ice/50 text-sm mb-4">Máximo desempenho e economia</p>
-                <div className="text-ice/40 text-xs line-through mb-2">De R$ 4.997/ano</div>
+                <div className="text-ice/40 text-xs line-through mb-2">De R$ 2.997/ano</div>
                 <div className="text-3xl font-display font-bold text-cyan-400">
-                  R$ <span className="text-2xl">497</span>
+                  R$ <span className="text-2xl">397</span>
                   <span className="text-sm text-ice/60 font-normal">/ano</span>
                 </div>
-                <div className="text-ice/40 text-xs mt-2">Equivale a R$ 41,41/mês</div>
+                <div className="text-ice/40 text-xs mt-2">Equivale a R$ 33,08/mês</div>
               </div>
               <div className="p-6 flex-1">
                 <ul className="space-y-3 mb-8">
