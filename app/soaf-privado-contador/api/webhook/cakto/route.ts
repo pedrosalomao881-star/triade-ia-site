@@ -16,7 +16,7 @@ type CaktoWebhookPayload = {
 };
 
 export async function POST(request: Request) {
-  const configuredSecret = "CpF5@gTxkhQTRtx";
+  const configuredSecret = "a1c8a002-1cc7-44aa-8247-95641b75868c";
   if (!configuredSecret) {
     return NextResponse.json({ error: "Webhook não configurado" }, { status: 500 });
   }
