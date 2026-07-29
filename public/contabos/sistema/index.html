@@ -332,7 +332,7 @@
 <!-- LOGIN SCREEN -->
 <div id="login-screen">
   <div class="login-card">
-    <img src="/contabos/sistema/triade-logo.png" alt="TRÍADE IA" style="width:80px;height:80px;margin:0 auto 16px;display:block;">
+    <img src="https://triadeiaos.com/logos/triade-logo-completa.png" alt="TRÍADE IA" style="width:80px;height:80px;margin:0 auto 16px;display:block;object-fit:contain;">
     <div class="login-logo">C</div>
     <div class="login-title">ContabOS</div>
     <div class="login-sub" id="login-sub-text">Sistema Operacional Contábil<br>TRÍADE IA</div>
@@ -342,7 +342,7 @@
            onkeydown="if(event.key==='Enter')fazerLogin()">
     <button class="login-btn" id="login-btn-label" onclick="fazerLogin()">Entrar</button>
     <div class="login-error" id="login-error"></div>
-    <div class="login-reset" id="login-reset-link" onclick="resetarSenha()" style="display:none">Esqueci minha senha (apagar dados de acesso)</div>
+    <a class="login-reset" id="login-reset-link" href="https://wa.me/556499603399?text=Ol%C3%A1%20Sofia%2C%20esqueci%20minha%20senha%20do%20ContabOS%20e%20preciso%20de%20ajuda%20para%20recuperar%20o%20acesso." target="_blank" rel="noopener noreferrer" style="display:block">Esqueci minha senha (falar com a Sofia)</a>
     <div class="login-version">ContabOS v1.0 · © 2026 TRÍADE IA</div>
   </div>
 </div>
@@ -2182,47 +2182,55 @@ function dasArquivar() {
 }
 
 // ===== LOGIN =====
+// Acesso estritamente fechado: só entra quem já tem assinatura ativa
+// provisionada via webhook da Cakto (tabela contabos_subscriptions).
+// Ninguém cria conta pela tela — sem exceção.
 function initLogin() {
-  const stored = localStorage.getItem('contabos_pwd');
   const ls = document.getElementById('login-screen');
-  if (!stored) {
-    document.getElementById('login-sub-text').textContent = 'Primeiro acesso — crie uma senha para proteger seus dados';
-    document.getElementById('login-btn-label').textContent = 'Criar senha e entrar';
-    document.getElementById('login-reset-link').style.display = 'none';
-  } else {
-    document.getElementById('login-sub-text').textContent = 'Sistema Operacional Contábil · TRÍADE IA';
-    document.getElementById('login-btn-label').textContent = 'Entrar';
-    document.getElementById('login-reset-link').style.display = 'block';
+  const sessionEmail = localStorage.getItem('contabos_session_email');
+  if (sessionEmail) {
+    ls.style.display = 'none';
+    return;
   }
+  document.getElementById('login-sub-text').textContent = 'Sistema Operacional Contábil · TRÍADE IA';
+  document.getElementById('login-btn-label').textContent = 'Entrar';
   ls.style.display = 'flex';
   setTimeout(() => document.getElementById('login-email').focus(), 100);
 }
 
-function fazerLogin() {
+async function fazerLogin() {
   const email = document.getElementById('login-email').value.trim();
   const pwd = document.getElementById('login-pwd').value.trim();
   const err = document.getElementById('login-error');
+  const btn = document.getElementById('login-btn-label');
   err.textContent = '';
 
   if (!email) { err.textContent = 'Por favor, insira seu email.'; return; }
   if (!/^[^\s@]+@[^\s@]+$/.test(email)) { err.textContent = 'Email inválido.'; return; }
   if (!pwd || pwd.length < 4) { err.textContent = 'A senha deve ter ao menos 4 caracteres.'; return; }
 
-  const stored = localStorage.getItem('contabos_pwd');
-  if (!stored) {
-    localStorage.setItem('contabos_email', btoa(encodeURIComponent(email)));
-    localStorage.setItem('contabos_pwd', btoa(encodeURIComponent(pwd)));
-    document.getElementById('login-screen').style.display = 'none';
-    toast('Bem-vindo ao ContabOS!');
-  } else {
-    const storedEmail = localStorage.getItem('contabos_email');
-    if (btoa(encodeURIComponent(email)) === storedEmail && btoa(encodeURIComponent(pwd)) === stored) {
+  const originalLabel = btn.textContent;
+  btn.textContent = 'Verificando...';
+  try {
+    const resp = await fetch('/api/contabos/check-login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email }),
+    });
+    const result = await resp.json();
+    if (result.valid) {
+      localStorage.setItem('contabos_session_email', email);
       document.getElementById('login-screen').style.display = 'none';
+      toast('Bem-vindo ao ContabOS!');
     } else {
-      err.textContent = 'Email ou senha incorretos. Tente novamente.';
+      err.textContent = 'Acesso não encontrado. Fale com a Sofia para liberar sua conta.';
       document.getElementById('login-pwd').value = '';
       document.getElementById('login-pwd').focus();
     }
+  } catch (e) {
+    err.textContent = 'Erro ao verificar acesso. Tente novamente em instantes.';
+  } finally {
+    btn.textContent = originalLabel;
   }
 }
 
@@ -2230,17 +2238,8 @@ function logout() {
   document.getElementById('login-email').value = '';
   document.getElementById('login-pwd').value = '';
   document.getElementById('login-error').textContent = '';
+  localStorage.removeItem('contabos_session_email');
   initLogin();
-}
-
-function resetarSenha() {
-  if(!confirm('Isso vai apagar suas credenciais de acesso. Você precisará criar novas ao entrar. Continuar?')) return;
-  localStorage.removeItem('contabos_email');
-  localStorage.removeItem('contabos_pwd');
-  document.getElementById('login-email').value = '';
-  document.getElementById('login-pwd').value = '';
-  initLogin();
-  toast('Credenciais removidas. Crie novas ao entrar.');
 }
 
 // ===== BACKUP EXPORT / IMPORT =====
