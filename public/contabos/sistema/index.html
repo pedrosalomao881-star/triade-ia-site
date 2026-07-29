@@ -2207,7 +2207,7 @@ async function fazerLogin() {
 
   if (!email) { err.textContent = 'Por favor, insira seu email.'; return; }
   if (!/^[^\s@]+@[^\s@]+$/.test(email)) { err.textContent = 'Email inválido.'; return; }
-  if (!pwd || pwd.length < 4) { err.textContent = 'A senha deve ter ao menos 4 caracteres.'; return; }
+  if (!pwd) { err.textContent = 'Por favor, insira sua senha.'; return; }
 
   const originalLabel = btn.textContent;
   btn.textContent = 'Verificando...';
@@ -2215,7 +2215,7 @@ async function fazerLogin() {
     const resp = await fetch('/api/contabos/check-login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email }),
+      body: JSON.stringify({ email, password: pwd }),
     });
     const result = await resp.json();
     if (result.valid) {
@@ -2223,7 +2223,7 @@ async function fazerLogin() {
       document.getElementById('login-screen').style.display = 'none';
       toast('Bem-vindo ao ContabOS!');
     } else {
-      err.textContent = 'Acesso não encontrado. Fale com a Sofia para liberar sua conta.';
+      err.textContent = result.error || 'Credenciais inválidas.';
       document.getElementById('login-pwd').value = '';
       document.getElementById('login-pwd').focus();
     }
