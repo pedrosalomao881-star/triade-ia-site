@@ -68,7 +68,9 @@ export default function CreditorXLanding() {
           {/* CTAs */}
           <div className="flex flex-col sm:flex-row gap-6 justify-center mb-12">
             <Link
-              href="/creditorx"
+              href="https://frontend-three-iota-19.vercel.app/login"
+              target="_blank"
+              rel="noopener noreferrer"
               className="px-8 py-4 bg-[#00FF87] text-[#0A0A0C] font-semibold rounded-lg hover:bg-[#00e576] transition-all"
             >
               Iniciar Análise Gratuita →
@@ -448,7 +450,9 @@ export default function CreditorXLanding() {
             A recuperação de PIS/COFINS é um direito. CreditorX torna isso simples, seguro e comprovado.
           </p>
           <Link
-            href="/creditorx"
+            href="https://frontend-three-iota-19.vercel.app/login"
+            target="_blank"
+            rel="noopener noreferrer"
             className="inline-flex items-center gap-2 bg-[#050505] text-white px-10 py-4 rounded-lg font-semibold hover:bg-[#000000] transition-all"
           >
             Iniciar Minha Análise Gratuita <ArrowRight className="w-5 h-5" />
@@ -467,7 +471,9 @@ export default function CreditorXLanding() {
             <p className="text-xs text-[#7D8290] mt-1">CreditorX | Tríade IA | Tecnologia Tributária</p>
           </div>
           <Link
-            href="/creditorx"
+            href="https://frontend-three-iota-19.vercel.app/login"
+            target="_blank"
+            rel="noopener noreferrer"
             className="px-8 py-3 bg-[#00FF87] text-[#050505] font-semibold rounded-lg hover:bg-[#00e576] transition-all"
           >
             Acessar Plataforma →

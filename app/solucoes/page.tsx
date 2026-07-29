@@ -35,7 +35,7 @@ const sistemasPremiun = [
     categoria: "Empresas",
     cor: "from-green-500 to-emerald-500",
     icon: TrendingUp,
-    href: "https://triadeiaos.com/soaf-privado/empresario/index.html",
+    href: "https://triadeiaos.com/soaf-empresa",
     preco: "Sob demanda",
   },
   {
@@ -45,7 +45,7 @@ const sistemasPremiun = [
     categoria: "Contadores",
     cor: "from-purple-500 to-pink-500",
     icon: BarChart3,
-    href: "https://triadeiaos.com/soaf-privado/contador/index.html",
+    href: "https://triadeiaos.com/soaf-contador",
     preco: "Sob demanda",
   },
   {
@@ -65,7 +65,7 @@ const sistemasPremiun = [
     categoria: "Crédito Tributário",
     cor: "from-rose-500 to-pink-500",
     icon: BarChart3,
-    href: "https://triadeiaos.com/creditorX/sistema",
+    href: "https://frontend-three-iota-19.vercel.app/login",
     preco: "Sob demanda",
   },
   {

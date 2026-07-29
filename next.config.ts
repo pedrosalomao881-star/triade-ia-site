@@ -4,6 +4,28 @@ const nextConfig: NextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
   staticPageGenerationTimeout: 300,
+  async redirects() {
+    return [
+      // /creditorX era um proxy quebrado (CSS não carregava). Agora redireciona
+      // para a landing real, que já renderiza com o layout correto.
+      {
+        source: "/creditorX",
+        destination: "/creditorx-landing",
+        permanent: false,
+      },
+      // Página fantasma removida — manda quem tinha o link salvo direto pro login real.
+      {
+        source: "/creditorX/sistema",
+        destination: "https://frontend-three-iota-19.vercel.app/login",
+        permanent: false,
+      },
+      {
+        source: "/creditorX/sistema/:path*",
+        destination: "https://frontend-three-iota-19.vercel.app/login",
+        permanent: false,
+      },
+    ];
+  },
   async rewrites() {
     return {
       beforeFiles: [
@@ -15,19 +37,6 @@ const nextConfig: NextConfig = {
         {
           source: "/scenarioos-app/:path*",
           destination: "https://scenarioos-triade.vercel.app/scenarioos-app/:path*",
-        },
-        // Serve CreditorX Sistema em /creditorX/sistema (proxy para o deployment frontend)
-        {
-          source: "/creditorX",
-          destination: "https://frontend-three-iota-19.vercel.app/login",
-        },
-        {
-          source: "/creditorX/sistema",
-          destination: "https://frontend-three-iota-19.vercel.app",
-        },
-        {
-          source: "/creditorX/sistema/:path*",
-          destination: "https://frontend-three-iota-19.vercel.app/:path*",
         },
         // Serve ContabOS Sistema (app-contabos.triadeiaos.com)
         {

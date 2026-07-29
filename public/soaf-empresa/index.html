@@ -1223,8 +1223,10 @@ function doLogin(){
     document.getElementById('sb-av-init').textContent=user.nome.charAt(0);
     setProfile(user.perfil);
   } else {
-    // demo sem credenciais — usa perfil selecionado
-    setProfile(pfLogin);
+    // Sem credenciais: acesso demo fechado, direciona para a Sofia no WhatsApp
+    const perfilLabel = pfLogin==='contador' ? 'Contador' : 'Empresário';
+    window.location.href = 'https://wa.me/556499603399?text=' + encodeURIComponent('Olá Sofia, gostaria de solicitar acesso à demonstração do SOAF Painel Misto (' + perfilLabel + ').');
+    return;
   }
   document.getElementById('login-screen').style.display='none';
   go('painel');
