@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+  <defs>
+    <linearGradient id="grad1" x1="0%" y1="100%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#00E5FF;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#2979FF;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <!-- Triângulo Fechado -->
+  <polygon points="60,25 25,85 95,85" fill="none" stroke="url(#grad1)" stroke-width="6" stroke-linejoin="round"/>
+  <!-- Vértice Topo (Dourado) -->
+  <circle cx="60" cy="25" r="10" fill="#D4AF37" />
+  <circle cx="60" cy="25" r="4" fill="#000" />
+  <!-- Vértice Esquerdo (Ciano) -->
+  <circle cx="25" cy="85" r="10" fill="#00E5FF" />
+  <circle cx="25" cy="85" r="4" fill="#000" />
+  <!-- Vértice Direito (Azul) -->
+  <circle cx="95" cy="85" r="10" fill="#2979FF" />
+  <circle cx="95" cy="85" r="4" fill="#000" />
+  <!-- Texto iA Centralizado -->
+  <text x="60" y="68" font-family="Arial, sans-serif" font-weight="bold" font-size="28" fill="#00E5FF" text-anchor="middle">iA</text>
+</svg>
