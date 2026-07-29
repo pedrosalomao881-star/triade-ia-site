@@ -255,7 +255,7 @@
   #toast.show { transform:translateY(0); opacity:1; }
 
   /* LOGIN */
-  #login-screen {
+  #login-screen, #recover-screen, #newpassword-screen {
     position:fixed; inset:0; background:var(--bg); z-index:99999;
     display:flex; align-items:center; justify-content:center;
   }
@@ -342,8 +342,37 @@
            onkeydown="if(event.key==='Enter')fazerLogin()">
     <button class="login-btn" id="login-btn-label" onclick="fazerLogin()">Entrar</button>
     <div class="login-error" id="login-error"></div>
-    <a class="login-reset" id="login-reset-link" href="https://wa.me/556499603399?text=Ol%C3%A1%20Sofia%2C%20esqueci%20minha%20senha%20do%20ContabOS%20e%20preciso%20de%20ajuda%20para%20recuperar%20o%20acesso." target="_blank" rel="noopener noreferrer" style="display:block">Esqueci minha senha (falar com a Sofia)</a>
+    <a class="login-reset" id="login-reset-link" href="#" onclick="mostrarRecuperarSenha(); return false;" style="display:block">Esqueci minha senha</a>
     <div class="login-version">ContabOS v1.0 · © 2026 TRÍADE IA</div>
+  </div>
+</div>
+
+<!-- RECUPERAR SENHA (Supabase resetPasswordForEmail) -->
+<div id="recover-screen" style="display:none">
+  <div class="login-card">
+    <img src="https://triadeiaos.com/logos/triade-logo-completa.png" alt="TRÍADE IA" style="width:80px;height:80px;margin:0 auto 16px;display:block;object-fit:contain;">
+    <div class="login-title">Recuperar senha</div>
+    <div class="login-sub">Informe seu email. Enviaremos um link seguro para redefinir sua senha.</div>
+    <input type="email" id="recover-email" class="login-input" placeholder="seu@email.com"
+           onkeydown="if(event.key==='Enter')enviarRecuperacaoSenha()">
+    <button class="login-btn" onclick="enviarRecuperacaoSenha()">Enviar link de recuperação</button>
+    <div class="login-error" id="recover-error"></div>
+    <a class="login-reset" href="#" onclick="voltarParaLogin(); return false;" style="display:block">Voltar para o login</a>
+  </div>
+</div>
+
+<!-- NOVA SENHA (chega aqui pelo link do email de recuperacao) -->
+<div id="newpassword-screen" style="display:none">
+  <div class="login-card">
+    <img src="https://triadeiaos.com/logos/triade-logo-completa.png" alt="TRÍADE IA" style="width:80px;height:80px;margin:0 auto 16px;display:block;object-fit:contain;">
+    <div class="login-title">Nova senha</div>
+    <div class="login-sub">Defina sua nova senha de acesso ao ContabOS.</div>
+    <input type="password" id="newpwd-1" class="login-input" placeholder="Nova senha"
+           onkeydown="if(event.key==='Enter')document.getElementById('newpwd-2').focus()">
+    <input type="password" id="newpwd-2" class="login-input" placeholder="Confirme a nova senha"
+           onkeydown="if(event.key==='Enter')definirNovaSenha()">
+    <button class="login-btn" onclick="definirNovaSenha()">Salvar nova senha</button>
+    <div class="login-error" id="newpwd-error"></div>
   </div>
 </div>
 
@@ -2181,6 +2210,102 @@ function dasArquivar() {
   toast(`DAS arquivado na ficha de ${c.nome}!`);
 }
 
+// ===== RECUPERACAO DE SENHA (fluxo nativo Supabase Auth) =====
+const SUPABASE_URL = 'https://kxoifalopelzaemliruj.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt4b2lmYWxvcGVsemFlbWxpcnVqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI0MzY0MjksImV4cCI6MjA5ODAxMjQyOX0.jQfDCIebhRW8e5phj2h23jdjOvXxPeVCsRVGd4EBJA4';
+
+function mostrarRecuperarSenha() {
+  const emailAtual = document.getElementById('login-email').value.trim();
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('recover-error').textContent = '';
+  document.getElementById('recover-email').value = emailAtual;
+  document.getElementById('recover-screen').style.display = 'flex';
+  setTimeout(() => document.getElementById('recover-email').focus(), 100);
+}
+
+function voltarParaLogin() {
+  document.getElementById('recover-screen').style.display = 'none';
+  document.getElementById('login-screen').style.display = 'flex';
+}
+
+async function enviarRecuperacaoSenha() {
+  const email = document.getElementById('recover-email').value.trim();
+  const err = document.getElementById('recover-error');
+  err.style.color = 'var(--red)';
+  err.textContent = '';
+
+  if (!email || !/^[^\s@]+@[^\s@]+$/.test(email)) { err.textContent = 'Informe um email válido.'; return; }
+
+  try {
+    const resp = await fetch(`${SUPABASE_URL}/auth/v1/recover`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', apikey: SUPABASE_ANON_KEY },
+      body: JSON.stringify({
+        email,
+        options: { redirect_to: window.location.origin + window.location.pathname },
+      }),
+    });
+    if (resp.ok) {
+      err.style.color = '#8fd4a0';
+      err.textContent = 'Email enviado! Verifique sua caixa de entrada para redefinir a senha.';
+    } else {
+      err.textContent = 'Não foi possível enviar o email agora. Tente novamente.';
+    }
+  } catch (e) {
+    err.textContent = 'Erro de conexão. Tente novamente.';
+  }
+}
+
+// Supabase manda o usuário de volta com #access_token=...&type=recovery no hash da URL
+function verificarRecuperacaoNaURL() {
+  const hash = window.location.hash;
+  if (hash && hash.includes('type=recovery')) {
+    const params = new URLSearchParams(hash.substring(1));
+    const accessToken = params.get('access_token');
+    if (accessToken) {
+      window._recoveryToken = accessToken;
+      document.getElementById('login-screen').style.display = 'none';
+      document.getElementById('newpassword-screen').style.display = 'flex';
+      history.replaceState(null, '', window.location.pathname + window.location.search);
+      return true;
+    }
+  }
+  return false;
+}
+
+async function definirNovaSenha() {
+  const p1 = document.getElementById('newpwd-1').value;
+  const p2 = document.getElementById('newpwd-2').value;
+  const err = document.getElementById('newpwd-error');
+  err.textContent = '';
+
+  if (!p1 || p1.length < 6) { err.textContent = 'A senha deve ter ao menos 6 caracteres.'; return; }
+  if (p1 !== p2) { err.textContent = 'As senhas não coincidem.'; return; }
+  if (!window._recoveryToken) { err.textContent = 'Link de recuperação inválido ou expirado.'; return; }
+
+  try {
+    const resp = await fetch(`${SUPABASE_URL}/auth/v1/user`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        apikey: SUPABASE_ANON_KEY,
+        Authorization: `Bearer ${window._recoveryToken}`,
+      },
+      body: JSON.stringify({ password: p1 }),
+    });
+    if (resp.ok) {
+      document.getElementById('newpassword-screen').style.display = 'none';
+      toast('Senha atualizada! Faça login com a nova senha.');
+      initLogin();
+    } else {
+      const body = await resp.json().catch(() => ({}));
+      err.textContent = body.msg || body.error_description || 'Erro ao definir nova senha. Solicite um novo link.';
+    }
+  } catch (e) {
+    err.textContent = 'Erro de conexão. Tente novamente.';
+  }
+}
+
 // ===== LOGIN =====
 // Acesso estritamente fechado: só entra quem já tem assinatura ativa
 // provisionada via webhook da Cakto (tabela contabos_subscriptions).
@@ -2423,7 +2548,9 @@ document.getElementById('badge-cal').textContent = obrigacoesGlobais.filter(o =>
   const d = new Date(hoje.getFullYear(), hoje.getMonth(), o.dia);
   return Math.ceil((d-hoje)/(1000*60*60*24)) <= 7 && Math.ceil((d-hoje)/(1000*60*60*24)) >= 0;
 }).length;
-initLogin();
+if (!verificarRecuperacaoNaURL()) {
+  initLogin();
+}
 </script>
 </body>
 </html>
