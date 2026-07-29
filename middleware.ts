@@ -4,20 +4,22 @@ export function middleware(request: NextRequest) {
   const hostname = request.headers.get('host') || '';
   const { pathname } = request.nextUrl;
 
+  const isApiOrAsset = pathname.startsWith('/api') || pathname.startsWith('/_next') || /\.[a-zA-Z0-9]+$/.test(pathname);
+
   // 1. app-contabos.triadeiaos.com → redirecionar para /contabos-app
-  if (hostname.includes('app-contabos')) {
+  if (hostname.includes('app-contabos') && !isApiOrAsset) {
     request.nextUrl.pathname = '/contabos-app';
     return NextResponse.rewrite(request.nextUrl);
   }
 
   // 2. soaf-empresa.triadeiaos.com → redirecionar para /soaf-empresa-app
-  if (hostname.includes('soaf-empresa')) {
+  if (hostname.includes('soaf-empresa') && !isApiOrAsset) {
     request.nextUrl.pathname = '/soaf-empresa-app';
     return NextResponse.rewrite(request.nextUrl);
   }
 
   // 3. soaf-contador.triadeiaos.com → redirecionar para /soaf-contador-app
-  if (hostname.includes('soaf-contador')) {
+  if (hostname.includes('soaf-contador') && !isApiOrAsset) {
     request.nextUrl.pathname = '/soaf-contador-app';
     return NextResponse.rewrite(request.nextUrl);
   }
